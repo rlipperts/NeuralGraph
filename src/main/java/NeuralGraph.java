@@ -18,8 +18,9 @@ public class NeuralGraph extends Application {
         MainViewController mainViewController = fxmlLoader.getController();
 
         Scene scene = new Scene(root, 200, 200);
-        stage.setTitle("Hello World Example");
+        stage.setTitle("Deep Neural Network Graph Editor");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
