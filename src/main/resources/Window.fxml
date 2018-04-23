@@ -9,7 +9,7 @@
             fx:controller="Controller.MainViewController">
     <top>
         <HBox>
-
+            <Button text="New Canvas" onAction="#addTab"/>
         </HBox>
     </top>
     <left>
@@ -18,10 +18,9 @@
         </GridPane>
     </left>
     <center>
-        <TabPane side="BOTTOM">
+        <TabPane fx:id="tabs" side="BOTTOM" tabClosingPolicy="SELECTED_TAB">
             <tabs>
-                <Tab closable="false"
-                    text="FirstTab">
+                <Tab text="Untitled">
                     <VBox>
                         <Text fx:id="helloWorld" text="Hello World!"/>
 
@@ -29,14 +28,6 @@
 
                         <Button text="Say Hello!" onAction="#sayHello"/>
                     </VBox>
-                </Tab>
-                <Tab closable="false"
-                text="SecondTab">
-
-                </Tab>
-                <Tab closable="false"
-                     text="ThirdTab">
-
                 </Tab>
             </tabs>
         </TabPane>
