@@ -1,30 +1,79 @@
 package Controller;
 
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.view.mxGraph;
+import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Optional;
+
 
 public class MainViewController {
-    @FXML
-    private Text helloWorld;
-
-    @FXML
-    private TextField name;
 
     @FXML
     private TabPane tabs;
 
-    public void sayHello(final ActionEvent actionEvent) {
-        helloWorld.setText("Hello " + name.getText());
+    public void setup() {
+
+        addTab();
+        mxGraph graph = new mxGraph();
+
+        Object parent = graph.getDefaultParent();
+        graph.getModel().beginUpdate();
+        try {
+            Object v1 = graph.insertVertex(parent, null, "Hello", 20, 20, 80,
+                    30);
+            Object v2 = graph.insertVertex(parent, null, "World!", 240, 150,
+                    80, 30);
+            graph.insertEdge(parent, null, "Edge", v1, v2);
+        } finally {
+            graph.getModel().endUpdate();
+        }
+
+        mxGraphComponent graphComponent = new mxGraphComponent(graph);
+        ((SwingNode) tabs.getTabs().get(0).getContent()).setContent(graphComponent);
+
     }
 
-    public void addTab(final ActionEvent actionEvent) {
+    public void addTab() {
+
         Tab newTab = new Tab();
-        newTab.setText("Untitled"); //give generic names like "untitled 1"
+        newTab.setText("Untitled"); //TODO: give numbered names like "untitled 1"
+
+        SwingNode graphConnector = new SwingNode();
+        mxGraphComponent graphComponent = new mxGraphComponent(new mxGraph());
+        graphConnector.setContent(graphComponent);
+        newTab.setContent(graphConnector);
+
+        newTab.setOnCloseRequest(event -> {
+
+            Dialog<ButtonType> dialog = new Dialog<>();
+            FXMLLoader dialogLoader = new FXMLLoader(getClass().getClassLoader().getResource("TabCloseDialog.fxml"));
+            try {
+                dialog.setDialogPane(dialogLoader.load());
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+
+            Optional<ButtonType> optResult = dialog.showAndWait();
+            if (optResult.isPresent()) {
+                if (optResult.get().equals(ButtonType.NO)) {
+                    event.consume();
+                }
+            }
+
+        });
+
         tabs.getTabs().add(newTab);
-        //TODO: Tab Content
+        tabs.getSelectionModel().select(newTab);
     }
+
 }
