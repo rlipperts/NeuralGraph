@@ -16,9 +16,10 @@ public class NeuralGraph extends Application {
 
         Pane root = fxmlLoader.load();
         MainViewController mainViewController = fxmlLoader.getController();
-        mainViewController.setup();
+        mainViewController.getTabsController().setup();
 
         Scene scene = new Scene(root, 800, 500);
+        scene.getStylesheets().add("src/main/resources/defaultStyle.css"); //TODO: use correct path
         stage.setTitle("Deep Neural Network Graph Editor");
         stage.setScene(scene);
         stage.setMaximized(true);

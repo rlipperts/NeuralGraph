@@ -2,14 +2,16 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.embed.swing.SwingNode?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.141"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controller.MainViewController">
     <top>
         <HBox>
-            <Button text="New Canvas" onAction="#addTab"/>
+            <Button text="Load" onAction="#load"/>
+            <Button text="Save" onAction="#save"/>
+            <Button text="Import" onAction="#importNode"/>
+            <Button text="Compile" onAction="#compile"/>
         </HBox>
     </top>
 
@@ -18,11 +20,6 @@
     </left>
 
     <center>
-        <fx:include fx:id="Canvas" source="Canvas.fxml">
-        <TabPane fx:id="tabs" side="BOTTOM" tabClosingPolicy="ALL_TABS">
-            <tabs>
-
-            </tabs>
-        </TabPane>
+        <fx:include fx:id="tabs" source="Tabs.fxml"/>
     </center>
 </BorderPane>
