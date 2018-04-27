@@ -14,12 +14,11 @@
     </top>
 
     <left>
-        <GridPane>
-
-        </GridPane>
+        <fx:include fx:id="Toolbar" source="Toolbar.fxml"/>
     </left>
 
     <center>
+        <fx:include fx:id="Canvas" source="Canvas.fxml">
         <TabPane fx:id="tabs" side="BOTTOM" tabClosingPolicy="ALL_TABS">
             <tabs>
 
