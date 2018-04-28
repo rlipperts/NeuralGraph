@@ -20,7 +20,7 @@ public class TabController {
 
     public void setup() {
 
-        addTab("helloWorld");
+        addTab("helloWorld", 0);
         mxGraph graph = new mxGraph();
 
         Object parent = graph.getDefaultParent();
@@ -38,7 +38,8 @@ public class TabController {
         addTabBtn = new Button();
         addTabBtn.setText("+");
         addTabBtn.setId("addTabBtn");
-        addTabBtn.setOnAction(event -> addTab(null));
+        addTabBtn.setOnAction(event -> addTab(null, tabs.getTabs().size()-1));
+        //tabs.getTabs().size() always >= 1 bc addTabBtn ain't closable
 
         Tab buttonTab = new Tab();
         buttonTab.setId("buttonTab");
@@ -51,7 +52,7 @@ public class TabController {
         ((SwingNode) tabs.getTabs().get(0).getContent()).setContent(graphComponent);
     }
 
-    public void addTab(String id) {
+    public void addTab(String id, int index) {
 
         Tab newTab = new Tab();
         newTab.setText("Untitled"); //TODO: give numbered names like "untitled 1"
@@ -81,7 +82,7 @@ public class TabController {
 
         });
 
-        tabs.getTabs().add(newTab);
+        tabs.getTabs().add(index, newTab);
         tabs.getSelectionModel().select(newTab);
     }
 
