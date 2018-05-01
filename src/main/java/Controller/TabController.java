@@ -16,11 +16,9 @@ public class TabController {
     @FXML
     private TabPane tabs;
 
-    private Button addTabBtn;
-
     public void setup() {
 
-        addTab("helloWorld", 0);
+        addTab();
         mxGraph graph = new mxGraph();
 
         Object parent = graph.getDefaultParent();
@@ -35,28 +33,14 @@ public class TabController {
             graph.getModel().endUpdate();
         }
 
-        addTabBtn = new Button();
-        addTabBtn.setText("+");
-        addTabBtn.setId("addTabBtn");
-        addTabBtn.setOnAction(event -> addTab(null, tabs.getTabs().size()-1));
-        //tabs.getTabs().size() always >= 1 bc addTabBtn ain't closable
-
-        Tab buttonTab = new Tab();
-        buttonTab.setId("buttonTab");
-        buttonTab.setGraphic(addTabBtn);
-        buttonTab.setClosable(false);
-        buttonTab.setTooltip(new Tooltip("Creates a new Tab")); //Todo: tooltip doesnt show up, Button is not always as right as possible
-        tabs.getTabs().add(buttonTab);
-
         mxGraphComponent graphComponent = new mxGraphComponent(graph);
         ((SwingNode) tabs.getTabs().get(0).getContent()).setContent(graphComponent);
     }
 
-    public void addTab(String id, int index) {
+    public void addTab() {
 
         Tab newTab = new Tab();
         newTab.setText("Untitled"); //TODO: give numbered names like "untitled 1"
-        newTab.setId(id);
 
         SwingNode graphConnector = new SwingNode();
         mxGraphComponent graphComponent = new mxGraphComponent(new mxGraph());
@@ -66,7 +50,7 @@ public class TabController {
         newTab.setOnCloseRequest(event -> {
 
             Dialog<ButtonType> dialog = new Dialog<>();
-            FXMLLoader dialogLoader = new FXMLLoader(getClass().getClassLoader().getResource("TabCloseDialog.fxml"));
+            FXMLLoader dialogLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/TabCloseDialog.fxml"));
             try {
                 dialog.setDialogPane(dialogLoader.load());
             } catch (IOException e) {
@@ -82,7 +66,8 @@ public class TabController {
 
         });
 
-        tabs.getTabs().add(index, newTab);
+        tabs.getTabs().add(tabs.getTabs().size()-1, newTab);
+        //there's always the addTabBtn in the TabPane, therefore we add tabs on its left side
         tabs.getSelectionModel().select(newTab);
     }
 

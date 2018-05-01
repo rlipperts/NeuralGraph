@@ -6,20 +6,22 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 
 public class NeuralGraph extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("Window.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Window.fxml"));
 
         Pane root = fxmlLoader.load();
         MainViewController mainViewController = fxmlLoader.getController();
         mainViewController.getTabsController().setup();
 
-        Scene scene = new Scene(root, 800, 500);
-        scene.getStylesheets().add("src/main/resources/defaultStyle.css"); //TODO: use correct path
+        Scene scene = new Scene(root);
+        URL url = this.getClass().getResource("css/defaultStyle.css");
+        scene.getStylesheets().add(url.toExternalForm()); //TODO: use correct path
         stage.setTitle("Deep Neural Network Graph Editor");
         stage.setScene(scene);
         stage.setMaximized(true);

@@ -16,7 +16,7 @@
     </top>
 
     <left>
-        <fx:include fx:id="Toolbar" source="Toolbar.fxml"/>
+        <fx:include fx:id="toolbar" source="Toolbar.fxml"/>
     </left>
 
     <center>
