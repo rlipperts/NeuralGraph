@@ -13,45 +13,70 @@
       fx:id="toolbar">
 
     <fx:define>
-        <ToggleGroup fx:id="toolSelection"/>
+        <ToggleGroup fx:id="toolSelector"/>
     </fx:define>
 
-    <ToggleButton fx:id="tool0" toggleGroup="$toolSelection">
+    <ToggleButton fx:id="Flatten" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="100"
-                       fitWidth="100">
-                <Image url="@/images/0.png"/>
-            </ImageView>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Flatten.png"/>
+                </ImageView>
+                <Text text="Flatten"/>
+            </VBox>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="tool1" toggleGroup="$toolSelection">
+    <ToggleButton fx:id="Dense" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="100"
-                       fitWidth="100">
-                <Image url="@/images/1.png"/>
-            </ImageView>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Dense.png"/>
+                </ImageView>
+                <Text text="Dense"/>
+            </VBox>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="tool2" toggleGroup="$toolSelection">
+    <ToggleButton fx:id="Embedding" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="100"
-                       fitWidth="100">
-                <Image url="@/images/2.png"/>
-            </ImageView>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Embedding.png"/>
+                </ImageView>
+                <Text text="Embedding"/>
+            </VBox>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="tool3" toggleGroup="$toolSelection">
+    <ToggleButton fx:id="Conv1D" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="100"
-                       fitWidth="100">
+            <ImageView fitHeight="128"
+                       fitWidth="128">
                 <Image url="@/images/3.png"/>
             </ImageView>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="tool4" toggleGroup="$toolSelection">
+    <ToggleButton fx:id="Conv2D" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="100"
-                       fitWidth="100">
+            <ImageView fitHeight="128"
+                       fitWidth="128">
+                <Image url="@/images/4.png"/>
+            </ImageView>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="MaxPooling1D" toggleGroup="$toolSelector">
+        <graphic>
+            <ImageView fitHeight="128"
+                       fitWidth="128">
+                <Image url="@/images/4.png"/>
+            </ImageView>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="MaxPooling2D" toggleGroup="$toolSelector">
+        <graphic>
+            <ImageView fitHeight="128"
+                       fitWidth="128">
                 <Image url="@/images/4.png"/>
             </ImageView>
         </graphic>

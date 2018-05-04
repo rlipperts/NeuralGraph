@@ -11,7 +11,16 @@ public class MainViewController {
     @FXML
     private TabController tabsController;
 
+    @FXML
+    private Parent toolbar;
 
+    @FXML
+    private ToolbarController toolbarController;
+
+    @FXML
+    public void initialize() {
+        tabsController.setToolbarController(toolbarController);
+    }
 
     public void load() {
 
