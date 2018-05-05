@@ -51,34 +51,57 @@
     </ToggleButton>
     <ToggleButton fx:id="Conv1D" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="128"
-                       fitWidth="128">
-                <Image url="@/images/3.png"/>
-            </ImageView>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Conv1D.png"/>
+                </ImageView>
+                <Text text="Conv1D"/>
+            </VBox>
         </graphic>
     </ToggleButton>
     <ToggleButton fx:id="Conv2D" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="128"
-                       fitWidth="128">
-                <Image url="@/images/4.png"/>
-            </ImageView>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Conv2D.png"/>
+                </ImageView>
+                <Text text="Conv2D"/>
+            </VBox>
         </graphic>
     </ToggleButton>
     <ToggleButton fx:id="MaxPooling1D" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="128"
-                       fitWidth="128">
-                <Image url="@/images/4.png"/>
-            </ImageView>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/MaxPooling1D.png"/>
+                </ImageView>
+                <Text text="MaxPooling1D"/>
+            </VBox>
         </graphic>
     </ToggleButton>
     <ToggleButton fx:id="MaxPooling2D" toggleGroup="$toolSelector">
         <graphic>
-            <ImageView fitHeight="128"
-                       fitWidth="128">
-                <Image url="@/images/4.png"/>
-            </ImageView>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/MaxPooling2D.png"/>
+                </ImageView>
+                <Text text="MaxPooling2D"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="CustomLayer" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/CustomLayer.png"/>
+                </ImageView>
+                <Text text="CustomLayer"/>
+            </VBox>
         </graphic>
     </ToggleButton>
 </VBox>
