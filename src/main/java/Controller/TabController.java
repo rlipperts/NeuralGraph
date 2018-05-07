@@ -68,7 +68,7 @@ public class TabController {
                     NodeCreatorImplementation nodeCreator = new NodeCreatorImplementation();
                     String layerType = toolbarController.getSelectedToggleButtonID();
                     Layer layer = nodeCreator.createNode(LayerType.valueOf(layerType.toUpperCase()));
-                    //TODO: Add Layer to Model Graph
+                    //TODO: Add Layer to Model Root
 
                     Object parent = graph.getDefaultParent();
                     graph.getModel().beginUpdate();
