@@ -2,12 +2,15 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.VBox?>
 
 <DialogPane xmlns="http://javafx.com/javafx/8.0.141"
             xmlns:fx="http://javafx.com/fxml/1">
 
     <content>
-        <Text text="Close Tab? Unsaved progress will be lost."/>
+        <VBox alignment="CENTER">
+            <Text text="Close Tab? Unsaved progress will be lost."/>
+        </VBox>
     </content>
 
     <ButtonType fx:constant="YES"/>

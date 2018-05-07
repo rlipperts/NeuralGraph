@@ -20,6 +20,7 @@ public class TabController {
 
     public static final int NODE_DEFAULT_WIDTH = 80;
     public static final int NODE_DEFAULT_HEIGHT = 40;
+    public static final String TAB_CLOSURE_DIALOG_TITLE = "Confirm Tab Closure";
     @FXML
     private TabPane tabs;
 
@@ -60,7 +61,7 @@ public class TabController {
                 Object cell = graphComponent.getCellAt(e.getX(), e.getY());
 
                 if (cell != null) {
-                    System.out.println("Mouse click on cell="+graph.getLabel(cell));
+                    System.out.println("Mouse click on cell = "+graph.getLabel(cell));
                 }
 
                 else {
@@ -85,6 +86,7 @@ public class TabController {
         newTab.setOnCloseRequest(event -> {
 
             Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle(TAB_CLOSURE_DIALOG_TITLE);
             FXMLLoader dialogLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/TabCloseDialog.fxml"));
             try {
                 dialog.setDialogPane(dialogLoader.load());
