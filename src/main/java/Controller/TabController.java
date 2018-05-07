@@ -72,7 +72,8 @@ public class TabController {
                     Object parent = graph.getDefaultParent();
                     graph.getModel().beginUpdate();
                     try {
-                        graph.insertVertex(parent, null, layerType, e.getX(), e.getY(), NODE_DEFAULT_WIDTH, NODE_DEFAULT_HEIGHT);
+                        graph.insertVertex(parent, null, layerType, e.getX() - NODE_DEFAULT_WIDTH/2,
+                                e.getY() - NODE_DEFAULT_HEIGHT/2, NODE_DEFAULT_WIDTH, NODE_DEFAULT_HEIGHT);
                     } finally {
                         graph.getModel().endUpdate();
                     }
