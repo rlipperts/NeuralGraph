@@ -22,7 +22,7 @@ public class NeuralGraph extends Application {
         Scene scene = new Scene(root);
         URL url = this.getClass().getResource("css/defaultStyle.css");
         scene.getStylesheets().add(url.toExternalForm());
-        stage.setTitle("Deep Neural Network Graph Editor");
+        stage.setTitle("Deep Neural Network Root Editor");
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
