@@ -9,18 +9,13 @@ public class MainViewController {
     private Parent tabs;
 
     @FXML
-    private TabController tabsController;
+    private TabPaneController tabsController;
 
     @FXML
     private Parent toolbar;
 
     @FXML
     private ToolbarController toolbarController;
-
-    @FXML
-    public void initialize() {
-        tabsController.setToolbarController(toolbarController);
-    }
 
     public void load() {
 
@@ -38,7 +33,11 @@ public class MainViewController {
 
     }
 
-    public TabController getTabsController() {
+    public TabPaneController getTabPaneController() {
         return tabsController;
+    }
+
+    public ToolbarController getToolbarController() {
+        return toolbarController;
     }
 }

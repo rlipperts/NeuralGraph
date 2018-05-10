@@ -1,14 +1,14 @@
 package Model.Graph;
 
-import Model.Layers.Layer;
+import com.mxgraph.view.mxGraph;
 
 import java.util.HashMap;
 
-public class Root {
+public class Graph {
 
     private HashMap<String, Node> nodes;
 
-    public Root() {
+    public Graph() {
         nodes = new HashMap<>();
     }
 

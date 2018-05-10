@@ -20,6 +20,6 @@
     </left>
 
     <center>
-        <fx:include fx:id="tabs" source="Tabs.fxml"/>
+        <fx:include fx:id="tabs" source="TabPane.fxml"/>
     </center>
 </BorderPane>

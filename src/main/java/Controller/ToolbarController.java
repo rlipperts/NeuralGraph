@@ -1,5 +1,6 @@
 package Controller;
 
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
@@ -10,7 +11,7 @@ public class ToolbarController {
     @FXML
     private ToggleGroup toolSelector;
 
-    public String getSelectedToggleButtonID() {
-        return ((ToggleButton) toolSelector.getSelectedToggle()).getId();
+    public ReadOnlyProperty<Toggle> getSelectedToolProperty() {
+        return toolSelector.selectedToggleProperty();
     }
 }

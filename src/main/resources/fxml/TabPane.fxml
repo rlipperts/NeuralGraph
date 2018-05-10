@@ -4,8 +4,8 @@
 
 <TabPane xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
-         fx:controller="Controller.TabController"
-         fx:id="tabs"
+         fx:controller="Controller.TabPaneController"
+         fx:id="tabPane"
          side="BOTTOM"
          tabClosingPolicy="ALL_TABS">
 
