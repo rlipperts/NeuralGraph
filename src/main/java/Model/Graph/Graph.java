@@ -20,4 +20,8 @@ public class Graph {
         nodes.put(name, node);
     }
 
+    public boolean contains(String key) {
+        return nodes.containsKey(key);
+    }
+
 }

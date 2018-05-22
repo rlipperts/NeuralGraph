@@ -1,27 +1,31 @@
 package Controller.NodeFactory;
 
+import Model.Graph.Node;
 import Model.Layers.*;
 
 
 public class NodeCreatorImplementation implements Creator {
 
-    public Layer createNode(LayerType layerType) {
+    public Node createNode(LayerType layerType) {
+
+        Layer layer;
+
         switch (layerType) {
 
             case CONV1D:
-                return createConv1D();
+                layer = createConv1D();
             case CONV2D:
-                return createConv2D();
+                layer = createConv2D();
             case DENSE:
-                return createDense();
+                layer = createDense();
             case EMBEDDING:
-                return createEmbedding();
+                layer = createEmbedding();
             case FLATTEN:
-                return createFlatten();
+                layer = createFlatten();
             case MAXPOOLING1D:
-                return createMaxPooling1D();
+                layer = createMaxPooling1D();
             case MAXPOOLING2D:
-                return createMaxPooling2D();
+                layer = createMaxPooling2D();
             default: //None of the preconfigured nodeTypes was passed. Therefore, we need do complicated things.
                 CustomNodeCreator customNodeCreator = new CustomNodeCreator();
                 return customNodeCreator.createNode(layerType);

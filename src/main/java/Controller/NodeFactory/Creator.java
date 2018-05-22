@@ -1,10 +1,11 @@
 package Controller.NodeFactory;
 
+import Model.Graph.Node;
 import Model.Layers.Layer;
 import Model.Layers.LayerType;
 
 public interface Creator {
 
-    public Layer createNode(LayerType layerType);
+    public Node createNode(LayerType layerType);
 
 }
