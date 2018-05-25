@@ -51,7 +51,7 @@ public class TabPaneController {
         graphConnector.setContent(graphComponent);
 
         //My own much more beautiful Graph is being created --
-        GraphController graphController = new GraphController(selectedToolProperty, mxGraph);
+        GraphController graphController = new GraphController(selectedToolProperty, mxGraph, tabPane.widthProperty(), tabPane.heightProperty());
         graphControllers.put(newTab.getId(), graphController);
 
         //Ugly awt mouseListener is added and connected with beautiful graph class
