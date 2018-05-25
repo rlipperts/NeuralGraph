@@ -23,7 +23,6 @@ public class TabPaneController {
     private TabPane tabPane;
 
     private ReadOnlyProperty<Toggle> selectedToolProperty;
-    //private ArrayList<GraphController> graphControllers;
     private HashMap<String, GraphController> graphControllers;
 
     public void setup(ReadOnlyProperty<Toggle> selectedToolProperty) {
