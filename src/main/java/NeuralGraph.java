@@ -2,6 +2,7 @@ import Controller.MainViewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -10,6 +11,11 @@ import java.net.URL;
 
 
 public class NeuralGraph extends Application {
+
+    public static void main(String[] parameters) {
+        launch(parameters);
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Window.fxml"));
@@ -23,10 +29,10 @@ public class NeuralGraph extends Application {
         stage.show();
 
         MainViewController mainViewController = fxmlLoader.getController();
+        mainViewController.setup(scene);
         mainViewController.getTabPaneController().setup(mainViewController.getToolbarController().getSelectedToolProperty());
+
+
     }
 
-    public static void main(String[] parameters) {
-        launch(parameters);
-    }
 }

@@ -14,4 +14,8 @@ public class ToolbarController {
     public ReadOnlyProperty<Toggle> getSelectedToolProperty() {
         return toolSelector.selectedToggleProperty();
     }
+
+    public void deselectTool() {
+        toolSelector.getSelectedToggle().setSelected(false);
+    }
 }
