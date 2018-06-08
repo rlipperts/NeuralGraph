@@ -12,6 +12,7 @@ public class Node {
 
     public Node(Layer layer, Node... connectedNodes) {
         this.layer = layer;
+        edges = new ArrayList<>();
         edges.addAll(Arrays.asList(connectedNodes));
     }
 

@@ -6,6 +6,11 @@ import Model.Layers.*;
 
 public class NodeCreatorImplementation implements Creator {
 
+    /**
+     * Creates and returns a default Node
+     * @param layerType Type of Layer for which the
+     * @return
+     */
     public Node createNode(LayerType layerType) {
 
         Layer layer;
@@ -14,22 +19,39 @@ public class NodeCreatorImplementation implements Creator {
 
             case CONV1D:
                 layer = createConv1D();
+                break;
             case CONV2D:
                 layer = createConv2D();
+                break;
             case DENSE:
                 layer = createDense();
+                break;
             case EMBEDDING:
                 layer = createEmbedding();
+                break;
             case FLATTEN:
                 layer = createFlatten();
+                break;
             case MAXPOOLING1D:
                 layer = createMaxPooling1D();
+                break;
             case MAXPOOLING2D:
                 layer = createMaxPooling2D();
+                break;
+            case CUSTOMLAYER:
+                layer =  createCustomLayer();
+                break;
             default: //None of the preconfigured nodeTypes was passed. Therefore, we need do complicated things.
-                CustomNodeCreator customNodeCreator = new CustomNodeCreator();
-                return customNodeCreator.createNode(layerType);
+                layer = null;
+
         }
+
+        return new Node(layer);
+    }
+
+    private Layer createCustomLayer() {
+        //TODO
+        return null;
     }
 
     private Layer createConv1D() {

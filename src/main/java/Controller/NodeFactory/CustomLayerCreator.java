@@ -4,9 +4,9 @@ import Model.Graph.Node;
 import Model.Layers.Layer;
 import Model.Layers.LayerType;
 
-public class CustomNodeCreator implements Creator {
+public class CustomLayerCreator {
 
-    public Node createNode(LayerType layerType) {
+    public Layer createLayer(LayerType layerType) {
         return null;
     }
 
