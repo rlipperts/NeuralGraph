@@ -1,5 +1,8 @@
 package Controller;
 
+import Util.ToolDeselectEvent;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,6 +26,9 @@ public class MainViewController {
 
     @FXML
     private BorderPane borderPane;
+
+
+    EventBus eventBus;
 
     /**
      * Loads a previously saved graph from a file starting a file chooser.
@@ -53,14 +59,20 @@ public class MainViewController {
 
     }
 
-    public void setup(Scene scene) {
-        scene.setOnKeyPressed((KeyEvent keyEvent) -> {
-            switch (keyEvent.getCode()) {
-                case ESCAPE:
-                    toolbarController.deselectTool();
-                    break;
-            }
-        });
+    public void setup(Scene scene, EventBus eventBus) {
+        this.eventBus = eventBus;
+        eventBus.register(tabsController);
+        eventBus.register(toolbarController);
+    }
+
+    @Subscribe
+    void handleKeyEvent(KeyEvent keyEvent) {
+        System.out.println("keyEvent fired");
+        switch (keyEvent.getCode()) {
+            case ESCAPE:
+                eventBus.post(new ToolDeselectEvent());
+                break;
+        }
     }
 
     public TabPaneController getTabPaneController() {

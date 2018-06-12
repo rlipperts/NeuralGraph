@@ -1,5 +1,7 @@
 package Controller;
 
+import Util.ToolDeselectEvent;
+import com.google.common.eventbus.EventBus;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import javafx.beans.property.ReadOnlyProperty;
@@ -8,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -24,10 +27,12 @@ public class TabPaneController {
 
     private ReadOnlyProperty<Toggle> selectedToolProperty;
     private HashMap<String, GraphController> graphControllers;
+    private EventBus eventBus;
 
-    public void setup(ReadOnlyProperty<Toggle> selectedToolProperty) {
+    public void setup(ReadOnlyProperty<Toggle> selectedToolProperty, EventBus eventBus) {
 
         this.selectedToolProperty = selectedToolProperty;
+        this.eventBus = eventBus;
         graphControllers = new HashMap<>();
 
         addTab();
@@ -60,10 +65,14 @@ public class TabPaneController {
             public void mouseReleased(MouseEvent e) {
                 Object cell = graphComponent.getCellAt(e.getX(), e.getY());
 
-                if (cell != null) {
-                    System.out.println("Mouse click on cell = " + mxGraph.getLabel(cell));
-                } else {
-                    graphController.createNode(e);
+                if(SwingUtilities.isLeftMouseButton(e)) {
+                    if (cell != null) {
+                        System.out.println("Mouse click on cell = " + mxGraph.getLabel(cell));
+                    } else {
+                        graphController.createNode(e);
+                    }
+                } else if(SwingUtilities.isRightMouseButton(e) && cell == null) {
+                    eventBus.post(new ToolDeselectEvent());
                 }
             }
         });

@@ -1,4 +1,5 @@
 import Controller.MainViewController;
+import com.google.common.eventbus.EventBus;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,11 +29,13 @@ public class NeuralGraph extends Application {
         stage.setMaximized(true);
         stage.show();
 
+        EventBus eventBus = new EventBus();
+        scene.setOnKeyPressed(event -> {
+            eventBus.post(event);
+        });
         MainViewController mainViewController = fxmlLoader.getController();
-        mainViewController.setup(scene);
-        mainViewController.getTabPaneController().setup(mainViewController.getToolbarController().getSelectedToolProperty());
-
-
+        mainViewController.setup(scene, eventBus);
+        mainViewController.getTabPaneController().setup(mainViewController.getToolbarController().getSelectedToolProperty(), eventBus);
     }
 
 }
