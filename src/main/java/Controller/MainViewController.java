@@ -1,6 +1,7 @@
 package Controller;
 
 import Util.ToolDeselectEvent;
+import Util.VertexDeletionEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
@@ -67,10 +68,12 @@ public class MainViewController {
 
     @Subscribe
     void handleKeyEvent(KeyEvent keyEvent) {
-        System.out.println("keyEvent fired");
         switch (keyEvent.getCode()) {
             case ESCAPE:
                 eventBus.post(new ToolDeselectEvent());
+                break;
+            case DELETE:
+                eventBus.post(new VertexDeletionEvent());
                 break;
         }
     }

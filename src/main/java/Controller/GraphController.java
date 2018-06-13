@@ -5,6 +5,13 @@ import Model.Graph.Graph;
 import Model.Graph.Node;
 import Model.Layers.Layer;
 import Model.Layers.LayerType;
+import Util.InspectCellEvent;
+import Util.ToolDeselectEvent;
+import Util.VertexDeletionEvent;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -13,7 +20,9 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Border;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GraphController {
@@ -27,17 +36,42 @@ public class GraphController {
 
     private Graph graph;
     private mxGraph mxGraph;
+    private mxGraphComponent mxGraphComponent;
     private ReadOnlyProperty<Toggle> selectedToolProperty;
 
-    public GraphController(ReadOnlyProperty<Toggle> selectedToolProperty, mxGraph mxGraph, ReadOnlyDoubleProperty canvasWidth, ReadOnlyDoubleProperty canvasHeight) {
+    public GraphController(ReadOnlyProperty<Toggle> selectedToolProperty, mxGraph mxGraph, mxGraphComponent graphComponent,
+                           ReadOnlyDoubleProperty canvasWidth, ReadOnlyDoubleProperty canvasHeight, EventBus eventBus) {
         this.selectedToolProperty = selectedToolProperty;
         this.mxGraph = mxGraph;
+        this.mxGraphComponent = graphComponent;
         this.graph = new Graph();
 
         createNode(LayerType.DATA, INPUT_LAYER_NAME, canvasWidth.getValue().intValue()/2,
                 NODE_SPACING + NODE_DEFAULT_HEIGHT/2);
         createNode(LayerType.DATA, OUTPUT_LAYER_NAME, canvasWidth.getValue().intValue()/2,
                 canvasHeight.getValue().intValue() - NODE_SPACING - NODE_DEFAULT_HEIGHT/2 - TAB_BAR_HEIGHT);
+
+        //Ugly awt mouseListener is added and connected with beautiful graph class
+        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
+
+            public void mouseReleased(MouseEvent e) {
+                Object cell = graphComponent.getCellAt(e.getX(), e.getY());
+
+                if(SwingUtilities.isLeftMouseButton(e)) {
+                    if (cell != null) {
+                        //TODO: Is there anything we should do here?
+                    } else {
+                        createNode(e);
+                    }
+                } else if(SwingUtilities.isRightMouseButton(e)) {
+                    if(cell == null) {
+                        eventBus.post(new ToolDeselectEvent());
+                    } else {
+                        eventBus.post(new InspectCellEvent((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -91,5 +125,10 @@ public class GraphController {
         } finally {
             mxGraph.getModel().endUpdate();
         }
+    }
+
+    @Subscribe
+    public void deleteSelectedVertices(VertexDeletionEvent vertexDeletionEvent) {
+        mxGraph.removeCells(mxGraph.getSelectionCells(), true);
     }
 }

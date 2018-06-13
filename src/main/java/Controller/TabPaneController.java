@@ -1,5 +1,6 @@
 package Controller;
 
+import Util.InspectCellEvent;
 import Util.ToolDeselectEvent;
 import com.google.common.eventbus.EventBus;
 import com.mxgraph.swing.mxGraphComponent;
@@ -56,31 +57,15 @@ public class TabPaneController {
         graphConnector.setContent(graphComponent);
 
         //My own much more beautiful Graph is being created --
-        GraphController graphController = new GraphController(selectedToolProperty, mxGraph, tabPane.widthProperty(), tabPane.heightProperty());
+        GraphController graphController = new GraphController(selectedToolProperty, mxGraph, graphComponent,
+                tabPane.widthProperty(), tabPane.heightProperty(), eventBus);
         graphControllers.put(newTab.getId(), graphController);
 
-        //Ugly awt mouseListener is added and connected with beautiful graph class
-        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
-
-            public void mouseReleased(MouseEvent e) {
-                Object cell = graphComponent.getCellAt(e.getX(), e.getY());
-
-                if(SwingUtilities.isLeftMouseButton(e)) {
-                    if (cell != null) {
-                        System.out.println("Mouse click on cell = " + mxGraph.getLabel(cell));
-                    } else {
-                        graphController.createNode(e);
-                    }
-                } else if(SwingUtilities.isRightMouseButton(e) && cell == null) {
-                    eventBus.post(new ToolDeselectEvent());
-                }
-            }
-        });
 
         //Setting content of the Tab and adding a TabClosureDialog
         newTab.setContent(graphConnector);
         newTab.setOnCloseRequest(event -> {
-
+            //TODO: Maybe get this into a separate controller
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle(TAB_CLOSURE_DIALOG_TITLE);
             FXMLLoader dialogLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/TabCloseDialog.fxml"));
@@ -104,6 +89,7 @@ public class TabPaneController {
 
         //Adding the Tab to the TabPane
         tabPane.getTabs().add(tabPane.getTabs().size() - 1, newTab);
+        eventBus.register(graphController);
         //there's always the addTabBtn in the TabPane, therefore we add tabPane on its left side
         tabPane.getSelectionModel().select(newTab);
     }
