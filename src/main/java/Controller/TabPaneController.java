@@ -1,7 +1,5 @@
 package Controller;
 
-import Util.InspectCellEvent;
-import Util.ToolDeselectEvent;
 import com.google.common.eventbus.EventBus;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
@@ -11,9 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 
-import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.HashMap;

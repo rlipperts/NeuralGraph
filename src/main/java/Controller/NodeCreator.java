@@ -1,10 +1,10 @@
-package Controller.NodeFactory;
+package Controller;
 
 import Model.Graph.Node;
 import Model.Layers.*;
 
 
-public class NodeCreatorImplementation implements Creator {
+public class NodeCreator {
 
     /**
      * Creates and returns a default Node

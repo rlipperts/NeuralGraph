@@ -1,6 +1,11 @@
 package Model.Layers;
 
+import static Model.Layers.LayerProperty.*;
+
 public class Conv2D implements Layer {
+
+    public static final LayerProperty LAYERPROPERTIES[] = {OUTPUT_DIMENSION, WINDOWSIZE2D, ACTIVATION_FUNCTION};
+
     int filters; //dimensionality of the output space = number of output filters
     int[] kernel_size; //length and height of the 2D convolution window
     ActivationFunction activation; //used activation function
@@ -43,5 +48,10 @@ public class Conv2D implements Layer {
 
     public void setActivation(ActivationFunction activation) {
         this.activation = activation;
+    }
+
+    @Override
+    public LayerProperty[] getLayerProperties() {
+        return LAYERPROPERTIES;
     }
 }

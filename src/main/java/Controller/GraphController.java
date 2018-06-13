@@ -1,27 +1,22 @@
 package Controller;
 
-import Controller.NodeFactory.NodeCreatorImplementation;
 import Model.Graph.Graph;
 import Model.Graph.Node;
-import Model.Layers.Layer;
 import Model.Layers.LayerType;
-import Util.InspectCellEvent;
+import Util.InspectNodeEvent;
 import Util.ToolDeselectEvent;
 import Util.VertexDeletionEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.Border;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -67,7 +62,7 @@ public class GraphController {
                     if(cell == null) {
                         eventBus.post(new ToolDeselectEvent());
                     } else {
-                        eventBus.post(new InspectCellEvent((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
+                        eventBus.post(new InspectNodeEvent((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
                     }
                 }
             }
@@ -102,7 +97,7 @@ public class GraphController {
      */
     private void createNode(LayerType layerType, String layerName, int xPos, int yPos) {
         //Adding to the internal graph
-        NodeCreatorImplementation nodeCreator = new NodeCreatorImplementation();
+        NodeCreator nodeCreator = new NodeCreator();
         Node node = nodeCreator.createNode(layerType);
         graph.addNode(layerName, node);
 
