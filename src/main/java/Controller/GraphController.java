@@ -3,14 +3,15 @@ package Controller;
 import Model.Graph.Graph;
 import Model.Graph.Node;
 import Model.Layers.LayerType;
-import Util.InspectNodeEvent;
 import Util.ToolDeselectEvent;
+import Util.Vertex;
 import Util.VertexDeletionEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.control.Toggle;
@@ -41,9 +42,9 @@ public class GraphController {
         this.mxGraphComponent = graphComponent;
         this.graph = new Graph();
 
-        createNode(LayerType.DATA, INPUT_LAYER_NAME, canvasWidth.getValue().intValue()/2,
+        createNode(LayerType.INPUT, INPUT_LAYER_NAME, canvasWidth.getValue().intValue()/2,
                 NODE_SPACING + NODE_DEFAULT_HEIGHT/2);
-        createNode(LayerType.DATA, OUTPUT_LAYER_NAME, canvasWidth.getValue().intValue()/2,
+        createNode(LayerType.OUTPUT, OUTPUT_LAYER_NAME, canvasWidth.getValue().intValue()/2,
                 canvasHeight.getValue().intValue() - NODE_SPACING - NODE_DEFAULT_HEIGHT/2 - TAB_BAR_HEIGHT);
 
         //Ugly awt mouseListener is added and connected with beautiful graph class
@@ -62,7 +63,8 @@ public class GraphController {
                     if(cell == null) {
                         eventBus.post(new ToolDeselectEvent());
                     } else {
-                        eventBus.post(new InspectNodeEvent((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
+                        new NodeCustomizationController()
+                                .handleNodeCustomization(new Vertex((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
                     }
                 }
             }

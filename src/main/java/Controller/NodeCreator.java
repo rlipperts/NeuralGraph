@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Graph.Node;
 import Model.Layers.*;
+import javafx.application.Platform;
 
 
 public class NodeCreator {
@@ -38,11 +39,21 @@ public class NodeCreator {
             case MAXPOOLING2D:
                 layer = createMaxPooling2D();
                 break;
+            case DROPOUT:
+                layer = createDropout();
+                break;
+            case INPUT:
+                layer = createInput();
+                break;
+            case OUTPUT:
+                layer = createOutput();
+                break;
             case CUSTOMLAYER:
-                layer =  createCustomLayer();
+                layer = createCustomLayer();
                 break;
             default: //None of the preconfigured nodeTypes was passed. Therefore, we need do complicated things.
                 layer = null;
+                //TODO: Maybe throw an error here;
 
         }
 
@@ -50,7 +61,8 @@ public class NodeCreator {
     }
 
     private Layer createCustomLayer() {
-        //TODO
+        Platform.runLater(() -> new NodeCustomizationController().beginCustomNodeCreation());
+        //TODO: return sth
         return null;
     }
 
@@ -86,6 +98,21 @@ public class NodeCreator {
 
     private Layer createDense() {
         Dense layer = new Dense();
+        return layer;
+    }
+
+    private Layer createDropout() {
+        Dropout layer = new Dropout();
+        return layer;
+    }
+
+    private Layer createInput() {
+        Input layer = new Input();
+        return layer;
+    }
+
+    private Layer createOutput() {
+        Output layer = new Output();
         return layer;
     }
 }
