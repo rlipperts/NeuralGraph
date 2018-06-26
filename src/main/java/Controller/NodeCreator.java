@@ -61,7 +61,7 @@ public class NodeCreator {
     }
 
     private Layer createCustomLayer() {
-        Platform.runLater(() -> new NodeCustomizationController().beginCustomNodeCreation());
+        Platform.runLater(() -> new CustomNodeCreator().beginCustomNodeCreation());
         //TODO: return sth
         return null;
     }

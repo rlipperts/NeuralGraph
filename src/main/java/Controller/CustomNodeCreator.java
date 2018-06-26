@@ -1,18 +1,16 @@
 package Controller;
 
 import Util.Vertex;
-import com.google.common.eventbus.Subscribe;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.Optional;
+import java.util.*;
 
-public class NodeCustomizationController {
+//Todo: find a usefull name for this class
+public class CustomNodeCreator {
 
     public static final String NODE_CUSTOMIZATION_DIALOG_TITLE = "Node Customization";
 
@@ -20,11 +18,6 @@ public class NodeCustomizationController {
         //TODO: Handle this shit.
     }
 
-    @FXML
-    public void LayerTypeSelected() {
-        //TODO: Display the correct options to specify for creation of the selected layer.
-        //TODO: What about a CellFactory? https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Cell.html
-    }
 
     /**
      * Starts the creation Process of a custom Node, opening a Dialog for specification. Alot of magic happens.
@@ -54,6 +47,7 @@ public class NodeCustomizationController {
             throw new UncheckedIOException(e);
         }
 
+        //Todo: We need another controller Class for this. This Class cant access the objects from fxml.
         return dialog;
     }
 }

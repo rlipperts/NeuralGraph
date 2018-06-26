@@ -11,7 +11,6 @@ import com.google.common.eventbus.Subscribe;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.control.Toggle;
@@ -63,7 +62,7 @@ public class GraphController {
                     if(cell == null) {
                         eventBus.post(new ToolDeselectEvent());
                     } else {
-                        new NodeCustomizationController()
+                        new CustomNodeCreator()
                                 .handleNodeCustomization(new Vertex((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
                     }
                 }

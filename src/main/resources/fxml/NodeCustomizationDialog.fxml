@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.HBox?>
 <DialogPane xmlns="http://javafx.com/javafx/8.0.141"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controller.NodeCustomizationController">
+            fx:controller="Controller.CustomizationDialogController">
 
     <content>
         <HBox>
             <VBox alignment="CENTER">
-                <TextField fx:id="LayerNameTextField" text="Name of the custom Layer"/>
-                <ComboBox fx:id="LayerTypeSelectionBox" promptText="-Type of the custom Layer-" onAction="#LayerTypeSelected"/>
+                <TextField fx:id="layerNameTextField" text="Name of the custom Layer"/>
+                <ComboBox fx:id="layerTypeSelectionBox" promptText="-Type of the custom Layer-" onAction="#LayerTypeSelected"/>
             </VBox>
         </HBox>
     </content>
