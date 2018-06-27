@@ -2,7 +2,7 @@ package Model.Layers;
 
 import static Model.Layers.LayerProperty.*;
 
-public class MaxPooling1D implements Layer{
+public class MaxPooling2d implements Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {};
 
@@ -10,5 +10,4 @@ public class MaxPooling1D implements Layer{
     public LayerProperty[] getLayerProperties() {
         return LAYER_PROPERTIES;
     }
-
 }

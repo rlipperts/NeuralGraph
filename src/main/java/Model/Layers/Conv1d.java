@@ -2,7 +2,7 @@ package Model.Layers;
 
 import static Model.Layers.LayerProperty.*;
 
-public class Conv1D implements Layer {
+public class Conv1d implements Layer {
 
     public static final LayerProperty LAYER_PROPERTIES[] = {OUTPUT_DIMENSION, WINDOWSIZE, ACTIVATION_FUNCTION};
 
@@ -10,11 +10,11 @@ public class Conv1D implements Layer {
     int kernel_size; //length of the 1D convolution window
     ActivationFunction activation; //used activation function
 
-    public Conv1D() {
+    public Conv1d() {
 
     }
 
-    public Conv1D(int filters, int kernel_size, ActivationFunction activation) {
+    public Conv1d(int filters, int kernel_size, ActivationFunction activation) {
         this.activation = activation;
         this.filters = filters;
         this.kernel_size = kernel_size;

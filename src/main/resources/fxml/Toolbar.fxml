@@ -49,7 +49,7 @@
             </VBox>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="Conv1D" toggleGroup="$toolSelector">
+    <ToggleButton fx:id="Conv_1D" toggleGroup="$toolSelector">
         <graphic>
             <VBox alignment="CENTER">
                 <ImageView fitHeight="64"
@@ -60,7 +60,7 @@
             </VBox>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="Conv2D" toggleGroup="$toolSelector">
+    <ToggleButton fx:id="Conv_2D" toggleGroup="$toolSelector">
         <graphic>
             <VBox alignment="CENTER">
                 <ImageView fitHeight="64"
@@ -71,7 +71,7 @@
             </VBox>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="MaxPooling1D" toggleGroup="$toolSelector">
+    <ToggleButton fx:id="Max_Pooling_1D" toggleGroup="$toolSelector">
         <graphic>
             <VBox alignment="CENTER">
                 <ImageView fitHeight="64"
@@ -82,7 +82,7 @@
             </VBox>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="MaxPooling2D" toggleGroup="$toolSelector">
+    <ToggleButton fx:id="Max_Pooling_2D" toggleGroup="$toolSelector">
         <graphic>
             <VBox alignment="CENTER">
                 <ImageView fitHeight="64"
@@ -93,7 +93,7 @@
             </VBox>
         </graphic>
     </ToggleButton>
-    <ToggleButton fx:id="CustomLayer" toggleGroup="$toolSelector">
+    <ToggleButton fx:id="Custom_Layer" toggleGroup="$toolSelector">
         <graphic>
             <VBox alignment="CENTER">
                 <ImageView fitHeight="64"

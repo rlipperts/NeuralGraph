@@ -2,7 +2,7 @@ package Model.Layers;
 
 import static Model.Layers.LayerProperty.*;
 
-public class Conv2D implements Layer {
+public class Conv2d implements Layer {
 
     public static final LayerProperty LAYERPROPERTIES[] = {OUTPUT_DIMENSION, WINDOWSIZE2D, ACTIVATION_FUNCTION};
 
@@ -10,11 +10,11 @@ public class Conv2D implements Layer {
     int[] kernel_size; //length and height of the 2D convolution window
     ActivationFunction activation; //used activation function
 
-    public Conv2D() {
+    public Conv2d() {
 
     }
 
-    public Conv2D(int filters, int[] kernel_size, ActivationFunction activation) {
+    public Conv2d(int filters, int[] kernel_size, ActivationFunction activation) {
         if(kernel_size.length !=2) throw new IllegalArgumentException("Wrong dimensionality of the convolutional window!");
         this.activation = activation;
         this.filters = filters;
