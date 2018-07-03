@@ -4,7 +4,7 @@ import static Model.Layers.LayerProperty.*;
 
 public class MaxPooling1d implements Layer{
 
-    public static final LayerProperty[] LAYER_PROPERTIES = {};
+    public static final LayerProperty[] LAYER_PROPERTIES = {WINDOWSIZE};
 
     @Override
     public LayerProperty[] getLayerProperties() {

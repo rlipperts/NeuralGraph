@@ -14,10 +14,11 @@
             <VBox alignment="CENTER">
                 <TextField fx:id="layerNameTextField" promptText="Name of the custom layer"/>
                 <ComboBox fx:id="layerTypeSelectionBox" promptText="-Type of the custom layer-" onAction="#LayerTypeSelected"/>
-                <ComboBox fx:id="activationFunction" promptText="-Activation function-" />
-                <TextField fx:id="windowSize" promptText="Window size"/>
-                <TextField fx:id="droprate" promptText="Drop rate"/>
-                <TextField fx:id="outputDimension"  promptText="Output dimension, e.g. &quot;4,5&quot;"/>
+                <TextField fx:id="inputDimension" promptText="Input dimension, e.g. &quot;4,5&quot;" visible="false"/>
+                <ComboBox fx:id="activationFunction" promptText="-Activation function-" visible="false"/>
+                <TextField fx:id="windowSize" promptText="Window size" visible="false"/>
+                <TextField fx:id="droprate" promptText="Drop rate" visible="false"/>
+                <TextField fx:id="outputDimension"  promptText="Output dimension, e.g. &quot;4,5&quot;" visible="false"/>
 
             </VBox>
         </HBox>

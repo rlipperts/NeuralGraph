@@ -7,15 +7,26 @@ import java.util.HashMap;
 
 public enum LayerType {
 
-    CONV_1D, CONV_2D, DENSE, DROPOUT, EMBEDDING, FLATTEN, MAX_POOLING_1D, MAX_POOLING_2D, CUSTOM_LAYER, INPUT, OUTPUT;
+    CONV_1D(Conv1d.class), CONV_2D(Conv2d.class), DENSE(Dense.class), DROPOUT(Dropout.class), EMBEDDING(Embedding.class),
+    FLATTEN(Flatten.class), MAX_POOLING_1D(MaxPooling1d.class), MAX_POOLING_2D(MaxPooling2d.class), CUSTOM_LAYER(null),
+    INPUT(Input.class), OUTPUT(Output.class);
+
+    private final Class<? extends Layer> layerClass;
+
+    LayerType(final Class<? extends Layer> layerClass) {
+        this.layerClass = layerClass;
+    }
+
+    public Layer getLayer() {
+        try {
+            return this.layerClass.getConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static LayerType[] userCreateableLayerTypes() {
         return new LayerType[] {CONV_1D, CONV_2D, DENSE, DROPOUT, EMBEDDING, FLATTEN, MAX_POOLING_1D, MAX_POOLING_2D};
-    }
-
-    public static LayerProperty[] getCorrespondingLayerProperties(LayerType layerType) {
-        //Todo Give Enums Parameters pointing to corresponding classes.
-        return null;
     }
 
     @Override

@@ -4,7 +4,7 @@ import static Model.Layers.LayerProperty.*;
 
 public class Embedding implements Layer {
 
-    public static final LayerProperty[] LAYER_PROPERTIES = {};
+    public static final LayerProperty[] LAYER_PROPERTIES = {INPUT_DIMENSION, OUTPUT_DIMENSION};
 
     @Override
     public LayerProperty[] getLayerProperties() {
