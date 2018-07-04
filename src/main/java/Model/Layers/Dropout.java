@@ -6,8 +6,21 @@ public class Dropout implements Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {DROPRATE};
 
+    private Double droprate;
+
+    public Dropout() {
+    }
+
+    public Dropout(Double droprate) {
+        this.droprate = droprate;
+    }
+
     @Override
     public LayerProperty[] getLayerProperties() {
         return LAYER_PROPERTIES;
+    }
+
+    public Double getDroprate() {
+        return droprate;
     }
 }

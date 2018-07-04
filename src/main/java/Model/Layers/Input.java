@@ -1,31 +1,30 @@
 package Model.Layers;
 
-import static Model.Layers.LayerProperty.*;
+//T
+
+import static Model.Layers.LayerProperty.INPUT_DIMENSION;
 
 /**
  * Layer that describes input or output
  */
 public class Input implements Layer{
 
-    public static final LayerProperty[] LAYER_PROPERTIES = {};
+    public static final LayerProperty[] LAYER_PROPERTIES = {INPUT_DIMENSION};
 
-    int[] dimensionality;
+    private int[] outputDimension;
 
     public Input() {
 
     }
 
-    public Input(int[] dimensionality) {
-        this.dimensionality = dimensionality;
+    public Input(int[] outputDimension) {
+        this.outputDimension = outputDimension;
     }
 
-    public int[] getDimensionality() {
-        return dimensionality;
+    public int[] getOutputDimension() {
+        return outputDimension;
     }
 
-    public void setDimensionality(int[] dimensionality) {
-        this.dimensionality = dimensionality;
-    }
 
     @Override
     public LayerProperty[] getLayerProperties() {

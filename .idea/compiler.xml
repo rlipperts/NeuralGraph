@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="NeuralGraph" target="1.10" />
+      <module name="NeuralGraph" target="10" />
     </bytecodeTargetLevel>
   </component>
 </project>

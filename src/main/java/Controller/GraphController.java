@@ -58,14 +58,17 @@ public class GraphController {
                     } else {
                         createNode(e);
                     }
+                    e.consume();
                 } else if(SwingUtilities.isRightMouseButton(e)) {
                     if(cell == null) {
                         eventBus.post(new ToolDeselectEvent());
                     } else {
-                        new CustomNodeCreator()
+                        new NodeEditor()
                                 .handleNodeCustomization(new Vertex((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
                     }
+                    e.consume();
                 }
+
             }
         });
     }
@@ -98,8 +101,9 @@ public class GraphController {
      */
     private void createNode(LayerType layerType, String layerName, int xPos, int yPos) {
         //Adding to the internal graph
-        NodeCreator nodeCreator = new NodeCreator();
-        Node node = nodeCreator.createNode(layerType);
+        NodeEditor nodeEditor = new NodeEditor();
+        Node node = nodeEditor.createNode(layerType);
+        if(node == null) return;
         graph.addNode(layerName, node);
 
         //Adding to the visible graph
