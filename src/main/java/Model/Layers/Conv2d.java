@@ -40,4 +40,9 @@ public class Conv2d implements Layer {
     public LayerProperty[] getLayerProperties() {
         return LAYERPROPERTIES;
     }
+
+    @Override
+    public LayerData getLayerData() {
+        return new LayerData(LayerType.CONV_2D, null, filters, activation, null, kernel_size, null);
+    }
 }

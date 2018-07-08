@@ -20,6 +20,11 @@ public class MaxPooling1d implements Layer{
         return LAYER_PROPERTIES;
     }
 
+    @Override
+    public LayerData getLayerData() {
+        return new LayerData(LayerType.MAX_POOLING_1D, null, null, null, windowSize, null, null);
+    }
+
     public Integer getWindowSize() {
         return windowSize;
     }

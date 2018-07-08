@@ -33,6 +33,7 @@ public class GraphController {
     private mxGraph mxGraph;
     private mxGraphComponent mxGraphComponent;
     private ReadOnlyProperty<Toggle> selectedToolProperty;
+    private EventBus eventBus;
 
     public GraphController(ReadOnlyProperty<Toggle> selectedToolProperty, mxGraph mxGraph, mxGraphComponent graphComponent,
                            ReadOnlyDoubleProperty canvasWidth, ReadOnlyDoubleProperty canvasHeight, EventBus eventBus) {
@@ -40,6 +41,7 @@ public class GraphController {
         this.mxGraph = mxGraph;
         this.mxGraphComponent = graphComponent;
         this.graph = new Graph();
+        this.eventBus = eventBus;
 
         createNode(LayerType.INPUT, INPUT_LAYER_NAME, canvasWidth.getValue().intValue()/2,
                 NODE_SPACING + NODE_DEFAULT_HEIGHT/2);
@@ -63,8 +65,7 @@ public class GraphController {
                     if(cell == null) {
                         eventBus.post(new ToolDeselectEvent());
                     } else {
-                        new NodeEditor()
-                                .handleNodeCustomization(new Vertex((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
+                        editNode(new Vertex((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
                     }
                     e.consume();
                 }
@@ -90,6 +91,19 @@ public class GraphController {
         } while (graph.contains(layerName));
 
         createNode(layerType, layerName, e.getX(), e.getY());
+    }
+
+    private void editNode(Vertex vertex) {
+        //Adding to the internal graph
+        NodeEditor nodeEditor = new NodeEditor();
+        Node node = nodeEditor.editNode(vertex);
+        if(node == null) return;
+        mxGraph.removeCells(new Object[] {vertex.getCell()});
+        //todo: delete old node
+        graph.addNode("todo", node);
+
+        //Adding to the visible graph
+        insertVertex("todo", (int) vertex.getCell().getGeometry().getCenterX(), (int) vertex.getCell().getGeometry().getCenterY());
     }
 
     /**
@@ -130,5 +144,6 @@ public class GraphController {
     @Subscribe
     public void deleteSelectedVertices(VertexDeletionEvent vertexDeletionEvent) {
         mxGraph.removeCells(mxGraph.getSelectionCells(), true);
+        //todo: how the hell do i delete these in my own model
     }
 }

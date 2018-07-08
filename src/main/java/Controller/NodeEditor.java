@@ -3,6 +3,7 @@ package Controller;
 import Model.Graph.Node;
 import Model.Layers.*;
 import Util.Vertex;
+import com.google.common.eventbus.EventBus;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
@@ -11,6 +12,7 @@ import javafx.scene.control.Dialog;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
@@ -18,6 +20,9 @@ import java.util.concurrent.FutureTask;
 public class NodeEditor {
 
     public static final String NODE_CUSTOMIZATION_DIALOG_TITLE = "Node Customization";
+
+    private NodeEditingController controller;
+
 
     /**
      * Creates and returns a default Node
@@ -27,16 +32,22 @@ public class NodeEditor {
      */
     public Node createNode(LayerType layerType) {
         if (layerType == LayerType.CUSTOM_LAYER) {
-            Layer layer = createCustomLayer();
+            Layer layer = createCustomLayer(null);
             return layer == null ? null : new Node(layer);
         } else {
             return new Node(layerType.getLayer());
         }
     }
 
-    private Layer createCustomLayer() {
+    public Node editNode(Vertex vertex) {
+        Layer layer = createCustomLayer(vertex);
+        return layer == null ? null : new Node(layer);
+    }
+
+    //todo: naming of these functions
+    private Layer createCustomLayer(Vertex vertex) {
         Layer layer;
-        final FutureTask query = new FutureTask<>(this::specifyCustomNode);
+        final FutureTask query = new FutureTask<>(() -> specifyCustomNode(null));
         Platform.runLater(query);
         try {
             layer = (Layer) query.get();
@@ -48,19 +59,12 @@ public class NodeEditor {
         return layer;
     }
 
-
-    private NodeEditingController controller;
-
-    public void handleNodeCustomization(Vertex vertex) {
-        //TODO: Handle this shit.
-    }
-
     /**
      * Starts the creation Process of a custom Node, opening a Dialog for specification. Alot of magic happens.
      */
-    private Layer specifyCustomNode() {
+    private Layer specifyCustomNode(Vertex vertex) {
         Layer userInput = null;
-        Dialog<Layer> nodeCustomizationDialog = createDialog();
+        Dialog<Layer> nodeCustomizationDialog = createDialog(vertex);
         nodeCustomizationDialog.setResultConverter(button -> {
             if (button == ButtonType.OK)
                 return controller.getUserInput();
@@ -72,7 +76,7 @@ public class NodeEditor {
         return userInput;
     }
 
-    private Dialog<Layer> createDialog() {
+    private Dialog<Layer> createDialog(Vertex vertex) {
 
         Dialog<Layer> dialog = new Dialog<>();
         dialog.setTitle(NODE_CUSTOMIZATION_DIALOG_TITLE);
@@ -82,7 +86,8 @@ public class NodeEditor {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-        controller = dialogLoader.getController();
+        controller = dialogLoader.getController(); //todo: this is not beautiful yet
+        if (vertex!=null) controller.setContent(vertex);
         return dialog;
     }
 }

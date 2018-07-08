@@ -18,6 +18,11 @@ public class Embedding implements Layer {
     }
 
     @Override
+    public LayerData getLayerData() {
+        return new LayerData(LayerType.EMBEDDING, inputDimension, outputDimension, null, null, null, null);
+    }
+
+    @Override
     public LayerProperty[] getLayerProperties() {
         return LAYER_PROPERTIES;
     }

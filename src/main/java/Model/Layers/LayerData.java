@@ -52,4 +52,31 @@ public class LayerData {
         }
     }
 
+    public LayerType getLayerType() {
+        return layerType;
+    }
+
+    public int[] getInputDimensionality() {
+        return inputDimensionality;
+    }
+
+    public int[] getOutputDimensionality() {
+        return outputDimensionality;
+    }
+
+    public ActivationFunction getActivationFunction() {
+        return activationFunction;
+    }
+
+    public Integer getWindowSize() {
+        return windowSize;
+    }
+
+    public int[] getWindowSize2D() {
+        return windowSize2D;
+    }
+
+    public Double getDropRate() {
+        return dropRate;
+    }
 }

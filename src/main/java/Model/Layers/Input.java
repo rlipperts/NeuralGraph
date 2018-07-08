@@ -11,23 +11,27 @@ public class Input implements Layer{
 
     public static final LayerProperty[] LAYER_PROPERTIES = {INPUT_DIMENSION};
 
-    private int[] outputDimension;
+    private int[] inputDimension;
 
     public Input() {
 
     }
 
-    public Input(int[] outputDimension) {
-        this.outputDimension = outputDimension;
+    public Input(int[] inputDimension) {
+        this.inputDimension = inputDimension;
     }
 
-    public int[] getOutputDimension() {
-        return outputDimension;
+    public int[] getInputDimension() {
+        return inputDimension;
     }
-
 
     @Override
     public LayerProperty[] getLayerProperties() {
         return LAYER_PROPERTIES;
+    }
+
+    @Override
+    public LayerData getLayerData() {
+        return new LayerData(LayerType.INPUT, inputDimension, null, null, null, null, null);
     }
 }

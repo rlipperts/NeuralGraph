@@ -27,4 +27,10 @@ public class Output implements Layer{
     public LayerProperty[] getLayerProperties() {
         return LAYER_PROPERTIES;
     }
+
+    @Override
+    public LayerData getLayerData() {
+        return new LayerData(LayerType.OUTPUT, null, outputDimension, null, null, null, null);
+    }
+
 }

@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Layers.*;
+import Util.Vertex;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -21,25 +22,25 @@ public class NodeEditingController {
     public static final String REGEX_VECTOR_ND = "^$|[1-9]\\d*(,[1-9]\\d*)*";
 
     @FXML
-    DialogPane dialogPane;
+    private DialogPane dialogPane;
     @FXML
-    TextField layerNameTextField;
+    private TextField layerNameTextField;
     @FXML
-    ComboBox<LayerType> layerTypeSelectionBox;
+    private ComboBox<LayerType> layerTypeSelectionBox;
     @FXML
-    ComboBox<ActivationFunction> activationFunction;
+    private ComboBox<ActivationFunction> activationFunction;
     @FXML
-    TextField windowSize;
+    private TextField windowSize;
     @FXML
-    TextField windowSize2d;
+    private TextField windowSize2d;
     @FXML
-    TextField droprate;
+    private TextField droprate;
     @FXML
-    TextField inputDimension;
+    private TextField inputDimension;
     @FXML
-    TextField outputDimension;
+    private TextField outputDimension;
     @FXML
-    Text errorMessages;
+    private Text errorMessages;
 
     Map<LayerProperty, Node> nodeMap;
 
@@ -116,5 +117,18 @@ public class NodeEditingController {
                 && Pattern.matches(REGEX_FLOAT_FROM_0_TO_1, droprate.getCharacters())
                 && Pattern.matches(REGEX_VECTOR_ND, inputDimension.getCharacters())
                 && Pattern.matches(REGEX_VECTOR_ND, outputDimension.getCharacters());
+    }
+
+    public void setContent(Vertex vertex) {
+        layerNameTextField.setText(vertex.getCell().getId());
+
+        LayerData layerData = vertex.getNode().getLayer().getLayerData();
+        layerTypeSelectionBox.getSelectionModel().select(layerData.getLayerType());
+        activationFunction.getSelectionModel().select(layerData.getActivationFunction());
+        windowSize.setText(layerData.getWindowSize().toString());
+        windowSize2d.setText(Arrays.toString(layerData.getWindowSize2D()));
+        droprate.setText(layerData.getDropRate().toString());
+        inputDimension.setText(Arrays.toString(layerData.getInputDimensionality()));
+        outputDimension.setText(Arrays.toString(layerData.getOutputDimensionality()));
     }
 }
