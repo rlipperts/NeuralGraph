@@ -3,7 +3,6 @@ package Controller;
 import Model.Graph.Node;
 import Model.Layers.*;
 import Util.Vertex;
-import com.google.common.eventbus.EventBus;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
@@ -12,7 +11,6 @@ import javafx.scene.control.Dialog;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
@@ -32,53 +30,52 @@ public class NodeEditor {
      */
     public Node createNode(LayerType layerType) {
         if (layerType == LayerType.CUSTOM_LAYER) {
-            Layer layer = createCustomLayer(null);
-            return layer == null ? null : new Node(layer);
+            Node node = createCustomNode(null);
+            return node;
         } else {
             return new Node(layerType.getLayer());
         }
     }
 
     public Node editNode(Vertex vertex) {
-        Layer layer = createCustomLayer(vertex);
-        return layer == null ? null : new Node(layer);
+        return createCustomNode(vertex);
     }
 
     //todo: naming of these functions
-    private Layer createCustomLayer(Vertex vertex) {
-        Layer layer;
-        final FutureTask query = new FutureTask<>(() -> specifyCustomNode(null));
+    private Node createCustomNode(Vertex vertex) {
+        Node node;
+        final FutureTask query = new FutureTask<>(() -> specifyCustomNode(vertex));
         Platform.runLater(query);
         try {
-            layer = (Layer) query.get();
+            node = (Node) query.get();
         } catch (InterruptedException | ExecutionException e) {
-            layer = null;
+            node = null;
             e.printStackTrace();
         }
 
-        return layer;
+        return node;
     }
 
     /**
      * Starts the creation Process of a custom Node, opening a Dialog for specification. Alot of magic happens.
      */
-    private Layer specifyCustomNode(Vertex vertex) {
-        Layer userInput = null;
-        Dialog<Layer> nodeCustomizationDialog = createDialog(vertex);
+    private Node specifyCustomNode(Vertex vertex) {
+        Node userInput = null;
+        Dialog<Node> nodeCustomizationDialog = createDialog(vertex);
         nodeCustomizationDialog.setResultConverter(button -> {
             if (button == ButtonType.OK)
                 return controller.getUserInput();
             System.out.println("Cancel");
             return null;
         });
-        Optional<Layer> optionalLayerData = nodeCustomizationDialog.showAndWait();
+        Optional<Node> optionalLayerData = nodeCustomizationDialog.showAndWait();
         if (optionalLayerData.isPresent()) userInput = optionalLayerData.get();
         return userInput;
     }
 
-    private Dialog<Layer> createDialog(Vertex vertex) {
+    private Dialog<Node> createDialog(Vertex vertex) {
 
-        Dialog<Layer> dialog = new Dialog<>();
+        Dialog<Node> dialog = new Dialog<>();
         dialog.setTitle(NODE_CUSTOMIZATION_DIALOG_TITLE);
         FXMLLoader dialogLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/NodeCustomizationDialog.fxml"));
         try {

@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Graph.Graph;
 import Model.Layers.*;
 import Util.Vertex;
 import javafx.beans.binding.Bindings;
@@ -92,8 +93,8 @@ public class NodeEditingController {
         layerNameTextField.getScene().getWindow().sizeToScene();
     }
 
-    Layer getUserInput() {
-        return new LayerData(
+    Model.Graph.Node getUserInput() {
+        return new Model.Graph.Node(layerNameTextField.getText(), new LayerData(
                 layerTypeSelectionBox.getValue(),
                 extractVectorFromString(inputDimension.getText()),
                 extractVectorFromString(outputDimension.getText()),
@@ -101,7 +102,7 @@ public class NodeEditingController {
                 windowSize.getText().equals("") ? null : Integer.valueOf(windowSize.getText()),
                 extractVectorFromString(windowSize2d.getText()),
                 droprate.getText().equals("") ? null : Double.valueOf(droprate.getText()))
-                .getLayer();
+                .getLayer());
     }
 
     private int[] extractVectorFromString(String string) {

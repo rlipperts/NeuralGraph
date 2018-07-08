@@ -100,10 +100,10 @@ public class GraphController {
         if(node == null) return;
         mxGraph.removeCells(new Object[] {vertex.getCell()});
         //todo: delete old node
-        graph.addNode("todo", node);
+        graph.addNode(node.getName(), node);
 
         //Adding to the visible graph
-        insertVertex("todo", (int) vertex.getCell().getGeometry().getCenterX(), (int) vertex.getCell().getGeometry().getCenterY());
+        insertVertex(node.getName(), (int) vertex.getCell().getGeometry().getCenterX(), (int) vertex.getCell().getGeometry().getCenterY());
     }
 
     /**
@@ -121,7 +121,7 @@ public class GraphController {
         graph.addNode(layerName, node);
 
         //Adding to the visible graph
-        insertVertex(layerName, xPos, yPos);
+        insertVertex(node.getName() == null ? layerName : node.getName(), xPos, yPos);
     }
 
     /**

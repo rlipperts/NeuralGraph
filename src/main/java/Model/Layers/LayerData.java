@@ -5,6 +5,7 @@ package Model.Layers;
  */
 public class LayerData {
 
+    private String layerName;
     private LayerType layerType;
     private int[] inputDimensionality;
     private int[] outputDimensionality;
