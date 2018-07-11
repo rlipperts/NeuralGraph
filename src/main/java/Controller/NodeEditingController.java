@@ -17,9 +17,9 @@ import java.util.regex.Pattern;
 public class NodeEditingController {
 
     public static final String REGEX_SCALAR = "^$|[1-9]\\d*";
-    public static final String REGEX_VECTOR_2D = "^$|[1-9]\\d*,[1-9]\\d*";
+    public static final String REGEX_VECTOR_2D = "^$|[1-9]\\d*, *[1-9]\\d*";
     public static final String REGEX_FLOAT_FROM_0_TO_1 = "^$|0.\\d+|0|1";
-    public static final String REGEX_VECTOR_ND = "^$|[1-9]\\d*(,[1-9]\\d*)*";
+    public static final String REGEX_VECTOR_ND = "^$|[1-9]\\d*(, *[1-9]\\d*)*";
 
     @FXML
     private DialogPane dialogPane;
@@ -44,6 +44,7 @@ public class NodeEditingController {
 
     Map<LayerProperty, Node> nodeMap;
 
+    //Todo: Block activationfunction dropdown for Input and Output
     /**
      * Initializes the controller, filling up the comboboxes and binding some properties.
      */
@@ -105,7 +106,7 @@ public class NodeEditingController {
 
     private int[] extractVectorFromString(String string) {
         if (string.equals("")) return null;
-        return Arrays.stream(string.split(","))
+        return Arrays.stream(string.replace(" ", "").split(","))
                 .mapToInt(Integer::parseInt).toArray();
     }
 
@@ -128,15 +129,19 @@ public class NodeEditingController {
         //todo: Is this beautiful?
         String temp = layerData.getWindowSize() == null ? "" : layerData.getWindowSize().toString();
         windowSize.setText(temp);
-        temp = Arrays.toString(layerData.getWindowSize2D());
+        temp = toString(layerData.getWindowSize2D());
         windowSize2d.setText(temp.equals("null") ? "" : temp);
         droprate.setText(layerData.getDroprate() == null ? "" : layerData.getDroprate().toString());
-        temp = Arrays.toString(layerData.getInputDimensionality());
+        temp = toString(layerData.getInputDimensionality());
         inputDimension.setText(temp.equals("null") ? "" : temp);
-        temp = Arrays.toString(layerData.getOutputDimensionality());
+        temp = toString(layerData.getOutputDimensionality());
         outputDimension.setText(temp.equals("null") ? "" : temp);
 
         this.LayerTypeSelected();
+    }
+
+    private String toString(int[] array) {
+        return Arrays.toString(array).replace("[", "").replace("]", "");
     }
 
 }

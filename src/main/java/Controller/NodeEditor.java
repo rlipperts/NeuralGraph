@@ -18,8 +18,6 @@ public class NodeEditor {
 
     public static final String NODE_CUSTOMIZATION_DIALOG_TITLE = "Node Customization";
 
-
-
     public Node editNode(Node node) {
 
         LayerData layerData = handleDialog(node);
