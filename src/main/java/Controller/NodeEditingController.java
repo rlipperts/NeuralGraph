@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.Graph.Graph;
 import Model.Layers.*;
 import Util.Vertex;
 import javafx.beans.binding.Bindings;
@@ -93,16 +92,15 @@ public class NodeEditingController {
         layerNameTextField.getScene().getWindow().sizeToScene();
     }
 
-    Model.Graph.Node getUserInput() {
-        return new Model.Graph.Node(layerNameTextField.getText(), new LayerData(
+    LayerData getUserInput() {
+        return new LayerData(layerNameTextField.getText(),
                 layerTypeSelectionBox.getValue(),
                 extractVectorFromString(inputDimension.getText()),
                 extractVectorFromString(outputDimension.getText()),
                 activationFunction.getSelectionModel().getSelectedItem(),
                 windowSize.getText().equals("") ? null : Integer.valueOf(windowSize.getText()),
                 extractVectorFromString(windowSize2d.getText()),
-                droprate.getText().equals("") ? null : Double.valueOf(droprate.getText()))
-                .getLayer());
+                droprate.getText().equals("") ? null : Double.valueOf(droprate.getText()));
     }
 
     private int[] extractVectorFromString(String string) {
@@ -120,16 +118,25 @@ public class NodeEditingController {
                 && Pattern.matches(REGEX_VECTOR_ND, outputDimension.getCharacters());
     }
 
-    public void setContent(Vertex vertex) {
-        layerNameTextField.setText(vertex.getCell().getId());
+    public void setContent(Model.Graph.Node node) {
+        layerNameTextField.setText(node.getName());
 
-        LayerData layerData = vertex.getNode().getLayer().getLayerData();
+        LayerData layerData = node.getLayer().getLayerData();
         layerTypeSelectionBox.getSelectionModel().select(layerData.getLayerType());
         activationFunction.getSelectionModel().select(layerData.getActivationFunction());
-        windowSize.setText(layerData.getWindowSize().toString());
-        windowSize2d.setText(Arrays.toString(layerData.getWindowSize2D()));
-        droprate.setText(layerData.getDropRate().toString());
-        inputDimension.setText(Arrays.toString(layerData.getInputDimensionality()));
-        outputDimension.setText(Arrays.toString(layerData.getOutputDimensionality()));
+
+        //todo: Is this beautiful?
+        String temp = layerData.getWindowSize() == null ? "" : layerData.getWindowSize().toString();
+        windowSize.setText(temp);
+        temp = Arrays.toString(layerData.getWindowSize2D());
+        windowSize2d.setText(temp.equals("null") ? "" : temp);
+        droprate.setText(layerData.getDroprate() == null ? "" : layerData.getDroprate().toString());
+        temp = Arrays.toString(layerData.getInputDimensionality());
+        inputDimension.setText(temp.equals("null") ? "" : temp);
+        temp = Arrays.toString(layerData.getOutputDimensionality());
+        outputDimension.setText(temp.equals("null") ? "" : temp);
+
+        this.LayerTypeSelected();
     }
+
 }

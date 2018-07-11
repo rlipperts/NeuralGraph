@@ -2,7 +2,6 @@ package Controller;
 
 import Model.Graph.Node;
 import Model.Layers.*;
-import Util.Vertex;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
@@ -19,72 +18,70 @@ public class NodeEditor {
 
     public static final String NODE_CUSTOMIZATION_DIALOG_TITLE = "Node Customization";
 
-    private NodeEditingController controller;
 
+
+    public Node editNode(Node node) {
+
+        LayerData layerData = handleDialog(node);
+        return new Node(node.getId(), layerData.getLayerName(), layerData.getLayer());
+    }
+
+    public Node createNode(String id) {
+        LayerData layerData = handleDialog(null);
+        return new Node(id, layerData.getLayerName(), layerData.getLayer());
+    }
 
     /**
      * Creates and returns a default Node
      *
      * @param layerType Type of Layer for which the
-     * @return
+     * @return created default Node
      */
-    public Node createNode(LayerType layerType) {
-        if (layerType == LayerType.CUSTOM_LAYER) {
-            Node node = createCustomNode(null);
-            return node;
-        } else {
-            return new Node(layerType.getLayer());
-        }
-    }
-
-    public Node editNode(Vertex vertex) {
-        return createCustomNode(vertex);
-    }
-
-    //todo: naming of these functions
-    private Node createCustomNode(Vertex vertex) {
-        Node node;
-        final FutureTask query = new FutureTask<>(() -> specifyCustomNode(vertex));
-        Platform.runLater(query);
-        try {
-            node = (Node) query.get();
-        } catch (InterruptedException | ExecutionException e) {
-            node = null;
-            e.printStackTrace();
-        }
-
-        return node;
+    public Node createNode(String id, String name, LayerType layerType) {
+        return new Node(id, name, layerType.getLayer());
     }
 
     /**
      * Starts the creation Process of a custom Node, opening a Dialog for specification. Alot of magic happens.
      */
-    private Node specifyCustomNode(Vertex vertex) {
-        Node userInput = null;
-        Dialog<Node> nodeCustomizationDialog = createDialog(vertex);
-        nodeCustomizationDialog.setResultConverter(button -> {
-            if (button == ButtonType.OK)
-                return controller.getUserInput();
-            System.out.println("Cancel");
-            return null;
+    private LayerData handleDialog(Node node) {
+        LayerData layerData;
+
+        //Create the Dialog
+        final FutureTask query = new FutureTask<>(() -> {
+            Dialog<LayerData> dialog = new Dialog<>();
+            dialog.setTitle(NODE_CUSTOMIZATION_DIALOG_TITLE);
+            FXMLLoader dialogLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/NodeCustomizationDialog.fxml"));
+            try {
+                dialog.setDialogPane(dialogLoader.load());
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+            NodeEditingController controller = dialogLoader.getController();
+            if (node!=null) controller.setContent(node);
+
+            dialog.setResultConverter(button -> {
+                if (button == ButtonType.OK)
+                    return controller.getUserInput();
+                System.out.println("Cancel");
+                return null;
+            });
+            Optional<LayerData> optionalLayerData = dialog.showAndWait();
+            return optionalLayerData.isPresent() ? optionalLayerData.get() : null;
         });
-        Optional<Node> optionalLayerData = nodeCustomizationDialog.showAndWait();
-        if (optionalLayerData.isPresent()) userInput = optionalLayerData.get();
-        return userInput;
-    }
 
-    private Dialog<Node> createDialog(Vertex vertex) {
-
-        Dialog<Node> dialog = new Dialog<>();
-        dialog.setTitle(NODE_CUSTOMIZATION_DIALOG_TITLE);
-        FXMLLoader dialogLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/NodeCustomizationDialog.fxml"));
+        //Run it an retrieve the Information
+        Platform.runLater(query);
         try {
-            dialog.setDialogPane(dialogLoader.load());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            layerData = (LayerData) query.get();
+        } catch (InterruptedException | ExecutionException e) {
+            layerData = null;
+            e.printStackTrace();
         }
-        controller = dialogLoader.getController(); //todo: this is not beautiful yet
-        if (vertex!=null) controller.setContent(vertex);
-        return dialog;
+        return layerData;
     }
+
+
+
+
 }

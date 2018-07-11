@@ -1,5 +1,7 @@
 package Model.Layers;
 
+import Model.Graph.Node;
+
 /**
  * Variables for everything a Layer can have, a constructor and getters.
  */
@@ -12,7 +14,7 @@ public class LayerData {
     private ActivationFunction activationFunction;
     private Integer windowSize;
     private int[] windowSize2D;
-    private Double dropRate;
+    private Double droprate;
 
     public LayerData(LayerType layerType, int[] inputDimensionality, int[] outputDimensionality, ActivationFunction activationFunction, Integer windowSize, int[] windowSize2D, Double droprate) {
         this.layerType = layerType;
@@ -21,7 +23,18 @@ public class LayerData {
         this.activationFunction = activationFunction;
         this.windowSize2D = windowSize2D;
         this.windowSize = windowSize;
-        this.dropRate = droprate;
+        this.droprate = droprate;
+    }
+
+    public LayerData(String layerName, LayerType layerType, int[] inputDimensionality, int[] outputDimensionality, ActivationFunction activationFunction, Integer windowSize, int[] windowSize2D, Double droprate) {
+        this.layerName = layerName;
+        this.layerType = layerType;
+        this.inputDimensionality = inputDimensionality;
+        this.outputDimensionality = outputDimensionality;
+        this.activationFunction = activationFunction;
+        this.windowSize2D = windowSize2D;
+        this.windowSize = windowSize;
+        this.droprate = droprate;
     }
 
     //Todo: Is this a factory?
@@ -35,7 +48,7 @@ public class LayerData {
             case DENSE:
                 return new Dense(outputDimensionality, activationFunction);
             case DROPOUT:
-                return new Dropout(dropRate);
+                return new Dropout(droprate);
             case EMBEDDING:
                 return new Embedding(inputDimensionality, outputDimensionality);
             case FLATTEN:
@@ -51,6 +64,10 @@ public class LayerData {
             default:
                 throw new IllegalArgumentException("Couldn't find a constructor for LayerType " + layerType + "!");
         }
+    }
+
+    public String getLayerName() {
+        return layerName;
     }
 
     public LayerType getLayerType() {
@@ -77,7 +94,7 @@ public class LayerData {
         return windowSize2D;
     }
 
-    public Double getDropRate() {
-        return dropRate;
+    public Double getDroprate() {
+        return droprate;
     }
 }
