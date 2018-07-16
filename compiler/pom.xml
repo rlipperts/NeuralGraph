@@ -2,12 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   
   <groupId>de.techfak.uni-bielefeld.rlipperts</groupId>
-  <artifactId>neuralGraph</artifactId>
+  <artifactId>compiler</artifactId>
   <version>1.0</version>
   <packaging>pom</packaging>
   
-  <modules>
-	<module>compiler</module>
-	<module>graphEditor</module>
-  </modules>	
 </project>
