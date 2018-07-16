@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.Image?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.ToolbarController"
+      fx:id="toolbar">
+
+    <fx:define>
+        <ToggleGroup fx:id="toolSelector"/>
+    </fx:define>
+
+    <ToggleButton fx:id="Flatten" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Flatten.png"/>
+                </ImageView>
+                <Text text="Flatten"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="Dense" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Dense.png"/>
+                </ImageView>
+                <Text text="Dense"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="Embedding" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Embedding.png"/>
+                </ImageView>
+                <Text text="Embedding"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="Conv_1D" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Conv1D.png"/>
+                </ImageView>
+                <Text text="Conv1D"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="Conv_2D" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/Conv2D.png"/>
+                </ImageView>
+                <Text text="Conv2D"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="Max_Pooling_1D" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/MaxPooling1D.png"/>
+                </ImageView>
+                <Text text="MaxPooling1D"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="Max_Pooling_2D" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/MaxPooling2D.png"/>
+                </ImageView>
+                <Text text="MaxPooling2D"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+    <ToggleButton fx:id="Custom_Layer" toggleGroup="$toolSelector">
+        <graphic>
+            <VBox alignment="CENTER">
+                <ImageView fitHeight="64"
+                           fitWidth="128">
+                    <Image url="@/images/CustomLayer.png"/>
+                </ImageView>
+                <Text text="CustomLayer"/>
+            </VBox>
+        </graphic>
+    </ToggleButton>
+</VBox>

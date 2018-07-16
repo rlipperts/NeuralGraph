@@ -1,0 +1,10 @@
+/*Makes the addTabButton look decent*/
+#addTabBtn{
+    -fx-padding: 10;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: transparent;
+}
+#BtnTab{
+    -fx-padding: 0;
+}

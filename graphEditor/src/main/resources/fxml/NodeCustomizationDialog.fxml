@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.HBox?>
+<DialogPane xmlns="http://javafx.com/javafx/8.0.141"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.NodeEditingController"
+            fx:id="dialogPane">
+
+    <content>
+        <HBox>
+            <VBox alignment="CENTER" spacing="5">
+                <TextField fx:id="layerNameTextField" promptText="Name of the custom layer" prefWidth="200"/>
+                <ComboBox fx:id="layerTypeSelectionBox" promptText="-Type of the custom layer-" onAction="#LayerTypeSelected" prefWidth="200"/>
+                <TextField fx:id="inputDimension" promptText="Input dimension, e.g. &quot;4,5&quot;" visible="false" prefWidth="200"/>
+                <ComboBox fx:id="activationFunction" promptText="-Activation function-" visible="false" prefWidth="200"/>
+                <TextField fx:id="windowSize" promptText="Window size" visible="false" prefWidth="200"/>
+                <TextField fx:id="windowSize2d" promptText="2D Window size" visible="false" prefWidth="200"/>
+                <TextField fx:id="droprate" promptText="Drop rate" visible="false" prefWidth="200"/>
+                <TextField fx:id="outputDimension" promptText="Output dimension, e.g. &quot;4,5&quot;" visible="false" prefWidth="200"/>
+                <Text fx:id="errorMessages" text="These values are invalid!" fill="red" visible="false"/>
+
+            </VBox>
+        </HBox>
+    </content>
+
+    <ButtonType fx:constant="OK"/>
+    <ButtonType fx:constant="CANCEL"/>
+
+</DialogPane>
