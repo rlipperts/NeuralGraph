@@ -94,6 +94,7 @@ public class GraphController {
         Node node = nodeEditor.editNode(vertex.getNode());
         if(node == null) return;
         //delete old Node
+        //Todo: update old cell so Edges dont disappear
         mxGraph.removeCells(new Object[] {vertex.getCell()});
         graph.removeNode(vertex.getNode());
         //and replace with new one

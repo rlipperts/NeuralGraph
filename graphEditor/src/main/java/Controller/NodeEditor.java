@@ -21,6 +21,7 @@ public class NodeEditor {
     public Node editNode(Node node) {
 
         LayerData layerData = handleDialog(node);
+        if (layerData == null) return node; //if editing was cancelled keep the old Node
         return new Node(node.getId(), layerData.getLayerName(), layerData.getLayer());
     }
 
