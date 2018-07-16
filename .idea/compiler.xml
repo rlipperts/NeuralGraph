@@ -6,11 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="NeuralGraph" />
+        <module name="graphEditor" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="NeuralGraph" target="10" />
-    </bytecodeTargetLevel>
   </component>
 </project>
