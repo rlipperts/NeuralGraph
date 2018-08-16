@@ -21,9 +21,29 @@ public class Graph {
         nodes.put(id, node);
     }
 
-    public void removeNode(Node node) {
-        var result = nodes.remove(node.getId());
-        if (result == null) throw new NoSuchElementException("The Node \"" + node.getName() + "\" was not found in the model!");
+    public void removeNode(String id) {
+        var result = nodes.remove(id);
+        if (result == null) throw new NoSuchElementException("The Node \"" + id + "\" was not found in the model!");
+    }
+
+    public void removeNodes(String ... ids) {
+        for (String id: ids) removeNode(id);
+    }
+
+    public void updateNode(String id, Node node) {
+        var result = nodes.get(id);
+        if (result == null) throw new NoSuchElementException("The Node \"" + id + "\" was not found in the model!");
+        result.setId(node.getId());
+        result.setName(node.getName());
+        result.setLayer(node.getLayer());
+    }
+
+    public void addEdge(Node sourceNode, Node targetNode) {
+        sourceNode.addEdge(targetNode);
+    }
+
+    public void addEdge(String sourceNodeId, String targetNodeId) {
+        addEdge(getNode(sourceNodeId), getNode(targetNodeId));
     }
 
     public boolean contains(String key) {

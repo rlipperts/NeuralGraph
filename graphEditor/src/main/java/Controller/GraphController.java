@@ -10,6 +10,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxEvent;
+import com.mxgraph.util.mxEventObject;
 import com.mxgraph.view.mxGraph;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyProperty;
@@ -19,7 +21,10 @@ import javafx.scene.control.ToggleButton;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class GraphController {
 
@@ -55,7 +60,7 @@ public class GraphController {
 
                 if(SwingUtilities.isLeftMouseButton(e)) {
                     if (cell != null) {
-                        //TODO: Is there anything we should do here?
+                        //TODO: Is there anything we should do here? I don't think so.
                     } else {
                         if (selectedToolProperty.getValue() == null) return; //No Tool Selected
                         LayerType layerType = LayerType.valueOf(
@@ -75,7 +80,26 @@ public class GraphController {
 
             }
         });
+
+        graphComponent.getConnectionHandler().addListener(mxEvent.CONNECT, this::addEdge);
+        graphComponent.getConnectionHandler().addListener(mxEvent.CHANGE, this::deleteEdge);
+        //todo: listen for changes aswell
     }
+
+    private void addEdge(Object sender, mxEventObject event) {
+        mxCell edge = (mxCell) event.getProperty("cell");
+        if (edge.getTarget() == null) {//If the Edge has no Target delete it
+            mxGraph.getModel().remove(edge);
+            return;
+        }
+        graph.addEdge(edge.getSource().getId(), edge.getTarget().getId());
+        event.consume();
+    }
+
+    private void deleteEdge(Object sender, mxEventObject event) {
+        System.out.println("bla");
+    }
+
 
     private String generateVertexName(LayerType layerType) {
         int layerNameSuffix = 0;
@@ -93,14 +117,16 @@ public class GraphController {
         NodeEditor nodeEditor = new NodeEditor();
         Node node = nodeEditor.editNode(vertex.getNode());
         if(node == null) return;
-        //delete old Node
-        //Todo: update old cell so Edges dont disappear
-        mxGraph.removeCells(new Object[] {vertex.getCell()});
-        graph.removeNode(vertex.getNode());
-        //and replace with new one
-        graph.addNode(node.getId(), node);
-        insertCell(vertex.getNode().getId(), node.getName(), (int) vertex.getCell().getGeometry().getCenterX(),
-                (int) vertex.getCell().getGeometry().getCenterY());
+        //update old Node
+        mxGraph.getModel().beginUpdate();
+        try {
+            vertex.getCell().setId(vertex.getNode().getId());
+            vertex.getCell().setValue(node.getName());
+        } finally {
+            mxGraph.getModel().endUpdate();
+        }
+        mxGraph.refresh();
+        graph.updateNode(vertex.getNode().getId(), node);
     }
 
     /**
@@ -147,7 +173,7 @@ public class GraphController {
 
     @Subscribe
     public void deleteSelectedVertices(VertexDeletionEvent vertexDeletionEvent) {
+        graph.removeNodes(Arrays.stream(mxGraph.getSelectionCells()).map(mxCell.class::cast).map(mxCell::getId).toArray(String[]::new));
         mxGraph.removeCells(mxGraph.getSelectionCells(), true);
-        //todo: how the hell do I delete these in my own model
     }
 }

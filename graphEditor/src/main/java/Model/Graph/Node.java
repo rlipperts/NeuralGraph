@@ -8,8 +8,7 @@ import java.util.Arrays;
 public class Node {
 
     private String id;
-    private String name;
-    private Layer layer;
+    private String name;    private Layer layer;
     private ArrayList<Node> edges;
 
     public Node(String id, String name, Layer layer, Node... connectedNodes) {
@@ -38,6 +37,18 @@ public class Node {
 
     public Layer getLayer() {
         return layer;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLayer(Layer layer) {
+        this.layer = layer;
     }
 
 }
