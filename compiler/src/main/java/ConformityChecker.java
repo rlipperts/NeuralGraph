@@ -4,6 +4,7 @@ public class ConformityChecker {
 
     /**
      * Checks if the graph is circular
+     * NodeVisitor of visitorpattern
      * @param graph Graph to be checked
      * @return whether the graph has a circular structure
      */

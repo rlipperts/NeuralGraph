@@ -1,5 +1,9 @@
 import Model.Graph.Graph;
 
+/**
+ * Client of NodeVisitor Pattern.
+ * Manages the Compilation
+ */
 public class Compiler {
 
     /**
