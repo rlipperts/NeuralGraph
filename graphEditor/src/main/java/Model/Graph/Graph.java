@@ -2,6 +2,7 @@ package Model.Graph;
 
 import com.mxgraph.view.mxGraph;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
@@ -48,6 +49,10 @@ public class Graph {
 
     public boolean contains(String key) {
         return nodes.containsKey(key);
+    }
+
+    public Collection<Node> getNodes() {
+        return nodes.values();
     }
 
 }

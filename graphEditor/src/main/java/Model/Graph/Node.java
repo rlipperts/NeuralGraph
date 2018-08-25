@@ -19,6 +19,10 @@ public class Node {
         edges.addAll(Arrays.asList(connectedNodes));
     }
 
+    public Node(String id) {
+        this.id = id;
+    }
+
     public void addEdge(Node node) {
         edges.add(node);
     }
