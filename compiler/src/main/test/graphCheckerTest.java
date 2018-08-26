@@ -38,16 +38,16 @@ public class graphCheckerTest {
         graf.addNode("a", input);
         graf.addNode("z", output);
 
-        GraphChecker graphChecker = new GraphChecker(graf);
-        String checkResult = graphChecker.check();
+        GraphComformityChecker graphComformityChecker = new GraphComformityChecker(graf);
+        String checkResult = graphComformityChecker.check();
         assertEquals(NO_ERRORS_MESSAGE, checkResult);
     }
 
     @Test
     public void whenNoInputNode_thenRejected() {
-        GraphChecker graphChecker = new GraphChecker(new Graph());
-        String checkResult = graphChecker.check();
-        assertEquals(NO_INPUT_FOUND_MESSAGE, graphChecker.check());
+        GraphComformityChecker graphComformityChecker = new GraphComformityChecker(new Graph());
+        String checkResult = graphComformityChecker.check();
+        assertEquals(NO_INPUT_FOUND_MESSAGE, graphComformityChecker.check());
     }
 
     @Test
@@ -79,8 +79,8 @@ public class graphCheckerTest {
         graf.addNode("c", secondNode);
         graf.addNode("z", output);
 
-        GraphChecker graphChecker = new GraphChecker(graf);
-        String checkResult = graphChecker.check();
+        GraphComformityChecker graphComformityChecker = new GraphComformityChecker(graf);
+        String checkResult = graphComformityChecker.check();
         assertEquals(NO_ERRORS_MESSAGE, checkResult);
     }
 
@@ -114,8 +114,8 @@ public class graphCheckerTest {
         graf.addNode("c", secondNode);
         graf.addNode("z", output);
 
-        GraphChecker graphChecker = new GraphChecker(graf);
-        String checkResult = graphChecker.check();
+        GraphComformityChecker graphComformityChecker = new GraphComformityChecker(graf);
+        String checkResult = graphComformityChecker.check();
         assertEquals(ONE_ERROR_MESSAGE + GRAPH_CONTAINS_CYCLES_MESSAGE, checkResult);
     }
 
@@ -134,8 +134,8 @@ public class graphCheckerTest {
         graf.addNode("a", input);
         graf.addNode("z", output);
 
-        GraphChecker graphChecker = new GraphChecker(graf);
-        String checkResult = graphChecker.check();
+        GraphComformityChecker graphComformityChecker = new GraphComformityChecker(graf);
+        String checkResult = graphComformityChecker.check();
         assertEquals(TWO_ERRORS_FOUND_MESSAGE + ONE_DEAD_END_FOUND_MESSAGE + ONE_INACCESSIBLE_NODE_FOUND_MESSAGE, checkResult);
     }
 
@@ -204,8 +204,8 @@ public class graphCheckerTest {
         graf.addNode("h", seventhNode);
         graf.addNode("z", output);
 
-        GraphChecker graphChecker = new GraphChecker(graf);
-        String checkResult = graphChecker.check();
+        GraphComformityChecker graphComformityChecker = new GraphComformityChecker(graf);
+        String checkResult = graphComformityChecker.check();
         assertEquals(NO_ERRORS_MESSAGE, checkResult);
     }
 
@@ -274,8 +274,8 @@ public class graphCheckerTest {
         graf.addNode("h", seventhNode);
         graf.addNode("z", output);
 
-        GraphChecker graphChecker = new GraphChecker(graf);
-        String checkResult = graphChecker.check();
+        GraphComformityChecker graphComformityChecker = new GraphComformityChecker(graf);
+        String checkResult = graphComformityChecker.check();
         assertEquals(FOUR_ERRORS_FOUND_MESSAGE + TWO_DEAD_ENDS_FOUND_MESSAGE + TWO_INACCESSIBLE_NODES_FOUND_MESSAGE, checkResult);
     }
 }

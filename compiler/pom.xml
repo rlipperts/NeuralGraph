@@ -5,7 +5,6 @@
     <groupId>de.techfak.uni-bielefeld.rlipperts</groupId>
     <artifactId>compiler</artifactId>
     <version>1.0</version>
-    <packaging>pom</packaging>
 
     <build>
         <plugins>

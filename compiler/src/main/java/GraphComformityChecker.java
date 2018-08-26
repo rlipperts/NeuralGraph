@@ -10,7 +10,7 @@ import java.util.HashMap;
 /**
  * Checks given graph for cycles and creates a dfs tree.
  */
-public class GraphChecker {
+public class GraphComformityChecker {
 
     private int errors;
     private boolean deadEnd, cycle, inaccessible; //Nodes whose output is not used | | Nodes who are not reached by the input data
@@ -20,10 +20,10 @@ public class GraphChecker {
     private Graph graph;
 
     /**
-     * Contructor of class GraphChecker
+     * Contructor of class GraphComformityChecker
      * @param graph graph to be checked
      */
-    public GraphChecker(Graph graph) {
+    public GraphComformityChecker(Graph graph) {
         errors = 0;
         deadEnds = new ArrayList<>();
         inaccessibles = new ArrayList<>();

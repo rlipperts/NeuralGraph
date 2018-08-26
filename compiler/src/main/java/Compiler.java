@@ -12,10 +12,17 @@ public class Compiler {
      * @return Errors or return messages
      */
     public String compile(Graph graph) {
-
-        return null;
+        GraphComformityChecker graphComformityChecker = new GraphComformityChecker(graph);
+        String conformityCheckResult = graphComformityChecker.check();
+        if (conformityCheckResult == null) {
+            startCompilation(graph);
+        }
+        return conformityCheckResult;
     }
 
+    private void startCompilation(Graph graph) {
+        //TODO
+    }
 
 
 }

@@ -37,6 +37,11 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>de.techfak.uni-bielefeld.rlipperts</groupId>
+            <artifactId>compiler</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
