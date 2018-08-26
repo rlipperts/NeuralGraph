@@ -10,21 +10,24 @@ import java.util.HashMap;
 /**
  * Checks given graph for cycles and creates a dfs tree.
  */
-public class graphChecker {
+public class GraphChecker {
 
-    private static int errors;
-    private static boolean deadEnd, cycle, inaccessible; //Nodes whose output is not used | | Nodes who are not reached by the input data
-    private static ArrayList<Node> deadEnds;
-    private static ArrayList<Node> inaccessibles;
-    private static HashMap<String, Node> accessibles;
+    private int errors;
+    private boolean deadEnd, cycle, inaccessible; //Nodes whose output is not used | | Nodes who are not reached by the input data
+    private ArrayList<Node> deadEnds;
+    private ArrayList<Node> inaccessibles;
+    private HashMap<String, Node> accessibles;
+    private Graph graph;
 
-    public static String check(Graph graph) {
-
-        deadEnd = cycle = inaccessible = false;
+    public GraphChecker(Graph graph) {
         errors = 0;
         deadEnds = new ArrayList<>();
         inaccessibles = new ArrayList<>();
         accessibles = new HashMap<>();
+        this.graph = graph;
+    }
+
+    public String check() {
 
         ArrayList<Node> nodeList = new ArrayList<>(graph.getNodes());
         Node input = null;
@@ -32,8 +35,7 @@ public class graphChecker {
             if (node.getLayer() instanceof Input) input = node;
         }
         if (input == null) {
-            System.out.println("No input node found in graph!");
-            return null;
+            return ("No input node found in graph!");
         }
 
         Node dfsTree = new Node("root");
@@ -46,11 +48,12 @@ public class graphChecker {
     }
 
     @NotNull
-    private static StringBuilder buildCheckResult() {
+    private StringBuilder buildCheckResult() {
         StringBuilder checkResult = new StringBuilder();
-        checkResult.append("During the integrity check there were ");
+        checkResult.append("During the integrity check there ");
+        checkResult.append(errors == 1 ? "was " : "were ");
         checkResult.append(errors);
-        checkResult.append(".\n");
+        checkResult.append(errors == 1 ? " error.\n" : " errors.\n");
         if (deadEnd) {
             appendToCheckResult(checkResult, "dead end", deadEnds);
         }
@@ -63,24 +66,27 @@ public class graphChecker {
         return checkResult;
     }
 
-    private static void checkForAccessibility(Graph graph, ArrayList<Node> nodeList) {
+    private void checkForAccessibility(Graph graph, ArrayList<Node> nodeList) {
         if (accessibles.size() < nodeList.size()) {
             inaccessible = true;
             for (Node node : graph.getNodes()) {
                 if (!accessibles.containsKey(node.getId())) {
                     inaccessibles.add(node);
-                    errors ++;
+                    errors++;
                 }
             }
         }
     }
 
-    private static void appendToCheckResult(StringBuilder checkResult, String name, ArrayList<Node> errors) {
+    private void appendToCheckResult(StringBuilder checkResult, String name, ArrayList<Node> errors) {
         checkResult.append("Your graph has ");
         checkResult.append(errors.size());
         checkResult.append(" ");
         checkResult.append(name);
-        checkResult.append("s. The specific Nodes are called ");
+        checkResult.append(errors.size() > 1 ? "s" : "");
+        checkResult.append(". The specific node");
+        checkResult.append(errors.size() > 1 ? "s are" : " is");
+        checkResult.append(" called ");
         for (int i = 0; i < errors.size(); i++) {
             checkResult.append(errors.get(i).getName());//Node Name = Layer Name?
             int deadEndsRemaining = errors.size() - i - 1;
@@ -93,10 +99,12 @@ public class graphChecker {
         checkResult.append(".\n");
     }
 
-    private static void traverse(Node lastNode, Node currentGraphNode, int steps, int maxSteps) {
+    private void traverse(Node lastNode, Node currentGraphNode, int steps, int maxSteps) {
         if (steps > maxSteps) {
-            cycle = true;
-            errors ++;
+            if (!cycle) {
+                cycle = true;
+                errors++;
+            }
             return; //there is a cycle in the graph no need to continue
         }
         accessibles.put(currentGraphNode.getId(), currentGraphNode);
@@ -107,10 +115,11 @@ public class graphChecker {
             if (!(currentGraphNode.getLayer() instanceof Output)) { //Dead end?
                 deadEnd = true;
                 deadEnds.add(currentGraphNode);
-                errors ++;
+                errors++;
             }
             return;
         }
+        steps++;
         for (Node nextGraphNode : nextNodes) {
             traverse(currentNode, nextGraphNode, steps++, maxSteps);
         }

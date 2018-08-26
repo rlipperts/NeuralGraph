@@ -21,6 +21,7 @@ public class Node {
 
     public Node(String id) {
         this.id = id;
+        edges = new ArrayList<>();
     }
 
     public void addEdge(Node node) {
