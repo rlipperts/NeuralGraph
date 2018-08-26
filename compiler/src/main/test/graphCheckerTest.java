@@ -10,11 +10,11 @@ import static org.junit.Assert.assertEquals;
 
 public class graphCheckerTest {
 
-    public static final String NO_ERRORS_MESSAGE = "During the integrity check there were 0 errors.\n";
+    public static final String NO_ERRORS_MESSAGE = null;
     public static final String ONE_ERROR_MESSAGE = "During the integrity check there was 1 error.\n";
     public static final String TWO_ERRORS_FOUND_MESSAGE = "During the integrity check there were 2 errors.\n";
     public static final String FOUR_ERRORS_FOUND_MESSAGE = "During the integrity check there were 4 errors.\n";
-    public static final String NO_INPUT_FOUND_MESSAGE = "No input node found in graph!";
+    public static final String NO_INPUT_FOUND_MESSAGE = "No input node found in graph!\n";
     public static final String GRAPH_CONTAINS_CYCLES_MESSAGE = "The graph contains one or more cycles.\n";
     public static final String ONE_DEAD_END_FOUND_MESSAGE = "Your graph has 1 dead end. The specific node is called a.\n";
     public static final String TWO_DEAD_ENDS_FOUND_MESSAGE = "Your graph has 2 dead ends. The specific nodes are called d and g.\n";

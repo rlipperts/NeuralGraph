@@ -19,6 +19,10 @@ public class GraphChecker {
     private HashMap<String, Node> accessibles;
     private Graph graph;
 
+    /**
+     * Contructor of class GraphChecker
+     * @param graph graph to be checked
+     */
     public GraphChecker(Graph graph) {
         errors = 0;
         deadEnds = new ArrayList<>();
@@ -27,15 +31,18 @@ public class GraphChecker {
         this.graph = graph;
     }
 
+    /**
+     * Checks the graph for cycles, dead ends and inaccessible nodes
+     * @return String containing the error message or null if there were no errors
+     */
     public String check() {
-
         ArrayList<Node> nodeList = new ArrayList<>(graph.getNodes());
         Node input = null;
         for (Node node : nodeList) {
             if (node.getLayer() instanceof Input) input = node;
         }
         if (input == null) {
-            return ("No input node found in graph!");
+            return ("No input node found in graph!\n");
         }
 
         Node dfsTree = new Node("root");
@@ -43,6 +50,7 @@ public class GraphChecker {
 
         checkForAccessibility(graph, nodeList);
 
+        if (errors == 0) return null;
         StringBuilder checkResult = buildCheckResult();
         return checkResult.toString();
     }
