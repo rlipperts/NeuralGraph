@@ -1,7 +1,7 @@
 package Controller;
 
-import Model.Graph.Node;
-import Model.Layers.*;
+import Graph.Node;
+import Layers.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;

@@ -1,7 +1,6 @@
 package Controller;
 
-import Model.Layers.*;
-import Util.Vertex;
+import Layers.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -119,7 +118,7 @@ public class NodeEditingController {
                 && Pattern.matches(REGEX_VECTOR_ND, outputDimension.getCharacters());
     }
 
-    public void setContent(Model.Graph.Node node) {
+    public void setContent(Graph.Node node) {
         layerNameTextField.setText(node.getName());
 
         LayerData layerData = node.getLayer().getLayerData();

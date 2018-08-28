@@ -8,6 +8,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="compiler" />
         <module name="graphEditor" />
+        <module name="model" />
+        <module name="visitorPattern" />
       </profile>
     </annotationProcessing>
   </component>

@@ -1,8 +1,8 @@
 package Controller;
 
-import Model.Graph.Graph;
-import Model.Graph.Node;
-import Model.Layers.LayerType;
+import Graph.Graph;
+import Graph.Node;
+import Layers.LayerType;
 import Util.ToolDeselectEvent;
 import Util.Vertex;
 import Util.VertexDeletionEvent;
@@ -22,9 +22,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class GraphController {
 

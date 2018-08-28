@@ -1,7 +1,6 @@
 package Util;
 
-import Controller.GraphController;
-import Model.Graph.Node;
+import Graph.Node;
 import com.mxgraph.model.mxCell;
 
 public class Vertex {

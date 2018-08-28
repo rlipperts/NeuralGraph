@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import Compiler.Compiler;
 
 
 public class MainViewController {
@@ -57,7 +58,8 @@ public class MainViewController {
      * Starts compilation of the current graph.
      */
     public void compile() {
-
+        Compiler compiler = new Compiler();
+        //compiler.compile() TODO
     }
 
     public void setup(Scene scene, EventBus eventBus) {

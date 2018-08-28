@@ -9,6 +9,8 @@
   <modules>
 	<module>compiler</module>
 	<module>graphEditor</module>
+    <module>model</module>
+    <module>visitorPattern</module>
   </modules>
 
     <build>

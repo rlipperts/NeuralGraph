@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.techfak.uni-bielefeld.rlipperts</groupId>
-    <artifactId>compiler</artifactId>
+    <artifactId>visitorPattern</artifactId>
     <version>1.0</version>
 
     <build>
@@ -19,26 +19,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.techfak.uni-bielefeld.rlipperts</groupId>
-            <artifactId>visitorPattern</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.techfak.uni-bielefeld.rlipperts</groupId>
-            <artifactId>model</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
 </project>
