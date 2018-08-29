@@ -1,5 +1,6 @@
 package Controller;
 
+import Graph.Graph;
 import com.google.common.eventbus.EventBus;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
@@ -89,4 +90,9 @@ public class TabPaneController {
         tabPane.getSelectionModel().select(newTab);
     }
 
+    public Graph getActiveGraph() {
+        String tabId = tabPane.getSelectionModel().getSelectedItem().getId();
+        GraphController graphController = graphControllers.get(tabId);
+        return graphController.getGraph();
+    }
 }

@@ -21,6 +21,6 @@
     </left>
 
     <center>
-        <fx:include fx:id="tabs" source="TabPane.fxml"/>
+        <fx:include fx:id="tabPane" source="TabPane.fxml"/>
     </center>
 </BorderPane>

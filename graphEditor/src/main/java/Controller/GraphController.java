@@ -172,6 +172,12 @@ public class GraphController {
     @Subscribe
     public void deleteSelectedVertices(VertexDeletionEvent vertexDeletionEvent) {
         graph.removeNodes(Arrays.stream(mxGraph.getSelectionCells()).map(mxCell.class::cast).map(mxCell::getId).toArray(String[]::new));
+        graph.cleanUpEdges(); //Maybe cleanup only when returning is more efficient; doesn't matter in this scale
         mxGraph.removeCells(mxGraph.getSelectionCells(), true);
+    }
+
+    public Graph getGraph() {
+        //graph.cleanUpEdges();
+        return graph;
     }
 }

@@ -6,6 +6,7 @@ import Layers.Input;
 import Layers.Output;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -118,7 +119,7 @@ public class GraphComformityChecker {
         accessibles.put(currentGraphNode.getId(), currentGraphNode);
         Node currentNode = new Node(currentGraphNode.getId());
         lastNode.addEdge(currentNode);
-        Node[] nextNodes = currentGraphNode.getNextNodes();
+        Node[] nextNodes = currentGraphNode.getNextNodes().toArray(new Node[] {});
         if (nextNodes.length == 0) { //End of recursion
             if (!(currentGraphNode.getLayer() instanceof Output)) { //Dead end?
                 deadEnd = true;

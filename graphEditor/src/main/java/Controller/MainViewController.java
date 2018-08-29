@@ -15,10 +15,10 @@ import Compiler.Compiler;
 public class MainViewController {
 
     @FXML
-    private Parent tabs;
+    private Parent tabPane;
 
     @FXML
-    private TabPaneController tabsController;
+    private TabPaneController tabPaneController;
 
     @FXML
     private Parent toolbar;
@@ -59,12 +59,13 @@ public class MainViewController {
      */
     public void compile() {
         Compiler compiler = new Compiler();
-        //compiler.compile() TODO
+        String compilationResult = compiler.compile(tabPaneController.getActiveGraph());
+        System.out.println(compilationResult);
     }
 
     public void setup(Scene scene, EventBus eventBus) {
         this.eventBus = eventBus;
-        eventBus.register(tabsController);
+        eventBus.register(tabPaneController);
         eventBus.register(toolbarController);
     }
 
@@ -81,7 +82,7 @@ public class MainViewController {
     }
 
     public TabPaneController getTabPaneController() {
-        return tabsController;
+        return tabPaneController;
     }
 
     public ToolbarController getToolbarController() {

@@ -1,5 +1,6 @@
 package Graph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -53,4 +54,14 @@ public class Graph {
         return nodes.values();
     }
 
+    public void cleanUpEdges() {
+        for (Node node : nodes.values()) {
+            //Calling toArray here so we don't delete out of the iterator and avoid a ConcurrentModificationException
+            for(Node edge : node.getNextNodes().toArray(new Node[] {})) {
+                if (!nodes.containsKey(edge.getId())) {
+                    node.removeEdge(edge.getId());
+                }
+            }
+        }
+    }
 }
