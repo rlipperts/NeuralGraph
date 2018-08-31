@@ -1,11 +1,13 @@
 package Layers;
 
+import Visitable.VisitableLayer;
+
 import static Layers.LayerProperty.OUTPUT_DIMENSION;
 
 /**
  * Layer that describes input or output
  */
-public class Output implements Layer{
+public class Output extends VisitableLayer implements Layer{
 
     public static final LayerProperty[] LAYER_PROPERTIES = {OUTPUT_DIMENSION};
 

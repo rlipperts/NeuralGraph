@@ -1,6 +1,8 @@
 package Layers;
 
-public class Flatten implements Layer {
+import Visitable.VisitableLayer;
+
+public class Flatten extends VisitableLayer implements Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {};
 

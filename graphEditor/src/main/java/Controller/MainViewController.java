@@ -59,8 +59,7 @@ public class MainViewController {
      */
     public void compile() {
         Compiler compiler = new Compiler();
-        String compilationResult = compiler.compile(tabPaneController.getActiveGraph());
-        System.out.println(compilationResult);
+        compiler.compile(tabPaneController.getActiveGraph());
     }
 
     public void setup(Scene scene, EventBus eventBus) {

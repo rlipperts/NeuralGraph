@@ -45,10 +45,10 @@ public class GraphController {
         this.graph = new Graph();
         this.eventBus = eventBus;
 
-        createVertex(LayerType.INPUT, canvasWidth.getValue().intValue()/2,
-                NODE_SPACING + NODE_DEFAULT_HEIGHT/2);
-        createVertex(LayerType.OUTPUT, canvasWidth.getValue().intValue()/2,
-                canvasHeight.getValue().intValue() - NODE_SPACING - NODE_DEFAULT_HEIGHT/2 - TAB_BAR_HEIGHT);
+        createVertex(LayerType.INPUT, "input", canvasWidth.getValue().intValue() / 2,
+                NODE_SPACING + NODE_DEFAULT_HEIGHT / 2);
+        createVertex(LayerType.OUTPUT, "output", canvasWidth.getValue().intValue() / 2,
+                canvasHeight.getValue().intValue() - NODE_SPACING - NODE_DEFAULT_HEIGHT / 2 - TAB_BAR_HEIGHT);
 
         //Ugly awt mouseListener is added and connected with beautiful graph class
         graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
@@ -56,7 +56,7 @@ public class GraphController {
             public void mouseReleased(MouseEvent e) {
                 Object cell = graphComponent.getCellAt(e.getX(), e.getY());
 
-                if(SwingUtilities.isLeftMouseButton(e)) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     if (cell != null) {
                         //TODO: Is there anything we should do here? I don't think so.
                     } else {
@@ -67,8 +67,8 @@ public class GraphController {
                         createVertex(layerType, e.getX(), e.getY());
                     }
                     e.consume();
-                } else if(SwingUtilities.isRightMouseButton(e)) {
-                    if(cell == null) {
+                } else if (SwingUtilities.isRightMouseButton(e)) {
+                    if (cell == null) {
                         eventBus.post(new ToolDeselectEvent());
                     } else {
                         editVertex(new Vertex((mxCell) cell, graph.getNode(((mxCell) cell).getId())));
@@ -103,10 +103,10 @@ public class GraphController {
         int layerNameSuffix = 0;
         String layerName = layerType + "  ";
         do {
-            layerName = layerName.substring(0, layerName.length()-1) + layerNameSuffix;
-            layerNameSuffix ++;
+            layerName = layerName.substring(0, layerName.length() - 1) + layerNameSuffix;
+            layerNameSuffix++;
         } while (graph.contains(layerName));
-        if (layerNameSuffix == 1) layerName = layerName.substring(0, layerName.length()-1-1);
+        if (layerNameSuffix == 1) layerName = layerName.substring(0, layerName.length() - 1 - 1);
         return layerName;
     }
 
@@ -114,7 +114,7 @@ public class GraphController {
         //Adding to the internal graph
         NodeEditor nodeEditor = new NodeEditor();
         Node node = nodeEditor.editNode(vertex.getNode());
-        if(node == null) return;
+        if (node == null) return;
         //update old Node
         mxGraph.getModel().beginUpdate();
         try {
@@ -127,24 +127,16 @@ public class GraphController {
         graph.updateNode(vertex.getNode().getId(), node);
     }
 
-    /**
-     * Creates a Node both on the visible graph representation and the internal model.
-     * @param layerType Type of Layer to be created in the internal representation
-     * @param xPos Center X Position of the Vertex
-     * @param yPos Center Y Position of the Vertex
-     */
-    private void createVertex(LayerType layerType, int xPos, int yPos) {
-
-        String id = UUID.randomUUID().toString();
+    private void createVertex(LayerType layerType, String id, int xPos, int yPos) {
         //Adding to the internal graph
         NodeEditor nodeEditor = new NodeEditor();
         Node node;
-        if(layerType == LayerType.CUSTOM_LAYER)
+        if (layerType == LayerType.CUSTOM_LAYER)
             node = nodeEditor.createNode(id);
         else
             node = nodeEditor.createNode(id, generateVertexName(layerType), layerType);
 
-        if(node == null) return;
+        if (node == null) return;
         graph.addNode(id, node);
 
         //Adding to the visible graph
@@ -152,7 +144,20 @@ public class GraphController {
     }
 
     /**
+     * Creates a Node both on the visible graph representation and the internal model.
+     *
+     * @param layerType Type of Layer to be created in the internal representation
+     * @param xPos      Center X Position of the Vertex
+     * @param yPos      Center Y Position of the Vertex
+     */
+    private void createVertex(LayerType layerType, int xPos, int yPos) {
+        String id = UUID.randomUUID().toString();
+        createVertex(layerType, id, xPos, yPos);
+    }
+
+    /**
      * Creates a Vertex in the visible graph representation.
+     *
      * @param name Name of the Vertex
      * @param xPos Center X Position of the Vertex
      * @param yPos Center Y Position of the Vertex
@@ -162,8 +167,8 @@ public class GraphController {
         mxGraph.getModel().beginUpdate();
         try {
 
-            mxGraph.insertVertex(parent, id, name, xPos - NODE_DEFAULT_WIDTH/2,
-                    yPos - NODE_DEFAULT_HEIGHT/2, NODE_DEFAULT_WIDTH, NODE_DEFAULT_HEIGHT);
+            mxGraph.insertVertex(parent, id, name, xPos - NODE_DEFAULT_WIDTH / 2,
+                    yPos - NODE_DEFAULT_HEIGHT / 2, NODE_DEFAULT_WIDTH, NODE_DEFAULT_HEIGHT);
         } finally {
             mxGraph.getModel().endUpdate();
         }

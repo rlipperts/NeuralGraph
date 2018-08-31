@@ -7,7 +7,7 @@ public class ConcreteLayerVisitorKeras implements LayerVisitor {
 
     @Override
     public void visit(VisitableLayer visitable) {
-
+        
     }
 
 }

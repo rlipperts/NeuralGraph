@@ -1,8 +1,10 @@
 package Layers;
 
+import Visitable.VisitableLayer;
+
 import static Layers.LayerProperty.*;
 
-public class Conv1d implements Layer {
+public class Conv1d extends VisitableLayer implements Layer {
 
     public static final LayerProperty LAYER_PROPERTIES[] = {OUTPUT_DIMENSION, WINDOWSIZE, ACTIVATION_FUNCTION};
 

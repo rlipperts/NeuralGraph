@@ -1,11 +1,13 @@
 package Graph;
 
+import Visitable.VisitableGraph;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
-public class Graph {
+public class Graph extends VisitableGraph {
 
     private HashMap<String, Node> nodes;
 

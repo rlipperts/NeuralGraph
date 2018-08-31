@@ -1,8 +1,10 @@
 package Layers;
 
+import Visitable.VisitableLayer;
+
 import static Layers.LayerProperty.*;
 
-public class MaxPooling1d implements Layer{
+public class MaxPooling1d extends VisitableLayer implements Layer{
 
     public static final LayerProperty[] LAYER_PROPERTIES = {WINDOWSIZE};
 
