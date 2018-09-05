@@ -1,10 +1,10 @@
 package Layers;
 
-import Visitable.VisitableLayer;
+import Visitable.VisitableNode;
 
 import static Layers.LayerProperty.*;
 
-public class Dropout extends VisitableLayer implements Layer {
+public class Dropout implements Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {DROPRATE};
 

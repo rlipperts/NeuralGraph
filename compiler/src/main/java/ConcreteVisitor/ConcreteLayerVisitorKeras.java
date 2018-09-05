@@ -1,12 +1,12 @@
 package ConcreteVisitor;
 
-import Visitable.VisitableLayer;
+import Visitable.VisitableNode;
 import Visitor.LayerVisitor;
 
 public class ConcreteLayerVisitorKeras implements LayerVisitor {
 
     @Override
-    public void visit(VisitableLayer visitable) {
+    public void visit(VisitableNode visitable) {
         
     }
 

@@ -1,13 +1,14 @@
 package Graph;
 
 import Layers.Layer;
+import Visitable.VisitableNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Node {
+public class Node extends VisitableNode {
 
     private String id;
     private String name;    private Layer layer;
@@ -33,6 +34,11 @@ public class Node {
     }
 
     public Collection<Node> getNextNodes(){
+        return edges.values();
+    }
+
+    @Override
+    public Collection<VisitableNode> getNeighbours(){
         return edges.values();
     }
 

@@ -1,9 +1,9 @@
 package Visitor;
 
-import Visitable.VisitableLayer;
+import Visitable.VisitableNode;
 
 public interface LayerVisitor {
 
-    public void visit(VisitableLayer visitable);
+    public void visit(VisitableNode visitable);
 
 }

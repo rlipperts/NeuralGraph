@@ -1,10 +1,10 @@
 package Layers;
 
-import Visitable.VisitableLayer;
+import Visitable.VisitableNode;
 
 import static Layers.LayerProperty.*;
 
-public class Embedding extends VisitableLayer implements Layer {
+public class Embedding implements Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {INPUT_DIMENSION, OUTPUT_DIMENSION};
 

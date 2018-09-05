@@ -11,7 +11,7 @@ public class FileWriter {
      * Adds a line to the text which is to be written
      * @param line
      */
-    public void appendLine(String line) {
+    public void append(String line) {
 
     }
 

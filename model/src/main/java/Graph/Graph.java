@@ -1,6 +1,7 @@
 package Graph;
 
 import Visitable.VisitableGraph;
+import Visitable.VisitableNode;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,5 +66,10 @@ public class Graph extends VisitableGraph {
                 }
             }
         }
+    }
+
+    @Override
+    public VisitableNode getInputNode() {
+        return nodes.get("input");
     }
 }

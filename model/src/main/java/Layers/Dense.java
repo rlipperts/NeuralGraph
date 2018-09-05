@@ -1,10 +1,10 @@
 package Layers;
 
-import Visitable.VisitableLayer;
+import Visitable.VisitableNode;
 
 import static Layers.LayerProperty.*;
 
-public class Dense extends VisitableLayer implements Layer {
+public class Dense implements Layer {
 
    public static final LayerProperty[] LAYER_PROPERTIES = {OUTPUT_DIMENSION, ACTIVATION_FUNCTION};
 
