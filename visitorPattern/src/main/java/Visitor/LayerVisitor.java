@@ -1,9 +1,10 @@
 package Visitor;
 
-import Visitable.VisitableNode;
+import Visitable.VisitableLayer;
 
 public interface LayerVisitor {
 
-    public void visit(VisitableNode visitable);
+    public void visit(VisitableLayer visitable);
 
+    String getCode();
 }

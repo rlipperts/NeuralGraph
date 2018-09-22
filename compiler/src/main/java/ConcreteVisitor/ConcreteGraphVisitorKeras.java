@@ -4,8 +4,8 @@ import Visitable.*;
 import Visitor.GraphVisitor;
 import Compiler.FileWriter;
 
+import java.net.URI;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class ConcreteGraphVisitorKeras implements GraphVisitor {
 
@@ -13,11 +13,15 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
     public static final String IMPORT_MODELS = "from keras import models";
     public static final String IMPORT_ACTIVATIONS = "from keras import activations";
     public static final String SUMMARY = ".summary();";
+    public static final String LAYER_NAME_PREFIX = "var_";
 
-    VisitableGraph graph;
+    private VisitableGraph graph;
+    private int layerCount;
+
 
     @Override
     public void visit(VisitableGraph visitable) {
+        layerCount = 0;
         this.graph = visitable;
         FileWriter fileWriter = new FileWriter();
         writeHeading(fileWriter);
@@ -27,33 +31,49 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
 
     private void writeFooting(FileWriter fileWriter) {
         //TODO: this smells fishy
-        fileWriter.append(getRandomVariableName()+ SUMMARY);
+        fileWriter.append(generateLayerName(layerCount - 1) + SUMMARY); //reuse the last used layer name
     }
 
-    private String getRandomVariableName() {
-        return "var_" + UUID.randomUUID().toString().replace('-', '_');
+    private String generateLayerName(int layerCount) {
+        return LAYER_NAME_PREFIX + layerCount;
     }
 
     private void writeModel(FileWriter fileWriter) {
         VisitableNode input = graph.getInputNode();
         ArrayList<String> modelDraft = new ArrayList<>();
-        writeModelDraft(input, modelDraft);
-        fillBlanks(modelDraft);
+        writeLineDraft(layerCount, input, modelDraft);
+        replaceDefaults(modelDraft);
         for (String line : modelDraft) {
             fileWriter.append(line);
         }
+        System.out.println("Compiler actually compiles");
+        fileWriter.writeToFile(URI.create(""),"test", ".py");
     }
 
-    private void fillBlanks(ArrayList<String> modelDraft) {
+    private void replaceDefaults(ArrayList<String> modelDraft) {
 
     }
 
-    private void writeModelDraft(VisitableNode visitableNode, ArrayList<String> lines) {
-        ConcreteLayerVisitorKeras nodeVisitor = new ConcreteLayerVisitorKeras();
-        visitableNode.accept(nodeVisitor);
-        lines.add(nodeVisitor.getCode());
+    private void writeLineDraft(int parentLayerCount, VisitableNode visitableNode, ArrayList<String> modelDraft) {
+        ConcreteLayerVisitorKeras layerVisitor = new ConcreteLayerVisitorKeras();
+        visitableNode.getLayer().accept(layerVisitor);
+        StringBuilder line = new StringBuilder();
+
+        //Keras Functional API Code is created here
+        line.append(generateLayerName(layerCount));
+        line.append(" = ");
+        line.append(layerVisitor.getCode());
+        line.append(generateLayerName(parentLayerCount));
+        //Comments for debugging are inserted here
+        line.append("#Name: ");
+        line.append(visitableNode.getName());
+        line.append(", ID: ");
+        line.append(visitableNode.getId());
+
+        modelDraft.add(line.toString());
+        layerCount++;
         for (VisitableNode neighbour : visitableNode.getNeighbours()) {
-            writeModelDraft(neighbour, lines);
+            writeLineDraft(layerCount, neighbour, modelDraft);
         }
     }
 

@@ -50,6 +50,9 @@ public class GraphController {
         createVertex(LayerType.OUTPUT, "output", canvasWidth.getValue().intValue() / 2,
                 canvasHeight.getValue().intValue() - NODE_SPACING - NODE_DEFAULT_HEIGHT / 2 - TAB_BAR_HEIGHT);
 
+        mxGraph.setCellsEditable(false);
+        mxGraph.setAllowLoops(false);
+
         //Ugly awt mouseListener is added and connected with beautiful graph class
         graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
 
@@ -81,7 +84,7 @@ public class GraphController {
 
         graphComponent.getConnectionHandler().addListener(mxEvent.CONNECT, this::addEdge);
         graphComponent.getConnectionHandler().addListener(mxEvent.CHANGE, this::deleteEdge);
-        //todo: listen for changes aswell
+        //todo: Prevent edition of node names
     }
 
     private void addEdge(Object sender, mxEventObject event) {
@@ -90,6 +93,7 @@ public class GraphController {
             mxGraph.getModel().remove(edge);
             return;
         }
+        //TODO: Test if there already is an edge connecting to the Node
         graph.addEdge(edge.getSource().getId(), edge.getTarget().getId());
         event.consume();
     }

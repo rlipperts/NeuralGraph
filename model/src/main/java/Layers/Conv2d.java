@@ -1,12 +1,13 @@
 package Layers;
 
-import Visitable.VisitableNode;
+import java.util.Arrays;
 
 import static Layers.LayerProperty.*;
 
-public class Conv2d implements Layer {
+public class Conv2d extends Layer {
 
-    public static final LayerProperty LAYERPROPERTIES[] = {OUTPUT_DIMENSION, WINDOWSIZE2D, ACTIVATION_FUNCTION};
+    public static final LayerProperty LAYER_PROPERTIES[] = {OUTPUT_DIMENSION, WINDOWSIZE2D, ACTIVATION_FUNCTION};
+    public static final String LAYER_NAME = "Conv2D";
 
     private int[] filters; //outputDimension of the output space = number of output filters
     private int[] kernel_size; //length and height of the 2D convolution window
@@ -40,11 +41,23 @@ public class Conv2d implements Layer {
 
     @Override
     public LayerProperty[] getLayerProperties() {
-        return LAYERPROPERTIES;
+        return LAYER_PROPERTIES;
     }
 
     @Override
     public LayerData getLayerData() {
         return new LayerData(LayerType.CONV_2D, null, filters, activation, null, kernel_size, null);
+    }
+
+    @Override
+    public String toCode() {
+        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "") + ")";
+        //TODO: Replace with actual values;
+        return code;
+    }
+
+    @Override
+    public String getLayerName() {
+        return LAYER_NAME;
     }
 }

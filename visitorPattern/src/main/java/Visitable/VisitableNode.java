@@ -1,14 +1,15 @@
 package Visitable;
 
-import Visitor.LayerVisitor;
-
 import java.util.Collection;
 
-public abstract class VisitableNode {
+public interface VisitableNode {
 
-    public void accept(LayerVisitor visitor){
-        visitor.visit(this);
-    }
+    VisitableLayer getLayer();
 
-    public abstract Collection<? extends VisitableNode> getNeighbours();
+    Collection<? extends VisitableNode> getNeighbours();
+
+    String getName();
+
+    String getId();
+
 }

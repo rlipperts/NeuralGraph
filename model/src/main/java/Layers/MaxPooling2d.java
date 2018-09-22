@@ -1,12 +1,13 @@
 package Layers;
 
-import Visitable.VisitableNode;
+import java.util.Arrays;
 
 import static Layers.LayerProperty.*;
 
-public class MaxPooling2d implements Layer {
+public class MaxPooling2d extends Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {WINDOWSIZE2D};
+    public static final String LAYER_NAME = "MaxPooling2D";
 
     private int[] windowSize2d;
 
@@ -29,5 +30,17 @@ public class MaxPooling2d implements Layer {
 
     public int[] getWindowSize2d() {
         return windowSize2d;
+    }
+
+    @Override
+    public String toCode() {
+        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "") + ")";
+        //TODO: Replace with actual values;
+        return code;
+    }
+
+    @Override
+    public String getLayerName() {
+        return LAYER_NAME;
     }
 }

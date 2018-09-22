@@ -1,10 +1,11 @@
 package Layers;
 
-import Visitable.VisitableNode;
+import java.util.Arrays;
 
-public class Flatten implements Layer {
+public class Flatten extends Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {};
+    public static final String LAYER_NAME = "Flatten";
 
     @Override
     public LayerProperty[] getLayerProperties() {
@@ -16,4 +17,16 @@ public class Flatten implements Layer {
         return new LayerData(LayerType.FLATTEN, null, null, null, null, null, null);
     }
 
+
+    @Override
+    public String toCode() {
+        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "") + ")";
+        //TODO: Replace with actual values;
+        return code;
+    }
+
+    @Override
+    public String getLayerName() {
+        return LAYER_NAME;
+    }
 }

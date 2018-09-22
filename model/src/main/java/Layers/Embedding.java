@@ -1,12 +1,13 @@
 package Layers;
 
-import Visitable.VisitableNode;
+import java.util.Arrays;
 
 import static Layers.LayerProperty.*;
 
-public class Embedding implements Layer {
+public class Embedding extends Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {INPUT_DIMENSION, OUTPUT_DIMENSION};
+    public static final String LAYER_NAME = "Embedding";
 
     private int[] inputDimension;
     private int[] outputDimension;
@@ -35,5 +36,17 @@ public class Embedding implements Layer {
 
     public int[] getOutputDimension() {
         return outputDimension;
+    }
+
+    @Override
+    public String toCode() {
+        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "") + ")";
+        //TODO: Replace with actual values;
+        return code;
+    }
+
+    @Override
+    public String getLayerName() {
+        return LAYER_NAME;
     }
 }

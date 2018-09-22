@@ -1,12 +1,13 @@
 package Layers;
 
-import Visitable.VisitableNode;
+import java.util.Arrays;
 
 import static Layers.LayerProperty.*;
 
-public class Dropout implements Layer {
+public class Dropout extends Layer {
 
     public static final LayerProperty[] LAYER_PROPERTIES = {DROPRATE};
+    public static final String LAYER_NAME = "Dropout";
 
     private Double droprate;
 
@@ -29,5 +30,17 @@ public class Dropout implements Layer {
 
     public Double getDroprate() {
         return droprate;
+    }
+
+    @Override
+    public String toCode() {
+        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "") + ")";
+        //TODO: Replace with actual values;
+        return code;
+    }
+
+    @Override
+    public String getLayerName() {
+        return LAYER_NAME;
     }
 }

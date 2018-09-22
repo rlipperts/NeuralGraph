@@ -1,9 +1,11 @@
 package Layers;
 
-public interface Layer {
+import Visitable.VisitableLayer;
 
-    public LayerProperty[] getLayerProperties();
+public abstract class Layer extends VisitableLayer {
 
-    public LayerData getLayerData();
+    public abstract LayerProperty[] getLayerProperties();
+
+    public abstract LayerData getLayerData();
 
 }

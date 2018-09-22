@@ -1,12 +1,13 @@
 package Layers;
 
-import Visitable.VisitableNode;
+import java.util.Arrays;
 
 import static Layers.LayerProperty.*;
 
-public class Dense implements Layer {
+public class Dense extends Layer {
 
    public static final LayerProperty[] LAYER_PROPERTIES = {OUTPUT_DIMENSION, ACTIVATION_FUNCTION};
+   public static final String LAYER_NAME = "Dense";
 
     private int[] outputDimension;
     private ActivationFunction activationFunction;
@@ -27,6 +28,18 @@ public class Dense implements Layer {
     @Override
     public LayerData getLayerData() {
         return new LayerData(LayerType.DENSE, null, outputDimension, activationFunction, null, null, null);
+    }
+
+    @Override
+    public String toCode() {
+        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "") + ")";
+        //TODO: Replace with actual values;
+        return code;
+    }
+
+    @Override
+    public String getLayerName() {
+        return LAYER_NAME;
     }
 
     public int[] getOutputDimension() {

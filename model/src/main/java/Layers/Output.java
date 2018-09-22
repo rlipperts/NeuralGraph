@@ -1,15 +1,18 @@
 package Layers;
 
-import Visitable.VisitableNode;
+import Visitable.VisitableLayer;
+
+import java.util.Arrays;
 
 import static Layers.LayerProperty.OUTPUT_DIMENSION;
 
 /**
  * Layer that describes input or output
  */
-public class Output extends VisitableNode implements Layer{
+public class Output extends Layer{
 
     public static final LayerProperty[] LAYER_PROPERTIES = {OUTPUT_DIMENSION};
+    public static final String LAYER_NAME = "Output";
 
     private int[] outputDimension;
 
@@ -33,6 +36,18 @@ public class Output extends VisitableNode implements Layer{
     @Override
     public LayerData getLayerData() {
         return new LayerData(LayerType.OUTPUT, null, outputDimension, null, null, null, null);
+    }
+
+    @Override
+    public String toCode() {
+        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "") + ")";
+        //TODO: Replace with actual values;
+        return code;
+    }
+
+    @Override
+    public String getLayerName() {
+        return LAYER_NAME;
     }
 
 }

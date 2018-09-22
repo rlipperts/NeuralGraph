@@ -1,17 +1,17 @@
 package Graph;
 
 import Layers.Layer;
+import Visitable.VisitableLayer;
 import Visitable.VisitableNode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Node extends VisitableNode {
+public class Node implements VisitableNode {
 
     private String id;
-    private String name;    private Layer layer;
+    private String name;
+    private Layer layer;
     private HashMap<String, Node> edges;
 
     public Node(String id, String name, Layer layer, Node... connectedNodes) {
@@ -37,11 +37,6 @@ public class Node extends VisitableNode {
         return edges.values();
     }
 
-    @Override
-    public Collection<VisitableNode> getNeighbours(){
-        return edges.values();
-    }
-
     public String getId() {
         return id;
     }
@@ -52,6 +47,11 @@ public class Node extends VisitableNode {
 
     public Layer getLayer() {
         return layer;
+    }
+
+    @Override
+    public Collection<? extends VisitableNode> getNeighbours() {
+        return getNextNodes();
     }
 
     public void setId(String id) {
