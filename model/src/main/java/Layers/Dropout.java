@@ -34,7 +34,7 @@ public class Dropout extends Layer {
 
     @Override
     public String toCode() {
-        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "") + ")";
+        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "");
         //TODO: Replace with actual values;
         return code;
     }
