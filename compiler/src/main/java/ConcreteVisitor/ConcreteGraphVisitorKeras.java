@@ -5,9 +5,9 @@ import Visitable.*;
 import Visitor.GraphVisitor;
 import Compiler.FileWriter;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class ConcreteGraphVisitorKeras implements GraphVisitor {
@@ -19,10 +19,11 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
     public static final String LAYER_NAME_PREFIX = "var_";
     public static final String MODEL_START_COMMENT = "#Keras Model:";
     public static final String INPUT_LAYER_NAME = "input";
+    public static final String OUTPUT_NAME = "output";
 
     private VisitableGraph graph;
     private int numberOfLayers;
-    private HashMap<String, VisitableNode> visited = new HashMap<>();
+    private HashMap<String, KerasLine> visited = new HashMap<>();
 
 
     @Override
@@ -37,7 +38,7 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
     }
 
     private void writeFooting(FileWriter fileWriter) {
-        fileWriter.append("\n" + generateLayerName(numberOfLayers -1 -1) + SUMMARY); //reuse the last used layer name
+        fileWriter.append("\n" + OUTPUT_NAME + SUMMARY); //reuse the last used layer name
     }
 
     private String generateLayerName(int layerCount) {
@@ -46,7 +47,7 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
 
     private void writeModel(FileWriter fileWriter) {
         VisitableNode input = graph.getInputNode();
-        ArrayList<String> modelDraft = new ArrayList<>();
+        ArrayList<KerasLine> modelDraft = new ArrayList<>();
         numberOfLayers = 1;
 
         fileWriter.append(MODEL_START_COMMENT);
@@ -57,49 +58,34 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
             writeLineDraft(INPUT_LAYER_NAME, neighbour, modelDraft);
         }
         //Todo: Reorder the lines
-        //modelDraft.sort(Comparator.comparing());
-        replaceDefaults(modelDraft);
-        for (String line : modelDraft) {
-            fileWriter.append(line);
+        modelDraft.sort(Comparator.comparing(KerasLine::getPriority));
+        visited.get("output").setOutputName(OUTPUT_NAME);
+        for (KerasLine line : modelDraft) {
+            fileWriter.append(line.toString());
         }
     }
 
-    private void replaceDefaults(ArrayList<String> modelDraft) {
-
-    }
-
-    private void writeLineDraft(String parentLayerName, VisitableNode visitableNode, ArrayList<String> modelDraft) {
-        visited.put(visitableNode.getId(), visitableNode);
+    private void writeLineDraft(String parentLayerName, VisitableNode visitableNode, ArrayList<KerasLine> modelDraft) {
         ConcreteLayerVisitorKeras layerVisitor = new ConcreteLayerVisitorKeras();
         visitableNode.getLayer().accept(layerVisitor);
-        StringBuilder line = new StringBuilder();
-        //Keras Functional API Code is created here
-        String layerName = generateLayerName(numberOfLayers-1);
-        line.append(layerName);
-        line.append(" = ");
-        line.append(layerVisitor.getCode());//TODO: get the toCode method out of the layers, by utilizing a map that maps getters with NodeProperties
-        line.append(" (");
-        line.append(parentLayerName);
-        line.append(")");
-        //Comments for debugging are inserted here
-        line.append(" #Name:");
-        line.append(visitableNode.getName());
-        line.append(", ID:");
-        line.append(visitableNode.getId());
 
-        modelDraft.add(line.toString());
+        KerasLine line = layerVisitor.getCode();
+        String layerName = generateLayerName(numberOfLayers-1);
+        line.setOutputName(layerName);
+        line.setInputs(parentLayerName);
+        line.setNodeName(visitableNode.getName());
+        line.setNodeId(visitableNode.getId());
+
+        modelDraft.add(line);
+        visited.put(line.getNodeId(), line);
         numberOfLayers++;
+
         for (VisitableNode neighbour : visitableNode.getNeighbours()) {
-                if(visited.containsKey(neighbour.getId())) { //If Neighbour already was compiled and an input to it
-                    for (int i = 0; i < modelDraft.size(); i++) {
-                        String writtenLine = modelDraft.get(i);
-                        if(writtenLine.contains(neighbour.getId())){
-                            modelDraft.set(i, writtenLine.replace(") #",  "," + layerName + ") #"));
-                        }
-                    }
-                } else { //Otherwise compile it
-                    writeLineDraft(layerName, neighbour, modelDraft);
-                }
+            if(visited.containsKey(neighbour.getId())) { //If Neighbour already was compiled and an input to it
+                visited.get(neighbour.getId()).addInput(layerName);
+            } else { //Otherwise compile it
+                writeLineDraft(layerName, neighbour, modelDraft);
+            }
         }
     }
 

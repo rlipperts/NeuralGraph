@@ -2,29 +2,71 @@ package ConcreteVisitor;
 
 import Layers.Layer;
 import Layers.LayerData;
+import Layers.LayerProperty;
+import Visitable.VisitableLayer;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class KerasLine {
+
     public static final String EQUALS = " = ";
     public static final String LAYERS_CLASS = "layers.";
     public static final String COMMENT_NAME = " #NAME:";
     public static final String COMMENT_ID = ", ID:";
+
     private String outputName;
     private String layerName;
     private String parameters;
-    private String inputTouple;
-    private String comments;
+    private String inputs;
     private String nodeName;
     private String nodeId;
 
+    private static Map<LayerProperty, String> propertyPrefixMap;
 
-    public KerasLine(Layer layer) {
+    public static final String ACTIVATION_FUNCTION_PARAMETER_PREFIX = "activation=";
+
+    public static final String POOL_SIZE_PARAMETER_PREFIX = "pool_size=";
+
+    static {
+        propertyPrefixMap = new HashMap<>();
+        propertyPrefixMap.put(LayerProperty.ACTIVATION_FUNCTION, ACTIVATION_FUNCTION_PARAMETER_PREFIX);
+        propertyPrefixMap.put(LayerProperty.POOLSIZE, POOL_SIZE_PARAMETER_PREFIX);
+        propertyPrefixMap.put(LayerProperty.POOLSIZE2D, POOL_SIZE_PARAMETER_PREFIX);
+    }
+
+
+    public KerasLine(VisitableLayer visitableLayer) {
+        Layer layer = (Layer) visitableLayer;
         LayerData data = layer.getLayerData();
         layerName = generateLayerName(data);
-        parameters = Arrays.toString(layer.getLayerProperties())
-                .replace("[","").replace("]", "");
+
         //todo: replace default parameters with those that ain't null
+        StringBuilder finalParameters = new StringBuilder();
+        for (LayerProperty property : layer.getLayerProperties()) {
+            try {
+                Object actualProperty = data.getGetter(property).invoke(data);
+                if (actualProperty == null) {
+                    finalParameters.append("Mooooh!");
+                } else {
+                    String propertyPrefix = propertyPrefixMap.get(property);
+                    finalParameters.append(propertyPrefix == null ? "" : propertyPrefix);
+                    finalParameters.append(actualProperty.toString()//TODO toString auf Arrays funktioniert nicht!
+                            .replace("[", "(")
+                            .replace("]", ")"));
+                }
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            finalParameters.append(", ");
+        }
+        parameters = finalParameters.toString().substring(0, finalParameters.toString().length() - 2);
+    }
+
+    public String tupleFromArray(int[] array) {
+        return Arrays.toString(array).replace("[", "(").replace("]", ")");
     }
 
     private String generateLayerName(LayerData data) {
@@ -35,48 +77,16 @@ public class KerasLine {
         return name;
     }
 
-    public String getOutputName() {
-        return outputName;
-    }
-
     public void setOutputName(String outputName) {
         this.outputName = outputName;
     }
 
-    public String getLayerName() {
-        return layerName;
+    public void setInputs(String inputs) {
+        this.inputs = inputs;
     }
 
-    public void setLayerName(String layerName) {
-        this.layerName = layerName;
-    }
-
-    public String getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(String parameters) {
-        this.parameters = parameters;
-    }
-
-    public String getInputTouple() {
-        return inputTouple;
-    }
-
-    public void setInputTouple(String inputTouple) {
-        this.inputTouple = inputTouple;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public String getNodeName() {
-        return nodeName;
+    public void addInput(String input) {
+        inputs = inputs.concat(", " + input);
     }
 
     public void setNodeName(String nodeName) {
@@ -93,19 +103,25 @@ public class KerasLine {
 
     /**
      * Extracts the priority of the represented line
+     *
      * @return the priority
      */
     public double getPriority() {
-        int[] priorities = Arrays.stream(inputTouple
+        if (nodeId.equals("output")) return Double.POSITIVE_INFINITY;
+        int[] priorities = Arrays.stream(inputs
                 .replace("var_", "")
                 .replace("(", "")
                 .replace(")", "")
+                .replace("input", "0")
                 .split(","))
+                .map(String::trim)
                 .mapToInt(Integer::valueOf).toArray();
         Arrays.sort(priorities);
-        int mainPriority = priorities[priorities.length-1];
+        int mainPriority = priorities[priorities.length - 1];
 
         int sidePriority = Integer.valueOf(outputName.replace("var_", ""));
+
+        if (inputs.equals("input")) mainPriority = -1;
         return mainPriority + (((double) sidePriority) / Math.pow(10, String.valueOf(sidePriority).length()));
     }
 
@@ -118,8 +134,9 @@ public class KerasLine {
         result.append(layerName);
         result.append("(");
         result.append(parameters);
+        result.append(") (");
+        result.append(inputs);
         result.append(") ");
-        result.append(inputTouple);
         result.append(COMMENT_NAME);
         result.append(nodeName);
         result.append(COMMENT_ID);

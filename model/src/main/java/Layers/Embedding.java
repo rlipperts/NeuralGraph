@@ -22,7 +22,7 @@ public class Embedding extends Layer {
 
     @Override
     public LayerData getLayerData() {
-        return new LayerData(LayerType.EMBEDDING, inputDimension, outputDimension, null, null, null, null);
+        return new LayerData(LayerType.EMBEDDING, inputDimension, outputDimension, null, null, null, null, null, null);
     }
 
     @Override
@@ -36,13 +36,6 @@ public class Embedding extends Layer {
 
     public int[] getOutputDimension() {
         return outputDimension;
-    }
-
-    @Override
-    public String toCode() {
-        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "");
-        //TODO: Replace with actual values;
-        return code;
     }
 
     @Override

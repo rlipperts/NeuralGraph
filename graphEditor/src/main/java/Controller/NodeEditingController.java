@@ -33,6 +33,10 @@ public class NodeEditingController {
     @FXML
     private TextField windowSize2d;
     @FXML
+    private TextField poolSize;
+    @FXML
+    private TextField poolSize2d;
+    @FXML
     private TextField droprate;
     @FXML
     private TextField inputDimension;
@@ -56,6 +60,8 @@ public class NodeEditingController {
         nodeMap.put(LayerProperty.ACTIVATION_FUNCTION, activationFunction);
         nodeMap.put(LayerProperty.WINDOWSIZE, windowSize);
         nodeMap.put(LayerProperty.WINDOWSIZE2D, windowSize2d);
+        nodeMap.put(LayerProperty.POOLSIZE, poolSize);
+        nodeMap.put(LayerProperty.POOLSIZE2D, poolSize2d);
         nodeMap.put(LayerProperty.DROPRATE, droprate);
         nodeMap.put(LayerProperty.INPUT_DIMENSION, inputDimension);
         nodeMap.put(LayerProperty.OUTPUT_DIMENSION, outputDimension);
@@ -68,6 +74,7 @@ public class NodeEditingController {
         Button btnOk = (Button) dialogPane.lookupButton(ButtonType.OK);
         BooleanBinding inputValid = Bindings.createBooleanBinding(this::isInputValid,
                 layerTypeSelectionBox.valueProperty(), windowSize.textProperty(), windowSize2d.textProperty(),
+                poolSize.textProperty(), poolSize2d.textProperty(),
                 droprate.textProperty(), inputDimension.textProperty(), outputDimension.textProperty());
         btnOk.disableProperty().bind(inputValid.not());
         errorMessages.visibleProperty().bind(inputValid.not());
@@ -100,6 +107,8 @@ public class NodeEditingController {
                 activationFunction.getSelectionModel().getSelectedItem(),
                 windowSize.getText().equals("") ? null : Integer.valueOf(windowSize.getText()),
                 extractVectorFromString(windowSize2d.getText()),
+                poolSize.getText().equals("") ? null : Integer.valueOf(poolSize.getText()),
+                extractVectorFromString(poolSize2d.getText()),
                 droprate.getText().equals("") ? null : Double.valueOf(droprate.getText()));
     }
 
@@ -113,6 +122,8 @@ public class NodeEditingController {
         return !layerTypeSelectionBox.getSelectionModel().isEmpty()
                 && Pattern.matches(REGEX_SCALAR, windowSize.getCharacters())
                 && Pattern.matches(REGEX_VECTOR_2D, windowSize2d.getCharacters())
+                && Pattern.matches(REGEX_SCALAR, poolSize.getCharacters())
+                && Pattern.matches(REGEX_VECTOR_2D, poolSize2d.getCharacters())
                 && Pattern.matches(REGEX_FLOAT_FROM_0_TO_1, droprate.getCharacters())
                 && Pattern.matches(REGEX_VECTOR_ND, inputDimension.getCharacters())
                 && Pattern.matches(REGEX_VECTOR_ND, outputDimension.getCharacters());
@@ -125,11 +136,15 @@ public class NodeEditingController {
         layerTypeSelectionBox.getSelectionModel().select(layerData.getLayerType());
         activationFunction.getSelectionModel().select(layerData.getActivationFunction());
 
-        //todo: Is this beautiful?
+        //Is this beautiful?
         String temp = layerData.getWindowSize() == null ? "" : layerData.getWindowSize().toString();
         windowSize.setText(temp);
         temp = toString(layerData.getWindowSize2D());
         windowSize2d.setText(temp.equals("null") ? "" : temp);
+        temp = layerData.getPoolSize() == null ? "" : layerData.getPoolSize().toString();
+        poolSize.setText(temp);
+        temp = toString(layerData.getPoolSize2D());
+        poolSize2d.setText(temp.equals("null") ? "" : temp);
         droprate.setText(layerData.getDroprate() == null ? "" : layerData.getDroprate().toString());
         temp = toString(layerData.getInputDimensionality());
         inputDimension.setText(temp.equals("null") ? "" : temp);

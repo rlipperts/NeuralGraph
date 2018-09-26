@@ -35,14 +35,7 @@ public class Input extends Layer{
 
     @Override
     public LayerData getLayerData() {
-        return new LayerData(LayerType.INPUT, inputDimension, null, null, null, null, null);
-    }
-
-    @Override
-    public String toCode() {
-        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "");
-        //TODO: Replace with actual values;
-        return code;
+        return new LayerData(LayerType.INPUT, inputDimension, null, null, null, null, null, null, null);
     }
 
     @Override

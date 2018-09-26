@@ -25,19 +25,13 @@ public class Dropout extends Layer {
 
     @Override
     public LayerData getLayerData() {
-        return new LayerData(LayerType.DROPOUT, null, null, null, null, null, droprate);
+        return new LayerData(LayerType.DROPOUT, null, null, null, null, null, null, null, droprate);
     }
 
     public Double getDroprate() {
         return droprate;
     }
 
-    @Override
-    public String toCode() {
-        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "");
-        //TODO: Replace with actual values;
-        return code;
-    }
 
     @Override
     public String getLayerName() {

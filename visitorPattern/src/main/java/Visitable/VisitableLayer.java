@@ -10,8 +10,6 @@ public abstract class VisitableLayer {
         visitor.visit(this);
     }
 
-    public abstract String toCode();
-
     public abstract String getLayerName();
 
 }

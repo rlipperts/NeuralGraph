@@ -19,6 +19,8 @@
                 <ComboBox fx:id="activationFunction" promptText="-Activation function-" visible="false" prefWidth="200"/>
                 <TextField fx:id="windowSize" promptText="Window size" visible="false" prefWidth="200"/>
                 <TextField fx:id="windowSize2d" promptText="2D Window size" visible="false" prefWidth="200"/>
+                <TextField fx:id="poolSize" promptText="Pool size" visible="false" prefWidth="200"/>
+                <TextField fx:id="poolSize2d" promptText="2D Pool size" visible="false" prefWidth="200"/>
                 <TextField fx:id="droprate" promptText="Drop rate" visible="false" prefWidth="200"/>
                 <TextField fx:id="outputDimension" promptText="Output dimension, e.g. &quot;4,5&quot;" visible="false" prefWidth="200"/>
                 <Text fx:id="errorMessages" text="These values are invalid!" fill="red" visible="false"/>

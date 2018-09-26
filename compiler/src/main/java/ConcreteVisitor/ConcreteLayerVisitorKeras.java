@@ -13,8 +13,8 @@ public class ConcreteLayerVisitorKeras implements LayerVisitor {
     }
 
     @Override
-    public String getCode() {
-        return "layers." + visitableLayer.getLayerName() + "(" +  visitableLayer.toCode() + ")";
+    public KerasLine getCode() {
+        return new KerasLine(visitableLayer);
     }
 
 }

@@ -1,21 +1,19 @@
 package Layers;
 
-import java.util.Arrays;
-
 import static Layers.LayerProperty.*;
 
 public class MaxPooling2d extends Layer {
 
-    public static final LayerProperty[] LAYER_PROPERTIES = {WINDOWSIZE2D};
+    public static final LayerProperty[] LAYER_PROPERTIES = {POOLSIZE2D};
     public static final String LAYER_NAME = "MaxPooling2D";
 
-    private int[] windowSize2d;
+    private int[] poolSize2d;
 
     public MaxPooling2d() {
     }
 
-    public MaxPooling2d(int[] windowSize2d) {
-        this.windowSize2d = windowSize2d;
+    public MaxPooling2d(int[] poolSize2d) {
+        this.poolSize2d = poolSize2d;
     }
 
     @Override
@@ -25,18 +23,11 @@ public class MaxPooling2d extends Layer {
 
     @Override
     public LayerData getLayerData() {
-        return new LayerData(LayerType.MAX_POOLING_2D, null, null, null, null, windowSize2d, null);
+        return new LayerData(LayerType.MAX_POOLING_2D, null, null, null, null, null, null, poolSize2d, null);
     }
 
-    public int[] getWindowSize2d() {
-        return windowSize2d;
-    }
-
-    @Override
-    public String toCode() {
-        String code = Arrays.toString(LAYER_PROPERTIES).replace("[","").replace("]", "");
-        //TODO: Replace with actual values;
-        return code;
+    public int[] getPoolSize2d() {
+        return poolSize2d;
     }
 
     @Override
