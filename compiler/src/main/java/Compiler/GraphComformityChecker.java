@@ -4,6 +4,7 @@ import Graph.Graph;
 import Graph.Node;
 import Layers.Input;
 import Layers.Output;
+import com.google.common.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,17 +21,19 @@ public class GraphComformityChecker {
     private ArrayList<Node> inaccessibles;
     private HashMap<String, Node> accessibles;
     private Graph graph;
+    private EventBus compilationResultBus;
 
     /**
      * Contructor of class Compiler.GraphComformityChecker
      * @param graph graph to be checked
      */
-    public GraphComformityChecker(Graph graph) {
+    public GraphComformityChecker(Graph graph, EventBus compilationResultBus) {
         errors = 0;
         deadEnds = new ArrayList<>();
         inaccessibles = new ArrayList<>();
         accessibles = new HashMap<>();
         this.graph = graph;
+        this.compilationResultBus = compilationResultBus;
     }
 
     /**
@@ -44,7 +47,9 @@ public class GraphComformityChecker {
             if (node.getLayer() instanceof Input) input = node;
         }
         if (input == null) {
-            return ("No input node found in graph!\n");
+            String returnMessage = "No input node found in graph!";
+            compilationResultBus.post(returnMessage);
+            return returnMessage;
         }
 
         Node dfsTree = new Node("root");
@@ -54,6 +59,7 @@ public class GraphComformityChecker {
 
         if (errors == 0) return null;
         StringBuilder checkResult = buildCheckResult();
+        compilationResultBus.post(checkResult.toString());
         return checkResult.toString();
     }
 

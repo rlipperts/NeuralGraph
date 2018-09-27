@@ -1,14 +1,11 @@
 package ConcreteVisitor;
 
-import Layers.Input;
 import Visitable.*;
 import Visitor.GraphVisitor;
 import Compiler.FileWriter;
+import com.google.common.eventbus.EventBus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 
 public class ConcreteGraphVisitorKeras implements GraphVisitor {
 
@@ -19,12 +16,16 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
     public static final String LAYER_NAME_PREFIX = "var_";
     public static final String MODEL_START_COMMENT = "#Keras Model:";
     public static final String INPUT_LAYER_NAME = "input";
-    public static final String OUTPUT_NAME = "output";
+    public static final String OUTPUT_LAYER_NAME = "output";
 
     private VisitableGraph graph;
     private int numberOfLayers;
+    EventBus compilationEventBus;
     private HashMap<String, KerasLine> visited = new HashMap<>();
 
+    public ConcreteGraphVisitorKeras(EventBus compilationEventBus) {
+        this.compilationEventBus = compilationEventBus;
+    }
 
     @Override
     public void visit(VisitableGraph visitable) {
@@ -38,7 +39,7 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
     }
 
     private void writeFooting(FileWriter fileWriter) {
-        fileWriter.append("\n" + OUTPUT_NAME + SUMMARY); //reuse the last used layer name
+        fileWriter.append("\n" + OUTPUT_LAYER_NAME + SUMMARY); //reuse the last used layer name
     }
 
     private String generateLayerName(int layerCount) {
@@ -51,39 +52,48 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
         numberOfLayers = 1;
 
         fileWriter.append(MODEL_START_COMMENT);
-        fileWriter.append(INPUT_LAYER_NAME + " = keras.Input(shape=" +
-                Arrays.toString(((Input) input.getLayer()).getInputDimension())
-                        .replace("[", "").replace("]", "") + ")\n");
-        for (VisitableNode neighbour : input.getNeighbours()) {
-            writeLineDraft(INPUT_LAYER_NAME, neighbour, modelDraft);
-        }
-        //Todo: Reorder the lines
+
+        writeLineDraft(INPUT_LAYER_NAME, input, modelDraft);
+
         modelDraft.sort(Comparator.comparing(KerasLine::getPriority));
-        visited.get("output").setOutputName(OUTPUT_NAME);
+
+        //if (visited.containsKey(OUTPUT_LAYER_NAME)) visited.get(OUTPUT_LAYER_NAME).setOutputName(OUTPUT_LAYER_NAME);
         for (KerasLine line : modelDraft) {
             fileWriter.append(line.toString());
         }
     }
 
     private void writeLineDraft(String parentLayerName, VisitableNode visitableNode, ArrayList<KerasLine> modelDraft) {
+        if(visitableNode.getId().equals(OUTPUT_LAYER_NAME)) return;
         ConcreteLayerVisitorKeras layerVisitor = new ConcreteLayerVisitorKeras();
         visitableNode.getLayer().accept(layerVisitor);
 
-        KerasLine line = layerVisitor.getCode();
-        String layerName = generateLayerName(numberOfLayers-1);
+        KerasLine line = layerVisitor.generateKerasLine(compilationEventBus);
+
+        String layerName = generateLayerName(numberOfLayers - 1);
         line.setOutputName(layerName);
         line.setInputs(parentLayerName);
         line.setNodeName(visitableNode.getName());
         line.setNodeId(visitableNode.getId());
 
         modelDraft.add(line);
+
         visited.put(line.getNodeId(), line);
-        numberOfLayers++;
+        if (!line.getNodeId().equals(INPUT_LAYER_NAME)) {
+            numberOfLayers++;
+        } else {
+            layerName = line.getNodeId();
+        }
 
         for (VisitableNode neighbour : visitableNode.getNeighbours()) {
-            if(visited.containsKey(neighbour.getId())) { //If Neighbour already was compiled and an input to it
+            if (visited.containsKey(neighbour.getId())) { //If Neighbour already was compiled and an input to it
                 visited.get(neighbour.getId()).addInput(layerName);
             } else { //Otherwise compile it
+                if (neighbour.getId().equals(OUTPUT_LAYER_NAME)) {
+                    numberOfLayers--;
+                    layerName = OUTPUT_LAYER_NAME;
+                    modelDraft.get(modelDraft.size()-1).setOutputName(OUTPUT_LAYER_NAME);
+                }
                 writeLineDraft(layerName, neighbour, modelDraft);
             }
         }

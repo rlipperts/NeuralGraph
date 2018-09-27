@@ -1,9 +1,12 @@
 package ConcreteVisitor;
 
+import Layers.Input;
 import Layers.Layer;
 import Layers.LayerData;
 import Layers.LayerProperty;
 import Visitable.VisitableLayer;
+import com.google.common.eventbus.EventBus;
+import javafx.event.Event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -25,6 +28,8 @@ public class KerasLine {
     private String nodeId;
 
     private static Map<LayerProperty, String> propertyPrefixMap;
+    private EventBus eventBus;
+    private Layer layer;
 
     public static final String ACTIVATION_FUNCTION_PARAMETER_PREFIX = "activation=";
 
@@ -38,26 +43,26 @@ public class KerasLine {
     }
 
 
-    public KerasLine(VisitableLayer visitableLayer) {
-        Layer layer = (Layer) visitableLayer;
+    public KerasLine(VisitableLayer visitableLayer, EventBus eventBus) {
+        this.eventBus = eventBus;
+        layer = (Layer) visitableLayer;
         LayerData data = layer.getLayerData();
         layerName = generateLayerName(data);
 
-        //todo: replace default parameters with those that ain't null
         StringBuilder finalParameters = new StringBuilder();
         for (LayerProperty property : layer.getLayerProperties()) {
             try {
                 Object actualProperty = data.getGetter(property).invoke(data);
                 if (actualProperty == null) {
-                    //Todo: Compilation Error
-                    finalParameters.append("Mooooh!");
+                    eventBus.post("Error! Layer " + layer.getLayerName() + " has an undefined property: " + property.name());
+                    finalParameters.append("null");
                 } else {
                     String propertyPrefix = propertyPrefixMap.get(property);
                     finalParameters.append(propertyPrefix == null ? "" : propertyPrefix);
                     if (actualProperty instanceof int[]) {
                         finalParameters.append(tupleFromArray((int[]) actualProperty));
                     } else {
-                        finalParameters.append(actualProperty.toString()//TODO toString auf Arrays funktioniert nicht!
+                        finalParameters.append(actualProperty.toString()
                                 .replace("[", "(")
                                 .replace("]", ")"));
                     }
@@ -128,13 +133,14 @@ public class KerasLine {
                 .replace("(", "")
                 .replace(")", "")
                 .replace("input", "0")
+                .replace("output", "" + Integer.MAX_VALUE)
                 .split(","))
                 .map(String::trim)
                 .mapToInt(Integer::valueOf).toArray();
         Arrays.sort(priorities);
         int mainPriority = priorities[priorities.length - 1];
 
-        int sidePriority = Integer.valueOf(outputName.replace("var_", ""));
+        int sidePriority = Integer.valueOf(outputName.replace("var_", "").replace("output", "" + Integer.MAX_VALUE));
 
         if (inputs.equals("input")) mainPriority = -1;
         return mainPriority + (((double) sidePriority) / Math.pow(10, String.valueOf(sidePriority).length()));
@@ -142,6 +148,8 @@ public class KerasLine {
 
     @Override
     public String toString() {
+        if (layer instanceof Input)
+            return "input = keras.Input(shape=" + parameters + ")\n";
         StringBuilder result = new StringBuilder();
         result.append(outputName);
         result.append(EQUALS);

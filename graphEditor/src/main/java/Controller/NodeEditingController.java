@@ -133,6 +133,9 @@ public class NodeEditingController {
         layerNameTextField.setText(node.getName());
 
         LayerData layerData = node.getLayer().getLayerData();
+        //if (layerData.getLayerType() == LayerType.INPUT || layerData)
+        if (layerData.getLayerType() == LayerType.INPUT) layerTypeSelectionBox.getItems().add(LayerType.INPUT);
+        else if (layerData.getLayerType() == LayerType.OUTPUT) layerTypeSelectionBox.getItems().add(LayerType.OUTPUT);
         layerTypeSelectionBox.getSelectionModel().select(layerData.getLayerType());
         activationFunction.getSelectionModel().select(layerData.getActivationFunction());
 

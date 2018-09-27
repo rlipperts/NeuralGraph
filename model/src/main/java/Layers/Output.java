@@ -11,7 +11,7 @@ import static Layers.LayerProperty.OUTPUT_DIMENSION;
  */
 public class Output extends Layer{
 
-    public static final LayerProperty[] LAYER_PROPERTIES = {OUTPUT_DIMENSION};
+    public static final LayerProperty[] LAYER_PROPERTIES = {};
     public static final String LAYER_NAME = "Output";
 
     private int[] outputDimension;

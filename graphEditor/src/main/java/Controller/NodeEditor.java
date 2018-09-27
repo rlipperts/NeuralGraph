@@ -62,7 +62,6 @@ public class NodeEditor {
             dialog.setResultConverter(button -> {
                 if (button == ButtonType.OK)
                     return controller.getUserInput();
-                System.out.println("Cancel");
                 return null;
             });
             Optional<LayerData> optionalLayerData = dialog.showAndWait();
