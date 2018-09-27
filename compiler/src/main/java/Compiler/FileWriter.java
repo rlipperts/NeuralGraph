@@ -46,21 +46,19 @@ public class FileWriter {
     /**
      * Writes the built String to a pythonFile in given Direction
      *
-     * @param destination path to save to
+     * @param file file to save to
      */
-    public void writeToFile(String destination) {
+    public void writeToFile(File file) {
 
         BufferedWriter bw = null;
 
         try {
 
-            File file = new File(destination);
             bw = new BufferedWriter(new java.io.FileWriter(file));
 
             for (String line : lines) {
                 bw.write(line + separator);
             }
-            System.out.println("File created in " + destination.toString());
         } catch (IOException e) {
 
             e.printStackTrace();

@@ -95,4 +95,10 @@ public class TabPaneController {
         GraphController graphController = graphControllers.get(tabId);
         return graphController.getGraph();
     }
+
+    public mxGraph getActiveVisualizationGraph() {
+        String tabId = tabPane.getSelectionModel().getSelectedItem().getId();
+        GraphController graphController = graphControllers.get(tabId);
+        return graphController.getVisualizationGraph();
+    }
 }

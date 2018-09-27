@@ -1,11 +1,13 @@
 package Compiler;
 
-import ConcreteVisitor.ConcreteGraphVisitorKeras;
+import Compiler.Keras.ConcreteGraphVisitorKeras;
 import Graph.Graph;
 import Visitor.GraphVisitor;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.scene.control.Alert;
+
+import java.io.File;
 
 /**
  * Client of Visitor.LayerVisitor Pattern.
@@ -26,21 +28,21 @@ public class Compiler {
      * @param graph Graph from which to build the neural net
      * @return Errors or return messages
      */
-    public void compile(Graph graph) {
+    public void compile(Graph graph, File file) {
         compilationResultBuilder = new StringBuilder();
         compilationEventBus = new EventBus();
         compilationEventBus.register(this);
         GraphComformityChecker graphComformityChecker = new GraphComformityChecker(graph, compilationEventBus);
         graphComformityChecker.check();
         if (compilationResultBuilder.length() == 0) {
-            startCompilation(graph);
+            startCompilation(graph, file);
         }
 
         showCompilationResult(compilationResultBuilder.toString());
     }
 
-    private void startCompilation(Graph graph) {
-        GraphVisitor graphVisitor = new ConcreteGraphVisitorKeras(compilationEventBus);
+    private void startCompilation(Graph graph, File file) {
+        GraphVisitor graphVisitor = new ConcreteGraphVisitorKeras(compilationEventBus, file);
         graph.accept(graphVisitor);
     }
 

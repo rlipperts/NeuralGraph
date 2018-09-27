@@ -1,10 +1,11 @@
-package ConcreteVisitor;
+package Compiler.Keras;
 
 import Visitable.*;
 import Visitor.GraphVisitor;
 import Compiler.FileWriter;
 import com.google.common.eventbus.EventBus;
 
+import java.io.File;
 import java.util.*;
 
 public class ConcreteGraphVisitorKeras implements GraphVisitor {
@@ -20,11 +21,13 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
 
     private VisitableGraph graph;
     private int numberOfLayers;
-    EventBus compilationEventBus;
+    private EventBus compilationEventBus;
     private HashMap<String, KerasLine> visited = new HashMap<>();
+    private File file;
 
-    public ConcreteGraphVisitorKeras(EventBus compilationEventBus) {
+    public ConcreteGraphVisitorKeras(EventBus compilationEventBus, File file) {
         this.compilationEventBus = compilationEventBus;
+        this.file = file;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
         writeModel(fileWriter);
         writeFooting(fileWriter);
 
-        fileWriter.writeToFile("./test.py");
+        fileWriter.writeToFile(file);
     }
 
     private void writeFooting(FileWriter fileWriter) {

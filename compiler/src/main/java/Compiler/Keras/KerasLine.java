@@ -1,4 +1,4 @@
-package ConcreteVisitor;
+package Compiler.Keras;
 
 import Layers.Input;
 import Layers.Layer;
@@ -6,7 +6,6 @@ import Layers.LayerData;
 import Layers.LayerProperty;
 import Visitable.VisitableLayer;
 import com.google.common.eventbus.EventBus;
-import javafx.event.Event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graph>
+    <node id="input">
+        <layer name="Input">
+            <input_dimension>null</input_dimension>
+        </layer>
+        <coordinates>843.0, 10.0</coordinates>
+        <edges>
+            <edge>c5455923-8d68-42b0-8c8c-c72069f194b3</edge>
+        </edges>
+    </node>
+    <node id="c5455923-8d68-42b0-8c8c-c72069f194b3">
+        <layer name="Flatten"/>
+        <coordinates>833.0, 426.0</coordinates>
+        <edges>
+            <edge>output</edge>
+        </edges>
+    </node>
+    <node id="output">
+        <layer name="Output"/>
+        <coordinates>843.0, 952.0</coordinates>
+        <edges/>
+    </node>
+</graph>

@@ -1,5 +1,6 @@
 package Controller;
 
+import Compiler.XML.CompilerXML;
 import Util.ToolDeselectEvent;
 import Util.VertexDeletionEvent;
 import com.google.common.eventbus.EventBus;
@@ -10,6 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import Compiler.Compiler;
+import Compiler.FileSelector;
+import javafx.stage.Window;
+
+import java.io.File;
 
 
 public class MainViewController {
@@ -30,7 +35,10 @@ public class MainViewController {
     private BorderPane borderPane;
 
 
-    EventBus eventBus;
+    private EventBus eventBus;
+    private Window window;
+    private File latestCompilingDirectory = new File("./");
+    private File latestSavingDirectory = new File("./");
 
     /**
      * Loads a previously saved graph from a file starting a file chooser.
@@ -44,7 +52,13 @@ public class MainViewController {
      * a place to save.
      */
     public void save() {
-
+        FileSelector fileSelector = new FileSelector();
+        File file = fileSelector.chooseSavingFile("Save to..", window, latestSavingDirectory);
+        if (file == null) return;
+        latestSavingDirectory = new File(file.getParent());
+        CompilerXML compilerXML
+                = new CompilerXML(tabPaneController.getActiveGraph(), tabPaneController.getActiveVisualizationGraph());
+        compilerXML.compileTo(file);
     }
 
     /**
@@ -58,8 +72,12 @@ public class MainViewController {
      * Starts compilation of the current graph.
      */
     public void compile() {
+        FileSelector fileSelector = new FileSelector();
+        File file = fileSelector.chooseSavingFile("Compile as..", window, latestCompilingDirectory);
+        if (file == null) return;
+        latestCompilingDirectory = new File(file.getParent());
         Compiler compiler = new Compiler();
-        compiler.compile(tabPaneController.getActiveGraph());
+        compiler.compile(tabPaneController.getActiveGraph(), file);
     }
 
     public void setup(Scene scene, EventBus eventBus) {

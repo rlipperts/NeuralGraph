@@ -1,10 +1,8 @@
 import Controller.MainViewController;
-import Util.ToolDeselectEvent;
 import com.google.common.eventbus.EventBus;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -29,6 +27,7 @@ public class NeuralGraph extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
+
 
 
         EventBus eventBus = new EventBus();

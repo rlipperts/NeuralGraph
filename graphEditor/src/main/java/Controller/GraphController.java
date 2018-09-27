@@ -84,7 +84,6 @@ public class GraphController {
 
         graphComponent.getConnectionHandler().addListener(mxEvent.CONNECT, this::addEdge);
         graphComponent.getConnectionHandler().addListener(mxEvent.CHANGE, this::deleteEdge);
-        //todo: Prevent edition of node names
     }
 
     private void addEdge(Object sender, mxEventObject event) {
@@ -186,7 +185,10 @@ public class GraphController {
     }
 
     public Graph getGraph() {
-        //graph.cleanUpEdges();
         return graph;
+    }
+
+    public mxGraph getVisualizationGraph() {
+        return mxGraph;
     }
 }
