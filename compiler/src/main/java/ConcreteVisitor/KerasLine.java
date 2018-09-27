@@ -49,20 +49,27 @@ public class KerasLine {
             try {
                 Object actualProperty = data.getGetter(property).invoke(data);
                 if (actualProperty == null) {
+                    //Todo: Compilation Error
                     finalParameters.append("Mooooh!");
                 } else {
                     String propertyPrefix = propertyPrefixMap.get(property);
                     finalParameters.append(propertyPrefix == null ? "" : propertyPrefix);
-                    finalParameters.append(actualProperty.toString()//TODO toString auf Arrays funktioniert nicht!
-                            .replace("[", "(")
-                            .replace("]", ")"));
+                    if (actualProperty instanceof int[]) {
+                        finalParameters.append(tupleFromArray((int[]) actualProperty));
+                    } else {
+                        finalParameters.append(actualProperty.toString()//TODO toString auf Arrays funktioniert nicht!
+                                .replace("[", "(")
+                                .replace("]", ")"));
+                    }
                 }
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
             finalParameters.append(", ");
         }
-        parameters = finalParameters.toString().substring(0, finalParameters.toString().length() - 2);
+
+        parameters = finalParameters.toString();
+        if(parameters.length() != 0) parameters = parameters.substring(0, finalParameters.toString().length() - 2);
     }
 
     public String tupleFromArray(int[] array) {
@@ -101,6 +108,14 @@ public class KerasLine {
         this.nodeId = nodeId;
     }
 
+    private String getInputsKerasCompatible() {
+        if (inputs.contains(",")) {
+            return "[" + inputs + "]";
+        } else {
+            return inputs;
+        }
+    }
+
     /**
      * Extracts the priority of the represented line
      *
@@ -135,7 +150,7 @@ public class KerasLine {
         result.append("(");
         result.append(parameters);
         result.append(") (");
-        result.append(inputs);
+        result.append(getInputsKerasCompatible());
         result.append(") ");
         result.append(COMMENT_NAME);
         result.append(nodeName);

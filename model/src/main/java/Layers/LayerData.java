@@ -87,6 +87,14 @@ public class LayerData {
                 return new Input(inputDimensionality);
             case OUTPUT:
                 return new Output(outputDimensionality);
+            case ADD:
+                return new Add();
+            case SUBTRACT:
+                return new Subtract();
+            case MAXIMUM:
+                return new Maximum();
+            case AVERAGE:
+                return new Average();
             default:
                 throw new IllegalArgumentException("Couldn't find a constructor for LayerType " + layerType + "!");
         }

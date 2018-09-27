@@ -4,7 +4,8 @@ public enum LayerType {
 
     CONV_1D(Conv1d.class), CONV_2D(Conv2d.class), DENSE(Dense.class), DROPOUT(Dropout.class), EMBEDDING(Embedding.class),
     FLATTEN(Flatten.class), MAX_POOLING_1D(MaxPooling1d.class), MAX_POOLING_2D(MaxPooling2d.class), CUSTOM_LAYER(null),
-    INPUT(Input.class), OUTPUT(Output.class);
+    INPUT(Input.class), OUTPUT(Output.class), ADD(Add.class), SUBTRACT(Subtract.class), MAXIMUM(Maximum.class),
+    AVERAGE(Average.class);
 
     private final Class<? extends Layer> layerClass;
 
@@ -21,7 +22,8 @@ public enum LayerType {
     }
 
     public static LayerType[] userCreateableLayerTypes() {
-        return new LayerType[] {CONV_1D, CONV_2D, DENSE, DROPOUT, EMBEDDING, FLATTEN, MAX_POOLING_1D, MAX_POOLING_2D};
+        return new LayerType[] {CONV_1D, CONV_2D, DENSE, DROPOUT, EMBEDDING, FLATTEN,
+                MAX_POOLING_1D, MAX_POOLING_2D, ADD, SUBTRACT, MAXIMUM, AVERAGE};
     }
 
     @Override
