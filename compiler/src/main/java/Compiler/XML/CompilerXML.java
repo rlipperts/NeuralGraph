@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
- * Traverses the graph and makes the
+ * Traverses the graph and compiles into a xml document
  */
 public class CompilerXML {
 
@@ -46,10 +46,8 @@ public class CompilerXML {
 
             // compile nodes and add them as elements to the root
             Collection<Element> nodeElements = new ArrayList<>();
-            Map<String, Node> visitedNodes = new HashMap<String, Node>();
-            compileNodesRek(doc, (Node) dataGraph.getInputNode(), nodeElements, visitedNodes);
-            for(Element node : nodeElements) {
-                rootElement.appendChild(node);
+            for (Node dataNode : dataGraph.getNodes()) {
+                rootElement.appendChild(compileNode(doc, dataNode));
             }
 
             // write the content into xml file
@@ -59,22 +57,15 @@ public class CompilerXML {
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(file);
             transformer.transform(source, result);
-
-            // Output to console for testing
-            StreamResult consoleResult = new StreamResult(System.out);
-            transformer.transform(source, consoleResult);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void
-    compileNodesRek(Document doc, Node dataNode, Collection<Element> nodeElements, Map<String, Node> visitedNodes) {
-        visitedNodes.put(dataNode.getId(), dataNode);
+    private Element compileNode(Document doc, Node dataNode) {
 
         // node element
         Element nodeElement = doc.createElement("node");
-        nodeElements.add(nodeElement);
 
         // setting id attribute to element
         Attr attrId = doc.createAttribute("id");
@@ -101,11 +92,8 @@ public class CompilerXML {
         }
         nodeElement.appendChild(edgesElement);
 
-        // compile the adjacent nodes
-        for(Node edge : edges) {
-            if (visitedNodes.containsKey(edge.getId())) continue;
-            compileNodesRek(doc, edge, nodeElements, visitedNodes);
-        }
+        // return node element
+        return nodeElement;
     }
 
     private Element compileLayer(Document doc, Node node) {

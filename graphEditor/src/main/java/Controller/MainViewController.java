@@ -1,6 +1,8 @@
 package Controller;
 
 import Compiler.XML.CompilerXML;
+import Compiler.XML.ParserXML;
+import Graph.Graph;
 import Util.ToolDeselectEvent;
 import Util.VertexDeletionEvent;
 import com.google.common.eventbus.EventBus;
@@ -39,12 +41,19 @@ public class MainViewController {
     private Window window;
     private File latestCompilingDirectory = new File("./");
     private File latestSavingDirectory = new File("./");
+    private File latestOpeningDirectory = new File("./");
 
     /**
      * Loads a previously saved graph from a file starting a file chooser.
      */
     public void load() {
-
+        FileSelector fileSelector = new FileSelector();
+        File file = fileSelector.chooseOpeningFile("Open from..", window, latestSavingDirectory);
+        if (file == null) return;
+        tabPaneController.addTab();
+        ParserXML parserXML
+                = new ParserXML(tabPaneController.getActiveGraph(), tabPaneController.getActiveVisualizationGraph());
+        parserXML.parseFrom(file);
     }
 
     /**
