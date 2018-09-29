@@ -34,6 +34,12 @@ public enum LayerType {
         for(int i = 0; i < splits.length; i++) {
             splits[i] = splits[i].substring(0,1).toUpperCase() + splits[i].substring(1);
         }
-        return String.join("", splits);
+        return String.join(" ", splits);
+    }
+
+    public static LayerType fromString(String s) {
+        s = s.replace(" ", "_");
+        s = s.toUpperCase();
+        return LayerType.valueOf(s);
     }
 }

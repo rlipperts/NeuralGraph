@@ -6,6 +6,7 @@ import Visitable.VisitableNode;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class Graph extends VisitableGraph {
@@ -22,6 +23,10 @@ public class Graph extends VisitableGraph {
 
     public void addNode(String id, Node node) {
         nodes.put(id, node);
+    }
+
+    public void addAllNodes(Map<String, Node> nodeMap) {
+        nodes.putAll(nodeMap);
     }
 
     public void removeNode(String id) {

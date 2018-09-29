@@ -21,6 +21,7 @@ public class LayerData {
     private Double droprate;
 
     private static Map<LayerProperty, Method> getterMap;
+    private static Map<LayerProperty, Method> setterMap;
 
     static {
         getterMap = new HashMap<>();
@@ -36,9 +37,29 @@ public class LayerData {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+
+        setterMap = new HashMap<>();
+        try {
+            setterMap.put(LayerProperty.INPUT_DIMENSION, LayerData.class.getMethod("setInputDimensionality", int[].class));
+            setterMap.put(LayerProperty.OUTPUT_DIMENSION, LayerData.class.getMethod("setOutputDimensionality", int[].class));
+            setterMap.put(LayerProperty.ACTIVATION_FUNCTION, LayerData.class.getMethod("setActivationFunction", ActivationFunction.class));
+            setterMap.put(LayerProperty.DROPRATE, LayerData.class.getMethod("setDroprate", Double.class));
+            setterMap.put(LayerProperty.WINDOWSIZE, LayerData.class.getMethod("setWindowSize", Integer.class));
+            setterMap.put(LayerProperty.WINDOWSIZE2D, LayerData.class.getMethod("setWindowSize2D", int[].class));
+            setterMap.put(LayerProperty.POOLSIZE, LayerData.class.getMethod("setPoolSize", Integer.class));
+            setterMap.put(LayerProperty.POOLSIZE2D, LayerData.class.getMethod("setPoolSize2D", int[].class));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
-    public LayerData(LayerType layerType, int[] inputDimensionality, int[] outputDimensionality, ActivationFunction activationFunction, Integer windowSize, int[] windowSize2D, Integer poolSize, int[] poolSize2D, Double droprate) {
+    public LayerData(LayerType layerType) {
+        this.layerType = layerType;
+    }
+
+    public LayerData(LayerType layerType, int[] inputDimensionality, int[] outputDimensionality,
+                     ActivationFunction activationFunction, Integer windowSize, int[] windowSize2D,
+                     Integer poolSize, int[] poolSize2D, Double droprate) {
         this.layerType = layerType;
         this.inputDimensionality = inputDimensionality;
         this.outputDimensionality = outputDimensionality;
@@ -50,7 +71,9 @@ public class LayerData {
         this.droprate = droprate;
     }
 
-    public LayerData(String layerName, LayerType layerType, int[] inputDimensionality, int[] outputDimensionality, ActivationFunction activationFunction, Integer windowSize, int[] windowSize2D, Integer poolSize, int[] poolSize2D, Double droprate) {
+    public LayerData(String layerName, LayerType layerType, int[] inputDimensionality, int[] outputDimensionality,
+                     ActivationFunction activationFunction, Integer windowSize, int[] windowSize2D, Integer poolSize,
+                     int[] poolSize2D, Double droprate) {
         this.layerName = layerName;
         this.layerType = layerType;
         this.inputDimensionality = inputDimensionality;
@@ -142,5 +165,50 @@ public class LayerData {
 
     public Double getDroprate() {
         return droprate;
+    }
+
+
+    public Method getSetter(LayerProperty layerProperty) {
+        return setterMap.get(layerProperty);
+    }
+
+    public void setLayerName(String layerName) {
+        this.layerName = layerName;
+    }
+
+    public void setLayerType(LayerType layerType) {
+        this.layerType = layerType;
+    }
+
+    public void setInputDimensionality(int[] inputDimensionality) {
+        this.inputDimensionality = inputDimensionality;
+    }
+
+    public void setOutputDimensionality(int[] outputDimensionality) {
+        this.outputDimensionality = outputDimensionality;
+    }
+
+    public void setActivationFunction(ActivationFunction activationFunction) {
+        this.activationFunction = activationFunction;
+    }
+
+    public void setWindowSize(Integer windowSize) {
+        this.windowSize = windowSize;
+    }
+
+    public void setWindowSize2D(int[] windowSize2D) {
+        this.windowSize2D = windowSize2D;
+    }
+
+    public void setPoolSize(Integer poolSize) {
+        this.poolSize = poolSize;
+    }
+
+    public void setPoolSize2D(int[] poolSize2D) {
+        this.poolSize2D = poolSize2D;
+    }
+
+    public void setDroprate(Double droprate) {
+        this.droprate = droprate;
     }
 }

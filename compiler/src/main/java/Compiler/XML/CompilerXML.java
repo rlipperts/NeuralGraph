@@ -110,6 +110,7 @@ public class CompilerXML {
         // create layerType attribute
         Element layerTypeElement = doc.createElement("layerType");
         layerTypeElement.appendChild(doc.createTextNode(uniformLayer.getLayerType().toString()));
+        layerElement.appendChild(layerTypeElement);
 
         // generate layerProperty elements
         LayerProperty[] layerProperties = node.getLayer().getLayerProperties();

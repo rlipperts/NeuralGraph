@@ -1,122 +1,114 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <graph>
-    <node id="608cd274-4102-4933-ab9e-98775a8c8d36">
-        <layer name="Conv1d">
-            <output_dimension>42</output_dimension>
-            <windowsize>23</windowsize>
-            <activation_function>Softmax</activation_function>
-        </layer>
-        <coordinates>980.0, 231.0</coordinates>
-        <edges>
-            <edge>feb9713c-e43b-4373-b688-f93d7ec3b840</edge>
-        </edges>
-    </node>
-    <node id="48838d18-98de-4251-8795-d0de400d927b">
-        <layer name="MaxPooling2d">
+    <node id="f93509c0-e3a4-4be5-a969-41173e04ff0c">
+        <layer name="Max Pooling 2d">
+            <layerType>Max Pooling 2d</layerType>
             <poolsize2d>null</poolsize2d>
         </layer>
-        <coordinates>530.0, 500.0</coordinates>
+        <coordinates>370.0, 140.0</coordinates>
         <edges>
-            <edge>38a5c9ef-b25e-475d-8ba7-38cdf08f5fe9</edge>
+            <edge>2316337f-8f68-48e7-a80a-34be52c49311</edge>
+            <edge>165ddf28-2cf1-40c4-a0e6-c1b2550371e8</edge>
+            <edge>a15c02a1-2352-4ee1-b1f3-9fdc38d0902e</edge>
+            <edge>42c8a4eb-ee38-4273-bb24-78d6a8c41787</edge>
         </edges>
     </node>
-    <node id="3a34a96e-a8af-4040-84d2-70d099222e43">
-        <layer name="Flatten"/>
-        <coordinates>753.0, 404.0</coordinates>
-        <edges>
-            <edge>2bb1d461-457f-4250-801d-e45d8f228a9a</edge>
-        </edges>
-    </node>
-    <node id="9a9e6bb0-cc90-4f3c-a1cf-81c518c2d049">
-        <layer name="Embedding">
-            <input_dimension>null</input_dimension>
-            <output_dimension>null</output_dimension>
+    <node id="2316337f-8f68-48e7-a80a-34be52c49311">
+        <layer name="Max Pooling 1d">
+            <layerType>Max Pooling 1d</layerType>
+            <poolsize>45543</poolsize>
         </layer>
-        <coordinates>143.0, 491.0</coordinates>
-        <edges/>
+        <coordinates>832.0, 281.0</coordinates>
+        <edges>
+            <edge>a15c02a1-2352-4ee1-b1f3-9fdc38d0902e</edge>
+        </edges>
     </node>
-    <node id="41c26701-3eb3-4b74-b658-00657aed3698">
-        <layer name="Dense">
-            <output_dimension>null</output_dimension>
-            <activation_function>null</activation_function>
+    <node id="aa283a2d-6c44-42c3-a994-f6387f82965c">
+        <layer name="Flatten">
+            <layerType>Flatten</layerType>
         </layer>
-        <coordinates>135.0, 325.0</coordinates>
+        <coordinates>994.0, 283.0</coordinates>
         <edges>
-            <edge>9a9e6bb0-cc90-4f3c-a1cf-81c518c2d049</edge>
+            <edge>25bfd057-43fe-470a-8c05-f87fe3164495</edge>
         </edges>
     </node>
-    <node id="149a0be9-d6ec-4dbf-bb3f-16e614856531">
-        <layer name="Flatten"/>
-        <coordinates>162.0, 192.0</coordinates>
-        <edges>
-            <edge>41c26701-3eb3-4b74-b658-00657aed3698</edge>
-        </edges>
-    </node>
-    <node id="feb9713c-e43b-4373-b688-f93d7ec3b840">
-        <layer name="Conv2d">
-            <output_dimension>4, 2, 3, 4</output_dimension>
-            <windowsize2d>3, 2</windowsize2d>
-            <activation_function>Selu</activation_function>
+    <node id="370bc939-bbb3-4f8a-97d8-43fd1374fb49">
+        <layer name="Flatten">
+            <layerType>Flatten</layerType>
         </layer>
-        <coordinates>986.0, 431.0</coordinates>
+        <coordinates>850.0, 134.0</coordinates>
         <edges>
-            <edge>a479bc69-62b8-4002-ac22-44f36512748d</edge>
+            <edge>2316337f-8f68-48e7-a80a-34be52c49311</edge>
         </edges>
     </node>
-    <node id="202e8813-8d8f-45ba-997c-ac1ac717f3a2">
-        <layer name="MaxPooling1d">
-            <poolsize>null</poolsize>
+    <node id="25bfd057-43fe-470a-8c05-f87fe3164495">
+        <layer name="Flatten">
+            <layerType>Flatten</layerType>
         </layer>
-        <coordinates>476.0, 349.0</coordinates>
+        <coordinates>998.0, 426.0</coordinates>
         <edges>
-            <edge>48838d18-98de-4251-8795-d0de400d927b</edge>
+            <edge>a15c02a1-2352-4ee1-b1f3-9fdc38d0902e</edge>
         </edges>
     </node>
-    <node id="output">
-        <layer name="Output"/>
-        <coordinates>780.0, 920.0</coordinates>
-        <edges/>
-    </node>
-    <node id="53c2f63b-d15c-40f2-831e-42ef8b417b1d">
-        <layer name="Embedding">
-            <input_dimension>null</input_dimension>
-            <output_dimension>null</output_dimension>
+    <node id="a15c02a1-2352-4ee1-b1f3-9fdc38d0902e">
+        <layer name="Add">
+            <layerType>Add</layerType>
         </layer>
-        <coordinates>447.0, 184.0</coordinates>
-        <edges>
-            <edge>202e8813-8d8f-45ba-997c-ac1ac717f3a2</edge>
-        </edges>
-    </node>
-    <node id="input">
-        <layer name="Input">
-            <input_dimension>234</input_dimension>
-        </layer>
-        <coordinates>843.0, 10.0</coordinates>
-        <edges>
-            <edge>53c2f63b-d15c-40f2-831e-42ef8b417b1d</edge>
-            <edge>608cd274-4102-4933-ab9e-98775a8c8d36</edge>
-            <edge>3a34a96e-a8af-4040-84d2-70d099222e43</edge>
-        </edges>
-    </node>
-    <node id="a479bc69-62b8-4002-ac22-44f36512748d">
-        <layer name="Flatten"/>
-        <coordinates>988.0, 558.0</coordinates>
-        <edges>
-            <edge>2bb1d461-457f-4250-801d-e45d8f228a9a</edge>
-        </edges>
-    </node>
-    <node id="2bb1d461-457f-4250-801d-e45d8f228a9a">
-        <layer name="Maximum"/>
-        <coordinates>784.0, 737.0</coordinates>
+        <coordinates>829.0, 601.0</coordinates>
         <edges>
             <edge>output</edge>
         </edges>
     </node>
-    <node id="38a5c9ef-b25e-475d-8ba7-38cdf08f5fe9">
-        <layer name="Flatten"/>
-        <coordinates>561.0, 607.0</coordinates>
+    <node id="d4516cfe-2cee-4a20-bd83-14e87601ba96">
+        <layer name="Flatten">
+            <layerType>Flatten</layerType>
+        </layer>
+        <coordinates>997.0, 138.0</coordinates>
         <edges>
-            <edge>2bb1d461-457f-4250-801d-e45d8f228a9a</edge>
+            <edge>aa283a2d-6c44-42c3-a994-f6387f82965c</edge>
+        </edges>
+    </node>
+    <node id="output">
+        <layer name="Output">
+            <layerType>Output</layerType>
+        </layer>
+        <coordinates>790.0, 910.0</coordinates>
+        <edges/>
+    </node>
+    <node id="input">
+        <layer name="Input">
+            <layerType>Input</layerType>
+            <input_dimension>null</input_dimension>
+        </layer>
+        <coordinates>843.0, 10.0</coordinates>
+        <edges>
+            <edge>f93509c0-e3a4-4be5-a969-41173e04ff0c</edge>
+            <edge>370bc939-bbb3-4f8a-97d8-43fd1374fb49</edge>
+            <edge>d4516cfe-2cee-4a20-bd83-14e87601ba96</edge>
+            <edge>42c8a4eb-ee38-4273-bb24-78d6a8c41787</edge>
+        </edges>
+    </node>
+    <node id="165ddf28-2cf1-40c4-a0e6-c1b2550371e8">
+        <layer name="Conv 2d">
+            <layerType>Conv 2d</layerType>
+            <output_dimension>null</output_dimension>
+            <windowsize2d>1, 3</windowsize2d>
+            <activation_function>Sigmoid</activation_function>
+        </layer>
+        <coordinates>646.0, 274.0</coordinates>
+        <edges>
+            <edge>a15c02a1-2352-4ee1-b1f3-9fdc38d0902e</edge>
+        </edges>
+    </node>
+    <node id="42c8a4eb-ee38-4273-bb24-78d6a8c41787">
+        <layer name="Embedding">
+            <layerType>Embedding</layerType>
+            <input_dimension>null</input_dimension>
+            <output_dimension>null</output_dimension>
+        </layer>
+        <coordinates>636.0, 139.0</coordinates>
+        <edges>
+            <edge>165ddf28-2cf1-40c4-a0e6-c1b2550371e8</edge>
         </edges>
     </node>
 </graph>

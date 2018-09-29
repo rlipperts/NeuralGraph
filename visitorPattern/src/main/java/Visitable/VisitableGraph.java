@@ -2,6 +2,8 @@ package Visitable;
 
 import Visitor.GraphVisitor;
 
+import java.util.Collection;
+
 public abstract class VisitableGraph {
 
     public void accept(GraphVisitor visitor) {
@@ -9,4 +11,5 @@ public abstract class VisitableGraph {
     }
 
     public abstract VisitableNode getInputNode();
+
 }
