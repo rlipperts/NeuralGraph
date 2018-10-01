@@ -4,6 +4,6 @@ import Visitable.VisitableGraph;
 
 public interface GraphVisitor {
 
-    public void visit(VisitableGraph visitable);
+    public String visit(VisitableGraph visitable);
 
 }

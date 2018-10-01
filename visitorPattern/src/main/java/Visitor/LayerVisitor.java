@@ -7,5 +7,5 @@ public interface LayerVisitor {
 
     public void visit(VisitableLayer visitable);
 
-    Object generateKerasLine(EventBus eventBus);
+    Object generateKerasLine(EventBus eventBus, GraphVisitor parentGraphVisitor);
 }

@@ -36,19 +36,26 @@ public class GraphController {
     private mxGraphComponent mxGraphComponent;
     private ReadOnlyProperty<Toggle> selectedToolProperty;
     private EventBus eventBus;
+    private ReadOnlyDoubleProperty canvasWidth;
+    private ReadOnlyDoubleProperty canvasHeight;
 
     public GraphController(ReadOnlyProperty<Toggle> selectedToolProperty, mxGraph mxGraph, mxGraphComponent graphComponent,
-                           ReadOnlyDoubleProperty canvasWidth, ReadOnlyDoubleProperty canvasHeight, EventBus eventBus) {
+                           ReadOnlyDoubleProperty canvasWidth, ReadOnlyDoubleProperty canvasHeight, EventBus eventBus,
+                           boolean createDefaultNodes) {
         this.selectedToolProperty = selectedToolProperty;
         this.mxGraph = mxGraph;
         this.mxGraphComponent = graphComponent;
         this.graph = new Graph();
         this.eventBus = eventBus;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
 
-        createVertex(LayerType.INPUT, "input", canvasWidth.getValue().intValue() / 2,
-                NODE_SPACING + NODE_DEFAULT_HEIGHT / 2);
-        createVertex(LayerType.OUTPUT, "output", canvasWidth.getValue().intValue() / 2,
-                canvasHeight.getValue().intValue() - NODE_SPACING - NODE_DEFAULT_HEIGHT / 2 - TAB_BAR_HEIGHT);
+        if (createDefaultNodes) {
+            createVertex(LayerType.INPUT, UUID.randomUUID().toString(), canvasWidth.getValue().intValue() / 2,
+                    NODE_SPACING + NODE_DEFAULT_HEIGHT / 2);
+            createVertex(LayerType.OUTPUT, UUID.randomUUID().toString(), canvasWidth.getValue().intValue() / 2,
+                    canvasHeight.getValue().intValue() - NODE_SPACING - NODE_DEFAULT_HEIGHT / 2 - TAB_BAR_HEIGHT);
+        }
 
         mxGraph.setCellsEditable(false);
         mxGraph.setAllowLoops(false);
@@ -190,5 +197,14 @@ public class GraphController {
 
     public mxGraph getVisualizationGraph() {
         return mxGraph;
+    }
+
+    public void createVertex(Node node) {
+        graph.addNode(node.getId(), node);
+
+        //Adding to the visible graph
+        int xPos = canvasHeight.getValue().intValue() / 2;
+        int yPos = canvasHeight.getValue().intValue() / 2;
+        insertCell(node.getId(), node.getName(), xPos, yPos);
     }
 }

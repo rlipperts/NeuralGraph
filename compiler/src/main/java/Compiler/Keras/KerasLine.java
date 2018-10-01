@@ -1,9 +1,7 @@
 package Compiler.Keras;
 
-import Layers.Input;
-import Layers.Layer;
-import Layers.LayerData;
-import Layers.LayerProperty;
+import Layers.*;
+import Visitable.VisitableGraph;
 import Visitable.VisitableLayer;
 import com.google.common.eventbus.EventBus;
 
@@ -12,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KerasLine {
+public class KerasLine implements KerasCode {
 
     public static final String EQUALS = " = ";
     public static final String LAYERS_CLASS = "layers.";
@@ -41,10 +39,18 @@ public class KerasLine {
         propertyPrefixMap.put(LayerProperty.POOLSIZE2D, POOL_SIZE_PARAMETER_PREFIX);
     }
 
+    public KerasLine(String parentLayerName, String name, String layerName, String nodeId, String nodeName) {
+        inputs = parentLayerName;
+        outputName = name;
+        this.layerName = layerName;
+        this.nodeId = nodeId;
+        this.nodeName = nodeName;
+    }
 
     public KerasLine(VisitableLayer visitableLayer, EventBus eventBus) {
         this.eventBus = eventBus;
         layer = (Layer) visitableLayer;
+
         LayerData data = layer.getLayerData();
         layerName = generateLayerName(data);
 
@@ -88,6 +94,7 @@ public class KerasLine {
         return name;
     }
 
+    @Override
     public void setOutputName(String outputName) {
         this.outputName = outputName;
     }
@@ -96,6 +103,7 @@ public class KerasLine {
         this.inputs = inputs;
     }
 
+    @Override
     public void addInput(String input) {
         inputs = inputs.concat(", " + input);
     }
@@ -106,6 +114,10 @@ public class KerasLine {
 
     public String getNodeId() {
         return nodeId;
+    }
+
+    public LayerType getLayerType() {
+        return layer.getLayerData().getLayerType();
     }
 
     public void setNodeId(String nodeId) {
@@ -125,6 +137,7 @@ public class KerasLine {
      *
      * @return the priority
      */
+    @Override
     public double getPriority() {
         if (nodeId.equals("output")) return Double.POSITIVE_INFINITY;
         int[] priorities = Arrays.stream(inputs
@@ -157,6 +170,21 @@ public class KerasLine {
         result.append("(");
         result.append(parameters);
         result.append(") (");
+        result.append(getInputsKerasCompatible());
+        result.append(") ");
+        result.append(COMMENT_NAME);
+        result.append(nodeName);
+        result.append(COMMENT_ID);
+        result.append(nodeId);
+        return result.toString();
+    }
+
+    public String toIntegrationString() {
+        StringBuilder result = new StringBuilder();
+        result.append(outputName);
+        result.append(EQUALS);
+        result.append(layerName);
+        result.append(" (");
         result.append(getInputsKerasCompatible());
         result.append(") ");
         result.append(COMMENT_NAME);

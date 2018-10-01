@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.rmi.activation.ActivationGroup_Stub;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -73,5 +74,9 @@ public class FileWriter {
                 ex.printStackTrace();
             }
         }
+    }
+
+    public  String toString() {
+        return String.join("" + separator, lines);
     }
 }

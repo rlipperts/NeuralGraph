@@ -32,7 +32,11 @@ public class TabPaneController {
         this.eventBus = eventBus;
         graphControllers = new HashMap<>();
 
-        addTab();
+        addTab(true);
+    }
+
+    public  void addDefaultTab() {
+        addTab(true);
     }
 
     /**
@@ -40,7 +44,7 @@ public class TabPaneController {
      *
      * @return The created GraphController
      */
-    public void addTab() {
+    public void addTab(boolean createDefaultNodes) {
 
         //The side of the View and Library with all its useless Overhead is being created --
         Tab newTab = new Tab();
@@ -54,7 +58,7 @@ public class TabPaneController {
 
         //My own much more beautiful Graph is being created --
         GraphController graphController = new GraphController(selectedToolProperty, mxGraph, graphComponent,
-                tabPane.widthProperty(), tabPane.heightProperty(), eventBus);
+                tabPane.widthProperty(), tabPane.heightProperty(), eventBus, createDefaultNodes);
         graphControllers.put(newTab.getId(), graphController);
 
 
@@ -91,14 +95,22 @@ public class TabPaneController {
     }
 
     public Graph getActiveGraph() {
+        if (graphControllers.size() == 0) return null;
         String tabId = tabPane.getSelectionModel().getSelectedItem().getId();
         GraphController graphController = graphControllers.get(tabId);
         return graphController.getGraph();
     }
 
     public mxGraph getActiveVisualizationGraph() {
+        if (graphControllers.size() == 0) return null;
         String tabId = tabPane.getSelectionModel().getSelectedItem().getId();
         GraphController graphController = graphControllers.get(tabId);
         return graphController.getVisualizationGraph();
+    }
+
+    public GraphController getActiveGraphController() {
+        if (graphControllers.size() == 0) return null;
+        String tabId = tabPane.getSelectionModel().getSelectedItem().getId();
+        return graphControllers.get(tabId);
     }
 }

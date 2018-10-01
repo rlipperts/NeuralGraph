@@ -1,5 +1,6 @@
 package Graph;
 
+import Layers.Input;
 import Visitable.VisitableGraph;
 import Visitable.VisitableLayer;
 import Visitable.VisitableNode;
@@ -75,6 +76,9 @@ public class Graph extends VisitableGraph {
 
     @Override
     public VisitableNode getInputNode() {
-        return nodes.get("input");
+        for (Node node : nodes.values()) {
+            if (node.getLayer() instanceof Input) return node;
+        }
+        throw new NoSuchElementException("No Input Node found!");
     }
 }

@@ -1,5 +1,8 @@
 package Compiler.Keras;
 
+import Layers.Layer;
+import Layers.LayerType;
+import Layers.Macro;
 import Visitable.*;
 import Visitor.GraphVisitor;
 import Compiler.FileWriter;
@@ -22,7 +25,7 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
     private VisitableGraph graph;
     private int numberOfLayers;
     private EventBus compilationEventBus;
-    private HashMap<String, KerasLine> visited = new HashMap<>();
+    private HashMap<String, KerasCode> visited = new HashMap<>();
     private File file;
 
     public ConcreteGraphVisitorKeras(EventBus compilationEventBus, File file) {
@@ -30,69 +33,86 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
         this.file = file;
     }
 
+    public ConcreteGraphVisitorKeras(EventBus compilationEventBus) {
+        this.compilationEventBus = compilationEventBus;
+    }
+
     @Override
-    public void visit(VisitableGraph visitable) {
+    public String visit(VisitableGraph visitable) {
         this.graph = visitable;
         FileWriter fileWriter = new FileWriter();
         writeHeading(fileWriter);
         writeModel(fileWriter);
         writeFooting(fileWriter);
 
-        fileWriter.writeToFile(file);
+        if (file != null) {
+            fileWriter.writeToFile(file);
+        }
+        return fileWriter.toString();
     }
 
     private void writeFooting(FileWriter fileWriter) {
         fileWriter.append("\n" + OUTPUT_LAYER_NAME + SUMMARY); //reuse the last used layer name
     }
 
-    private String generateLayerName(int layerCount) {
+    String generateLayerName(int layerCount) {
         return LAYER_NAME_PREFIX + layerCount;
     }
 
     private void writeModel(FileWriter fileWriter) {
         VisitableNode input = graph.getInputNode();
-        ArrayList<KerasLine> modelDraft = new ArrayList<>();
+        ArrayList<KerasCode> modelDraft = new ArrayList<>();
         numberOfLayers = 1;
 
         fileWriter.append(MODEL_START_COMMENT);
 
         writeLineDraft(INPUT_LAYER_NAME, input, modelDraft);
 
-        modelDraft.sort(Comparator.comparing(KerasLine::getPriority));
+        modelDraft.sort(Comparator.comparing(KerasCode::getPriority));
 
         //if (visited.containsKey(OUTPUT_LAYER_NAME)) visited.get(OUTPUT_LAYER_NAME).setOutputName(OUTPUT_LAYER_NAME);
-        for (KerasLine line : modelDraft) {
-            fileWriter.append(line.toString());
+        for (KerasCode code : modelDraft) {
+            fileWriter.append(code.toString());
         }
     }
 
-    private void writeLineDraft(String parentLayerName, VisitableNode visitableNode, ArrayList<KerasLine> modelDraft) {
-        if(visitableNode.getId().equals(OUTPUT_LAYER_NAME)) return;
-        ConcreteLayerVisitorKeras layerVisitor = new ConcreteLayerVisitorKeras();
+    private void writeLineDraft(String parentLayerName, VisitableNode visitableNode, ArrayList<KerasCode> modelDraft) {
+       ConcreteLayerVisitorKeras layerVisitor = new ConcreteLayerVisitorKeras();
         visitableNode.getLayer().accept(layerVisitor);
 
-        KerasLine line = layerVisitor.generateKerasLine(compilationEventBus);
-
+        KerasCode code;
         String layerName = generateLayerName(numberOfLayers - 1);
-        line.setOutputName(layerName);
-        line.setInputs(parentLayerName);
-        line.setNodeName(visitableNode.getName());
-        line.setNodeId(visitableNode.getId());
 
-        modelDraft.add(line);
+        if(visitableNode.getLayer().getLayerName().equals("Macro")) {
+            Macro macro = ((Macro) visitableNode.getLayer());
+            ConcreteGraphVisitorKeras graphVisitor = new ConcreteGraphVisitorKeras(compilationEventBus);
+            String containedLogic[] = graphVisitor.visit(macro.getContainedGraph()).split("\n");
+            KerasMacro kerasMacro = new KerasMacro(containedLogic, layerName, parentLayerName,
+                    visitableNode.getId(), visitableNode.getName());
+            code = kerasMacro;
+        } else {
+            KerasLine line = layerVisitor.generateKerasLine(compilationEventBus, this);
+            if (line.getLayerType() == LayerType.OUTPUT) return;
+            line.setOutputName(layerName);
+            line.setInputs(parentLayerName);
+            line.setNodeName(visitableNode.getName());
+            line.setNodeId(visitableNode.getId());
+            code = line;
+        }
+        modelDraft.add(code);
 
-        visited.put(line.getNodeId(), line);
-        if (!line.getNodeId().equals(INPUT_LAYER_NAME)) {
+        visited.put(code.getNodeId(), code);
+        if (code.getLayerType() != LayerType.INPUT) {
             numberOfLayers++;
         } else {
-            layerName = line.getNodeId();
+            layerName = INPUT_LAYER_NAME;
         }
 
         for (VisitableNode neighbour : visitableNode.getNeighbours()) {
             if (visited.containsKey(neighbour.getId())) { //If Neighbour already was compiled and an input to it
                 visited.get(neighbour.getId()).addInput(layerName);
             } else { //Otherwise compile it
-                if (neighbour.getId().equals(OUTPUT_LAYER_NAME)) {
+                if (((Layer) neighbour.getLayer()).getLayerData().getLayerType() == LayerType.OUTPUT) {
                     numberOfLayers--;
                     layerName = OUTPUT_LAYER_NAME;
                     modelDraft.get(modelDraft.size()-1).setOutputName(OUTPUT_LAYER_NAME);
@@ -106,5 +126,13 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
         fileWriter.append(IMPORT_LAYERS);
         fileWriter.append(IMPORT_MODELS);
         fileWriter.append(IMPORT_ACTIVATIONS + "\n");
+    }
+
+    public int getNumberOfLayers() {
+        return numberOfLayers;
+    }
+
+    public void setNumberOfLayers(int newNumber) {
+        numberOfLayers = newNumber;
     }
 }

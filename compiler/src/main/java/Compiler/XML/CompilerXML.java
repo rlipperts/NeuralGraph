@@ -4,6 +4,7 @@ import Graph.Graph;
 import Graph.Node;
 import Layers.LayerData;
 import Layers.LayerProperty;
+import Layers.LayerType;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxGraphModel;
@@ -28,29 +29,40 @@ public class CompilerXML {
 
     private Graph dataGraph;
     private mxGraph visibleGraph;
+    private Document doc;
 
     public CompilerXML(Graph dataGraph, mxGraph visibleGraph) {
         this.dataGraph = dataGraph;
         this.visibleGraph = visibleGraph;
+
+        createXmlDocument();
     }
 
-    public void compileTo(File file) {
+    public CompilerXML(Graph dataGraph, Document doc) {
+        this.dataGraph = dataGraph;
+        this.doc = doc;
+    }
+
+
+    private void createXmlDocument() {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.newDocument();
+            doc = dBuilder.newDocument();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
 
-            // root element
-            Element rootElement = doc.createElement("graph");
-            doc.appendChild(rootElement);
+    public void compileTo(File file) {
 
-            // compile nodes and add them as elements to the root
-            Collection<Element> nodeElements = new ArrayList<>();
-            for (Node dataNode : dataGraph.getNodes()) {
-                rootElement.appendChild(compileNode(doc, dataNode));
-            }
+        // root element
+        Element rootElement = doc.createElement("graph");
+        doc.appendChild(rootElement);
+        compileAsChildElement(rootElement);
 
-            // write the content into xml file
+        // write the content into xml file
+        try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -59,6 +71,16 @@ public class CompilerXML {
             transformer.transform(source, result);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void compileAsChildElement(Element parentElement) {
+        if (dataGraph == null) return;
+
+        // compile nodes and add them as elements to the root
+        Collection<Element> nodeElements = new ArrayList<>();
+        for (Node dataNode : dataGraph.getNodes()) {
+            parentElement.appendChild(compileNode(doc, dataNode));
         }
     }
 
@@ -75,17 +97,19 @@ public class CompilerXML {
         // compile the layer
         nodeElement.appendChild(compileLayer(doc, dataNode));
 
-        // compile the vertice
-        Element verticeElement = doc.createElement("coordinates");
-        mxGeometry cellGeometry = ((mxCell) ((mxGraphModel) visibleGraph.getModel()).getCell(dataNode.getId())).getGeometry();
-        String coordinates = cellGeometry.getX() + ", " + cellGeometry.getY();
-        verticeElement.appendChild(doc.createTextNode(coordinates));
-        nodeElement.appendChild(verticeElement);
+        if (visibleGraph != null) {
+            // compile the vertice
+            Element verticeElement = doc.createElement("coordinates");
+            mxGeometry cellGeometry = ((mxCell) ((mxGraphModel) visibleGraph.getModel()).getCell(dataNode.getId())).getGeometry();
+            String coordinates = cellGeometry.getX() + ", " + cellGeometry.getY();
+            verticeElement.appendChild(doc.createTextNode(coordinates));
+            nodeElement.appendChild(verticeElement);
+        }
 
         // compile the edges
         Element edgesElement = doc.createElement("edges");
         Collection<Node> edges = dataNode.getNextNodes();
-        for(Node edge : edges) {
+        for (Node edge : edges) {
             Element edgeElement = doc.createElement("edge");
             edgeElement.appendChild(doc.createTextNode(edge.getId()));
             edgesElement.appendChild(edgeElement);
@@ -108,9 +132,17 @@ public class CompilerXML {
         layerElement.setAttributeNode(attrName);
 
         // create layerType attribute
+        LayerType layerType = uniformLayer.getLayerType();
         Element layerTypeElement = doc.createElement("layerType");
-        layerTypeElement.appendChild(doc.createTextNode(uniformLayer.getLayerType().toString()));
+        layerTypeElement.appendChild(doc.createTextNode(layerType.toString()));
         layerElement.appendChild(layerTypeElement);
+        if(layerType == LayerType.MACRO) {
+            Element macroGraphElement = doc.createElement("contains");
+            layerElement.appendChild(macroGraphElement);
+            CompilerXML compilerXML = new CompilerXML(uniformLayer.getContainedGraph(), doc);
+            compilerXML.compileAsChildElement(macroGraphElement);
+            return layerElement;
+        }
 
         // generate layerProperty elements
         LayerProperty[] layerProperties = node.getLayer().getLayerProperties();

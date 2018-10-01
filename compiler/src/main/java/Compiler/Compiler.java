@@ -29,6 +29,7 @@ public class Compiler {
      * @return Errors or return messages
      */
     public void compile(Graph graph, File file) {
+        if (graph == null) return;
         compilationResultBuilder = new StringBuilder();
         compilationEventBus = new EventBus();
         compilationEventBus.register(this);

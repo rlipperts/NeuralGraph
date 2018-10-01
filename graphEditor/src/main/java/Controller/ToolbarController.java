@@ -15,6 +15,7 @@ public class ToolbarController {
 
     @Subscribe
     public void handleDeselectEvent(ToolDeselectEvent toolDeselectEvent) {
+        if (toolSelector.getSelectedToggle() == null) return;
         toolSelector.getSelectedToggle().setSelected(false);
     }
 

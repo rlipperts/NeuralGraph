@@ -40,66 +40,84 @@ public class ParserXML {
         this.visibleGraph = visibleGraph;
     }
 
-    public void parseFrom(File file) {
+    public ParserXML(Graph.Graph dataGraph) {
+        this.dataGraph = dataGraph;
+    }
+
+    public void parseFromFile(File file) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(file);
             doc.getDocumentElement().normalize();
 
-            // process nodes
-            NodeList nodeElementList = doc.getElementsByTagName("node");
-            Map<String, Element> nodeElementMap = new HashMap<>();
+            Element rootElement = (Element) doc.getElementsByTagName("graph").item(0);
+            parseFromElement(rootElement);
 
-            for (int temp = 0; temp < nodeElementList.getLength(); temp++) {
-                Node nodeElementNode = nodeElementList.item(temp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void parseFromElement(Element containsElement) {
+        // process nodes
+        NodeList nodeElementList = containsElement.getElementsByTagName("node");
+        Map<String, Element> nodeElementMap = new HashMap<>();
+
+        for (int temp = 0; temp < nodeElementList.getLength(); temp++) {
+            Node nodeElementNode = nodeElementList.item(temp);
+            if (visibleGraph == null || nodeElementNode.getParentNode().getNodeName().equals("graph")) {
                 if (nodeElementNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element nodeElement = (Element) nodeElementNode;
                     nodeElementMap.put(nodeElement.getAttribute("id"), nodeElement);
                 }
             }
+        }
 
-            // create data graph
-            Map<String, Graph.Node> dataNodes = new HashMap<>();
+        // create data graph
+        Map<String, Graph.Node> dataNodes = new HashMap<>();
+        for (Element element : nodeElementMap.values()) {
+            Graph.Node dataNode = createDataNodeFromXMLElement(element);
+            dataNodes.put(dataNode.getId(), dataNode);
+        }
+        connectDataNodes(nodeElementMap, dataNodes);
+        dataGraph.addAllNodes(dataNodes);
+
+        // fill visualized graph if there is one
+        if (visibleGraph != null) {
+            createVisualizedGraph(nodeElementMap, dataNodes);
+        }
+    }
+
+    private void createVisualizedGraph(Map<String, Element> nodeElementMap, Map<String, Graph.Node> dataNodes) {
+        Object parent = visibleGraph.getDefaultParent();
+        visibleGraph.getModel().beginUpdate();
+        try {
             for (Element element : nodeElementMap.values()) {
-                Graph.Node dataNode = createDataNodeFromXMLElement(element);
-                dataNodes.put(dataNode.getId(), dataNode);
+                String id = element.getAttribute("id");
+                String name = ((Element) element
+                        .getElementsByTagName("layer")
+                        .item(0))
+                        .getAttribute("name");
+                String[] coordinates = element
+                        .getElementsByTagName("coordinates")
+                        .item(0)
+                        .getTextContent()
+                        .split(", ");
+                double x = Double.valueOf(coordinates[0]);
+                double y = Double.valueOf(coordinates[1]);
+                visibleGraph.insertVertex(parent, id, name, x, y, 90, 40);
             }
-            connectDataNodes(nodeElementMap, dataNodes);
-            dataGraph.addAllNodes(dataNodes);
+        } finally {
+            visibleGraph.getModel().endUpdate();
+        }
 
-            // create visualized graph
-            Object parent = visibleGraph.getDefaultParent();
-            visibleGraph.getModel().beginUpdate();
-            try {
-                for (Element element : nodeElementMap.values()) {
-                    String id = element.getAttribute("id");
-                    String name = ((Element) element
-                            .getElementsByTagName("layer")
-                            .item(0))
-                            .getAttribute("name");
-                    String[] coordinates = element
-                            .getElementsByTagName("coordinates")
-                            .item(0)
-                            .getTextContent()
-                            .split(", ");
-                    double x = Double.valueOf(coordinates[0]);
-                    double y = Double.valueOf(coordinates[1]);
-                    visibleGraph.insertVertex(parent, id, name, x, y, 90, 40);
-                }
-            } finally {
-                visibleGraph.getModel().endUpdate();
-            }
-
-            visibleGraph.getModel().beginUpdate();
-            try {
-                connectVisualNodes(nodeElementMap, dataNodes, visibleGraph);
-            } finally {
-                visibleGraph.getModel().endUpdate();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        visibleGraph.getModel().beginUpdate();
+        try {
+            connectVisualNodes(nodeElementMap, dataNodes, visibleGraph);
+        } finally {
+            visibleGraph.getModel().endUpdate();
         }
     }
 
@@ -113,10 +131,9 @@ public class ParserXML {
 
             // add an an edge to every saved id
             for (int i = 0; i < edgesNodeList.getLength(); i++) {
+                String debug = edgesNodeList.item(i).getTextContent();
                 dataNode.addEdge(dataNodeMap.get(edgesNodeList.item(i).getTextContent()));
             }
-
-
         }
     }
 
@@ -135,13 +152,20 @@ public class ParserXML {
             for (int i = 0; i < edgesNodeList.getLength(); i++) {
                 String targetId = edgesNodeList.item(i).getTextContent();
                 Object targetCell = visibleGraphModel.getCell(targetId);
-                visibleGraph.insertEdge(visibleGraph.getDefaultParent(), UUID.randomUUID().toString(), "",  sourceCell, targetCell);
+                visibleGraph.insertEdge(visibleGraph.getDefaultParent(), UUID.randomUUID().toString(), "", sourceCell, targetCell);
             }
         }
     }
 
     private NodeList getEdgeNodeListFromNodeElement(Element nodeElement) {
-        Node edgesNode = nodeElement.getElementsByTagName("edges").item(0);
+        NodeList edgesNodes = nodeElement.getElementsByTagName("edges");
+        Node edgesNode = null;
+        for (int i = 0; i < edgesNodes.getLength(); i++) {
+            Node currentNode = edgesNodes.item(i);
+            if(currentNode.getParentNode().isSameNode(nodeElement)) {
+                edgesNode = currentNode;
+            }
+        }
         NodeList edgesNodeList = null;
         if (edgesNode.getNodeType() == Node.ELEMENT_NODE) {
             Element edgesElement = (Element) edgesNode;
@@ -167,6 +191,18 @@ public class ParserXML {
                 .getElementsByTagName("layerType")
                 .item(0)
                 .getTextContent());
+
+        if (layerType == LayerType.MACRO) {
+            Graph.Graph containedGraph = new Graph.Graph();
+            Node containsNode = layerElement.getElementsByTagName("contains").item(0);
+            Element containsElement;
+            if (containsNode.getNodeType() == Node.ELEMENT_NODE) {
+                containsElement = (Element) containsNode;
+                ParserXML parserXML = new ParserXML(containedGraph);
+                parserXML.parseFromElement(containsElement);
+                return new Macro(containedGraph);
+            }
+        }
 
         LayerData layerData = new LayerData(layerType);
         for (LayerProperty layerProperty : layerData.getLayer().getLayerProperties()) {

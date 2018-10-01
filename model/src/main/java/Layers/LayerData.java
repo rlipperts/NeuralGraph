@@ -1,5 +1,7 @@
 package Layers;
 
+import Graph.Graph;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,7 @@ public class LayerData {
     private Integer poolSize;
     private int[] poolSize2D;
     private Double droprate;
+    private Graph containedGraph;
 
     private static Map<LayerProperty, Method> getterMap;
     private static Map<LayerProperty, Method> setterMap;
@@ -57,6 +60,11 @@ public class LayerData {
         this.layerType = layerType;
     }
 
+    public LayerData(Graph containedGraph) {
+        this.containedGraph = containedGraph;
+        this.layerType = LayerType.MACRO;
+    }
+
     public LayerData(LayerType layerType, int[] inputDimensionality, int[] outputDimensionality,
                      ActivationFunction activationFunction, Integer windowSize, int[] windowSize2D,
                      Integer poolSize, int[] poolSize2D, Double droprate) {
@@ -88,8 +96,8 @@ public class LayerData {
 
     //Todo: Is this a factory?
     public Layer getLayer() {
+        if (layerType == null) return null;
         switch (layerType) {
-
             case CONV_1D:
                 return new Conv1d(outputDimensionality, windowSize, activationFunction);
             case CONV_2D:
@@ -118,6 +126,8 @@ public class LayerData {
                 return new Maximum();
             case AVERAGE:
                 return new Average();
+            case MACRO:
+                return new Macro(containedGraph);
             default:
                 throw new IllegalArgumentException("Couldn't find a constructor for LayerType " + layerType + "!");
         }
@@ -167,6 +177,9 @@ public class LayerData {
         return droprate;
     }
 
+    public Graph getContainedGraph() {
+        return containedGraph;
+    }
 
     public Method getSetter(LayerProperty layerProperty) {
         return setterMap.get(layerProperty);

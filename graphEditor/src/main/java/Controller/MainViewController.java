@@ -2,7 +2,9 @@ package Controller;
 
 import Compiler.XML.CompilerXML;
 import Compiler.XML.ParserXML;
-import Graph.Graph;
+import Graph.*;
+import Layers.Layer;
+import Layers.Macro;
 import Util.ToolDeselectEvent;
 import Util.VertexDeletionEvent;
 import com.google.common.eventbus.EventBus;
@@ -17,6 +19,7 @@ import Compiler.FileSelector;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.util.UUID;
 
 
 public class MainViewController {
@@ -42,18 +45,20 @@ public class MainViewController {
     private File latestCompilingDirectory = new File("./");
     private File latestSavingDirectory = new File("./");
     private File latestOpeningDirectory = new File("./");
+    private File latestImportingDirectory = new File("./");
 
     /**
      * Loads a previously saved graph from a file starting a file chooser.
      */
     public void load() {
         FileSelector fileSelector = new FileSelector();
-        File file = fileSelector.chooseOpeningFile("Open from..", window, latestSavingDirectory);
+        File file = fileSelector.chooseOpeningFile("Open from..", window, latestOpeningDirectory);
         if (file == null) return;
-        tabPaneController.addTab();
+        latestOpeningDirectory = new File(file.getParent());
+        tabPaneController.addTab(false);
         ParserXML parserXML
                 = new ParserXML(tabPaneController.getActiveGraph(), tabPaneController.getActiveVisualizationGraph());
-        parserXML.parseFrom(file);
+        parserXML.parseFromFile(file);
     }
 
     /**
@@ -74,7 +79,18 @@ public class MainViewController {
      * Imports a node either from an open tab or from a File. In the latter case opens a file chooser.
      */
     public void importNode() {
+        FileSelector fileSelector = new FileSelector();
+        File file = fileSelector.chooseOpeningFile("Import from..", window, latestImportingDirectory);
+        if (file == null) return;
+        latestImportingDirectory = new File(file.getParent());
+        Graph containedGraph = new Graph();
+        ParserXML parserXML = new ParserXML(containedGraph);
+        parserXML.parseFromFile(file);
 
+        String nodeName = file.getName().split("\\.")[0];
+        Layer macroLayer = new Macro(containedGraph);
+        Node macroNode = new Node(UUID.randomUUID().toString(), nodeName, macroLayer);
+        tabPaneController.getActiveGraphController().createVertex(macroNode);
     }
 
     /**

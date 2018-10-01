@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graph>
+    <node id="f058ab4e-a9c7-4b79-928f-0684d11b8565">
+        <layer name="Flatten">
+            <layerType>Flatten</layerType>
+        </layer>
+        <coordinates>804.0, 348.0</coordinates>
+        <edges>
+            <edge>f2c998d4-2bcd-42de-af78-5ca15bd629d0</edge>
+        </edges>
+    </node>
+    <node id="54abac4c-1ad7-46af-b345-50ab2aaa4306">
+        <layer name="Output">
+            <layerType>Output</layerType>
+        </layer>
+        <coordinates>843.0, 952.0</coordinates>
+        <edges/>
+    </node>
+    <node id="76d096e6-3e7d-4539-b3ae-01cf5ad59e6a">
+        <layer name="Input">
+            <layerType>Input</layerType>
+            <input_dimension>2, 1</input_dimension>
+        </layer>
+        <coordinates>843.0, 10.0</coordinates>
+        <edges>
+            <edge>959a5b0f-b3ce-4bed-aeb2-9c993ddf5987</edge>
+            <edge>cbc401f7-29ec-40e3-8414-5b81ee35b658</edge>
+            <edge>64880a80-a5e4-455d-a7f3-f2c2c99c6815</edge>
+        </edges>
+    </node>
+    <node id="f2c998d4-2bcd-42de-af78-5ca15bd629d0">
+        <layer name="Add">
+            <layerType>Add</layerType>
+        </layer>
+        <coordinates>821.0, 584.0</coordinates>
+        <edges>
+            <edge>54abac4c-1ad7-46af-b345-50ab2aaa4306</edge>
+        </edges>
+    </node>
+    <node id="959a5b0f-b3ce-4bed-aeb2-9c993ddf5987">
+        <layer name="Dense">
+            <layerType>Dense</layerType>
+            <output_dimension>3, 5</output_dimension>
+            <activation_function>Selu</activation_function>
+        </layer>
+        <coordinates>598.0, 138.0</coordinates>
+        <edges>
+            <edge>352a7f22-2451-47d6-8fee-d0d9abf5365c</edge>
+        </edges>
+    </node>
+    <node id="cbc401f7-29ec-40e3-8414-5b81ee35b658">
+        <layer name="Embedding">
+            <layerType>Embedding</layerType>
+            <input_dimension>5, 3</input_dimension>
+            <output_dimension>2, 3</output_dimension>
+        </layer>
+        <coordinates>1011.0, 167.0</coordinates>
+        <edges>
+            <edge>dad3656a-ba5e-4dc8-87a8-9b4ad27d65b2</edge>
+        </edges>
+    </node>
+    <node id="352a7f22-2451-47d6-8fee-d0d9abf5365c">
+        <layer name="Flatten">
+            <layerType>Flatten</layerType>
+        </layer>
+        <coordinates>564.0, 317.0</coordinates>
+        <edges>
+            <edge>f2c998d4-2bcd-42de-af78-5ca15bd629d0</edge>
+        </edges>
+    </node>
+    <node id="64880a80-a5e4-455d-a7f3-f2c2c99c6815">
+        <layer name="Conv 1d">
+            <layerType>Conv 1d</layerType>
+            <output_dimension>5, 3</output_dimension>
+            <windowsize>3</windowsize>
+            <activation_function>Relu</activation_function>
+        </layer>
+        <coordinates>835.0, 128.0</coordinates>
+        <edges>
+            <edge>f058ab4e-a9c7-4b79-928f-0684d11b8565</edge>
+        </edges>
+    </node>
+    <node id="dad3656a-ba5e-4dc8-87a8-9b4ad27d65b2">
+        <layer name="Flatten">
+            <layerType>Flatten</layerType>
+        </layer>
+        <coordinates>974.0, 334.0</coordinates>
+        <edges>
+            <edge>f2c998d4-2bcd-42de-af78-5ca15bd629d0</edge>
+        </edges>
+    </node>
+</graph>

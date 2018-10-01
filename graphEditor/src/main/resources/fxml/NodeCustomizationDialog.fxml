@@ -14,7 +14,7 @@
         <HBox>
             <VBox alignment="CENTER" spacing="5">
                 <TextField fx:id="layerNameTextField" promptText="Name of the custom layer" prefWidth="200"/>
-                <ComboBox fx:id="layerTypeSelectionBox" promptText="-Type of the custom layer-" onAction="#LayerTypeSelected" prefWidth="200"/>
+                <ComboBox fx:id="layerTypeSelectionBox" promptText="-Type of the custom layer-" onAction="#layerTypeSelected" prefWidth="200"/>
                 <TextField fx:id="inputDimension" promptText="Input dimension, e.g. &quot;4,5&quot;" visible="false" prefWidth="200"/>
                 <ComboBox fx:id="activationFunction" promptText="-Activation function-" visible="false" prefWidth="200"/>
                 <TextField fx:id="windowSize" promptText="Window size" visible="false" prefWidth="200"/>

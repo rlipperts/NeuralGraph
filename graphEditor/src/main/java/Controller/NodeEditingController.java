@@ -73,11 +73,12 @@ public class NodeEditingController {
         //Enable input validity check
         Button btnOk = (Button) dialogPane.lookupButton(ButtonType.OK);
         BooleanBinding inputValid = Bindings.createBooleanBinding(this::isInputValid,
-                layerTypeSelectionBox.valueProperty(), windowSize.textProperty(), windowSize2d.textProperty(),
-                poolSize.textProperty(), poolSize2d.textProperty(),
+                layerTypeSelectionBox.valueProperty(), layerTypeSelectionBox.disabledProperty(), windowSize.textProperty(),
+                windowSize2d.textProperty(), poolSize.textProperty(), poolSize2d.textProperty(),
                 droprate.textProperty(), inputDimension.textProperty(), outputDimension.textProperty());
         btnOk.disableProperty().bind(inputValid.not());
         errorMessages.visibleProperty().bind(inputValid.not());
+
     }
 
     /**
@@ -85,7 +86,7 @@ public class NodeEditingController {
      * layer type.
      */
     @FXML
-    public void LayerTypeSelected() {
+    public void layerTypeSelected() {
         for (LayerProperty key : nodeMap.keySet()) {
             nodeMap.get(key).setVisible(false);
         }
@@ -119,7 +120,8 @@ public class NodeEditingController {
     }
 
     private boolean isInputValid() {
-        return !layerTypeSelectionBox.getSelectionModel().isEmpty()
+        return (!layerTypeSelectionBox.getSelectionModel().isEmpty()
+                || layerTypeSelectionBox.isDisabled())
                 && Pattern.matches(REGEX_SCALAR, windowSize.getCharacters())
                 && Pattern.matches(REGEX_VECTOR_2D, windowSize2d.getCharacters())
                 && Pattern.matches(REGEX_SCALAR, poolSize.getCharacters())
@@ -132,8 +134,13 @@ public class NodeEditingController {
     public void setContent(Graph.Node node) {
         layerNameTextField.setText(node.getName());
 
+        if(node.getLayer() instanceof Macro) {
+            layerTypeSelectionBox.setDisable(true);
+            layerTypeSelectionBox.setPromptText("Imported Layers");
+            //this.layerTypeSelected();
+            return;
+        }
         LayerData layerData = node.getLayer().getLayerData();
-        //if (layerData.getLayerType() == LayerType.INPUT || layerData)
         if (layerData.getLayerType() == LayerType.INPUT) layerTypeSelectionBox.getItems().add(LayerType.INPUT);
         else if (layerData.getLayerType() == LayerType.OUTPUT) layerTypeSelectionBox.getItems().add(LayerType.OUTPUT);
         layerTypeSelectionBox.getSelectionModel().select(layerData.getLayerType());
@@ -154,7 +161,11 @@ public class NodeEditingController {
         temp = toString(layerData.getOutputDimensionality());
         outputDimension.setText(temp.equals("null") ? "" : temp);
 
-        this.LayerTypeSelected();
+        if(node.getLayer() instanceof  Input || node.getLayer() instanceof Output) {
+            layerTypeSelectionBox.setDisable(true);
+        }
+
+        this.layerTypeSelected();
     }
 
     private String toString(int[] array) {
