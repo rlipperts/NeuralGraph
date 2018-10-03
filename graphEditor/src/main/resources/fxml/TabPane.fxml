@@ -11,7 +11,7 @@
 
     <Tab fx:id="BtnTab" closable="false">
         <graphic>
-            <Button fx:id="addTabBtn" text="+" onAction="#addTab"/>
+            <Button fx:id="addTabBtn" text="+" onAction="#addDefaultTab"/>
         </graphic>
     </Tab>
 
