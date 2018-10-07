@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graph>
+    <node id="169e86bf-6497-40b6-b540-ccf97544c022">
+        <layer name="Input">
+            <layerType>Input</layerType>
+            <input_dimension>3, 3</input_dimension>
+        </layer>
+        <coordinates>843.0, 10.0</coordinates>
+        <edges>
+            <edge>885a0af4-31c0-4f88-8716-40e564988626</edge>
+        </edges>
+    </node>
+    <node id="5bb12bbd-2fa5-49b3-8066-90641441a15f">
+        <layer name="Output">
+            <layerType>Output</layerType>
+        </layer>
+        <coordinates>843.0, 952.0</coordinates>
+        <edges/>
+    </node>
+    <node id="885a0af4-31c0-4f88-8716-40e564988626">
+        <layer name="Dense">
+            <layerType>Dense</layerType>
+            <output_dimension>3, 1</output_dimension>
+            <activation_function>Softsign</activation_function>
+        </layer>
+        <coordinates>791.0, 216.0</coordinates>
+        <edges>
+            <edge>81648bf5-8f4c-4598-84c7-b609eb0e2da0</edge>
+        </edges>
+    </node>
+    <node id="81648bf5-8f4c-4598-84c7-b609eb0e2da0">
+        <layer name="Flatten">
+            <layerType>Flatten</layerType>
+        </layer>
+        <coordinates>776.0, 398.0</coordinates>
+        <edges>
+            <edge>5bb12bbd-2fa5-49b3-8066-90641441a15f</edge>
+        </edges>
+    </node>
+</graph>

@@ -21,6 +21,8 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
     public static final String MODEL_START_COMMENT = "#Keras Model:";
     public static final String INPUT_LAYER_NAME = "input";
     public static final String OUTPUT_LAYER_NAME = "output";
+    public static final String MODEL_NAME = "model";
+    public static final String MODEL_STATEMENT = "Model";
 
     private VisitableGraph graph;
     private int numberOfLayers;
@@ -52,7 +54,9 @@ public class ConcreteGraphVisitorKeras implements GraphVisitor {
     }
 
     private void writeFooting(FileWriter fileWriter) {
-        fileWriter.append("\n" + OUTPUT_LAYER_NAME + SUMMARY); //reuse the last used layer name
+        fileWriter.append("\n" + MODEL_NAME + " = " + MODEL_STATEMENT
+                + "(" + INPUT_LAYER_NAME + ", " + OUTPUT_LAYER_NAME + ")");
+        fileWriter.append(MODEL_NAME + SUMMARY); //reuse the last used layer name
     }
 
     String generateLayerName(int layerCount) {

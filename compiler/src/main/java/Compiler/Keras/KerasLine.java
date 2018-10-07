@@ -88,9 +88,13 @@ public class KerasLine implements KerasCode {
 
     private String generateLayerName(LayerData data) {
         String name = data.getLayerType().toString().toLowerCase();
-        name = name.substring(0, 1).toUpperCase() + name.substring(1);
-        name = name.replace("_2d", "_2D");
-        name = name.replace("_3d", "_3D");
+        String[] subnames = name.split(" ");
+        for (int i = 0; i < subnames.length; i++) {
+            subnames[i] = subnames[i].substring(0, 1).toUpperCase() + subnames[i].substring(1);
+        }
+        name = String.join("", subnames);
+        name = name.replace("2d", "2D");
+        name = name.replace("1d", "1D");
         return name;
     }
 

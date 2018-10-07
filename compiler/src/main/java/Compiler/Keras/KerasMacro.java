@@ -18,14 +18,15 @@ public class KerasMacro implements KerasCode {
         lineName = name;
         String[] relevantLines = Arrays.copyOfRange(lines, 5, lines.length - 3);
         this.kerasLines = new ArrayList<String>(Arrays.asList(relevantLines));
+        finalInputName = name + "_input";
         for (int i = 0; i < kerasLines.size(); i++) {
             kerasLines.set(i, kerasLines.get(i).replace("var_", name + "_"));
+            kerasLines.set(i, kerasLines.get(i).replace("input", finalInputName));
         }
-        finalInputName = name + "_input ";
-        kerasLines.set(0, finalInputName
-                + String.join(" ", kerasLines.get(0).split(" ", 2)[1]));
+        //kerasLines.set(0, finalInputName
+        //        + String.join(" ", kerasLines.get(0).split(" ", 2)[1]));
         int endPosition = kerasLines.size() - 1;
-        finalOutputName = name + "_output ";
+        finalOutputName = name + "_output";
         kerasLines.set(endPosition, finalOutputName
                 + String.join(" ", kerasLines.get(endPosition).split(" ", 2)[1]));
         modelName = lineName + "_model";

@@ -47,7 +47,6 @@ public class NodeEditingController {
 
     Map<LayerProperty, Node> nodeMap;
 
-    //Todo: Block activationfunction dropdown for Input and Output
     /**
      * Initializes the controller, filling up the comboboxes and binding some properties.
      */
@@ -72,7 +71,7 @@ public class NodeEditingController {
 
         //Enable input validity check
         Button btnOk = (Button) dialogPane.lookupButton(ButtonType.OK);
-        BooleanBinding inputValid = Bindings.createBooleanBinding(this::isInputValid,
+        BooleanBinding inputValid = Bindings.createBooleanBinding(this::isInputValid, layerNameTextField.textProperty(),
                 layerTypeSelectionBox.valueProperty(), layerTypeSelectionBox.disabledProperty(), windowSize.textProperty(),
                 windowSize2d.textProperty(), poolSize.textProperty(), poolSize2d.textProperty(),
                 droprate.textProperty(), inputDimension.textProperty(), outputDimension.textProperty());
@@ -120,7 +119,8 @@ public class NodeEditingController {
     }
 
     private boolean isInputValid() {
-        return (!layerTypeSelectionBox.getSelectionModel().isEmpty()
+        return (layerNameTextField.getCharacters().length() != 0
+                && (!layerTypeSelectionBox.getSelectionModel().isEmpty()
                 || layerTypeSelectionBox.isDisabled())
                 && Pattern.matches(REGEX_SCALAR, windowSize.getCharacters())
                 && Pattern.matches(REGEX_VECTOR_2D, windowSize2d.getCharacters())
@@ -128,7 +128,7 @@ public class NodeEditingController {
                 && Pattern.matches(REGEX_VECTOR_2D, poolSize2d.getCharacters())
                 && Pattern.matches(REGEX_FLOAT_FROM_0_TO_1, droprate.getCharacters())
                 && Pattern.matches(REGEX_VECTOR_ND, inputDimension.getCharacters())
-                && Pattern.matches(REGEX_VECTOR_ND, outputDimension.getCharacters());
+                && Pattern.matches(REGEX_VECTOR_ND, outputDimension.getCharacters()));
     }
 
     public void setContent(Graph.Node node) {

@@ -8,4 +8,4 @@ public abstract class Layer extends VisitableLayer {
 
     public abstract LayerData getLayerData();
 
-}
+} //TODO: why is this no interface?

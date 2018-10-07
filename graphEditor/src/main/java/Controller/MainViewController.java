@@ -52,7 +52,7 @@ public class MainViewController {
      */
     public void load() {
         FileSelector fileSelector = new FileSelector();
-        File file = fileSelector.chooseOpeningFile("Open from..", window, latestOpeningDirectory);
+        File file = fileSelector.chooseOpeningFile("Open from..", window, latestOpeningDirectory, "XML Files", "*.xml");
         if (file == null) return;
         latestOpeningDirectory = new File(file.getParent());
         tabPaneController.addTab(false);
@@ -67,7 +67,7 @@ public class MainViewController {
      */
     public void save() {
         FileSelector fileSelector = new FileSelector();
-        File file = fileSelector.chooseSavingFile("Save to..", window, latestSavingDirectory);
+        File file = fileSelector.chooseSavingFile("Save to..", window, latestSavingDirectory, "XML Files", "*.xml");
         if (file == null) return;
         latestSavingDirectory = new File(file.getParent());
         CompilerXML compilerXML
@@ -80,7 +80,7 @@ public class MainViewController {
      */
     public void importNode() {
         FileSelector fileSelector = new FileSelector();
-        File file = fileSelector.chooseOpeningFile("Import from..", window, latestImportingDirectory);
+        File file = fileSelector.chooseOpeningFile("Import from..", window, latestImportingDirectory, "XML Files", "*.xml");
         if (file == null) return;
         latestImportingDirectory = new File(file.getParent());
         Graph containedGraph = new Graph();
@@ -98,7 +98,7 @@ public class MainViewController {
      */
     public void compile() {
         FileSelector fileSelector = new FileSelector();
-        File file = fileSelector.chooseSavingFile("Compile as..", window, latestCompilingDirectory);
+        File file = fileSelector.chooseSavingFile("Compile as..", window, latestCompilingDirectory, "Python Files", "*.py");
         if (file == null) return;
         latestCompilingDirectory = new File(file.getParent());
         Compiler compiler = new Compiler();

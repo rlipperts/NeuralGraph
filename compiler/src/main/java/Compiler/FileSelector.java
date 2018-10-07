@@ -8,24 +8,21 @@ import java.io.File;
 
 public class FileSelector {
 
-    public File chooseOpeningFile(String WindowTitle, Window window, File initialDirectory) {
+    public File chooseOpeningFile(String WindowTitle, Window window, File initialDirectory, String extensionFilterName, String filetype) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(WindowTitle);
         fileChooser.setInitialDirectory(initialDirectory);
-        /*
-        fileChooser.getExtensionFilters().addAll(
-                new ExtensionFilter("Text Files", "*.txt"),
-                new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                new ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
-                new ExtensionFilter("All Files", "*.*"));
-                */
+
+        fileChooser.getExtensionFilters().add(new ExtensionFilter(extensionFilterName, filetype));
+
         return fileChooser.showOpenDialog(window);
     }
 
-    public File chooseSavingFile(String WindowTitle, Window window, File initialDirectory) {
+    public File chooseSavingFile(String WindowTitle, Window window, File initialDirectory, String extensionFilterName, String filetype) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(WindowTitle);
         fileChooser.setInitialDirectory(initialDirectory);
+        fileChooser.getExtensionFilters().add(new ExtensionFilter(extensionFilterName, filetype));
         return fileChooser.showSaveDialog(window);
     }
 
